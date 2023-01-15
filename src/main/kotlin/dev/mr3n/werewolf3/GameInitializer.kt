@@ -4,6 +4,7 @@ import dev.moru3.minepie.item.EasyItem
 import dev.mr3n.werewolf3.items.quickchat.TrustYou
 import dev.mr3n.werewolf3.items.quickchat.WithYou
 import dev.mr3n.werewolf3.items.quickchat.YouAreWolf
+import dev.mr3n.werewolf3.items.shop.OpenShop
 import dev.mr3n.werewolf3.protocol.DeadBody
 import dev.mr3n.werewolf3.protocol.MetadataPacketUtil
 import dev.mr3n.werewolf3.protocol.TeamPacketUtil
@@ -14,7 +15,6 @@ import dev.mr3n.werewolf3.sidebar.StartingSidebar
 import dev.mr3n.werewolf3.utils.*
 import org.bukkit.*
 import org.bukkit.enchantments.Enchantment
-import org.bukkit.persistence.PersistentDataType
 import java.util.*
 
 object GameInitializer {
@@ -103,11 +103,8 @@ object GameInitializer {
         WereWolf3.PLAYERS.forEach {  player ->
             // アイテム配布時に人狼アイテムとかを持たないようにスロットを0に設定
             player.inventory.heldItemSlot = 0
-            player.inventory.setItem(8,
-                EasyItem(Material.AMETHYST_SHARD, languages("item.shop.open.name"), languages("item.shop.open.description").split("\n")).also { item ->
-                    item.setContainerValue(Keys.ITEM_TYPE, PersistentDataType.STRING, ShopMenu.SHOP_ID)
-                }
-            )
+            // ショップを開くアイテム
+            player.inventory.setItem(8, OpenShop.itemStack)
             // クイックチャットのアイテムを渡す。
             player.inventory.setItem(5, WithYou.itemStack)
             player.inventory.setItem(6, TrustYou.itemStack)

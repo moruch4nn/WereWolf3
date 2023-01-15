@@ -4,15 +4,6 @@ import dev.moru3.minepie.item.EasyItem
 import dev.mr3n.werewolf3.Constants
 import dev.mr3n.werewolf3.Keys
 import dev.mr3n.werewolf3.WereWolf3
-import dev.mr3n.werewolf3.items.doctor.DoctorSword
-import dev.mr3n.werewolf3.items.doctor.HealthCharger
-import dev.mr3n.werewolf3.items.madman.FakeMediumItem
-import dev.mr3n.werewolf3.items.madman.FakeSeerItem
-import dev.mr3n.werewolf3.items.madman.WolfGuide
-import dev.mr3n.werewolf3.items.medium.MediumItem
-import dev.mr3n.werewolf3.items.seer.MultipleSeerItem
-import dev.mr3n.werewolf3.items.seer.SeerItem
-import dev.mr3n.werewolf3.items.wolf.*
 import dev.mr3n.werewolf3.roles.Role
 import dev.mr3n.werewolf3.utils.*
 import net.md_5.bungee.api.ChatColor
@@ -140,28 +131,13 @@ interface IShopItem {
         companion object {
             val ITEMS = mutableListOf<IShopItem>()
             val ITEMS_BY_ID = mutableMapOf<String, IShopItem>()
-            val STAN_BALL = StanBall
-            val INVISIBLE_POTION = InvisiblePotion
-            val HEAL_POTION = HealPotion
-            val GLOW_INK = GlowInk
-            val ASSASSIN_SWORD = AssassinSword
-            val BOMB_BALL = BombBall
-            val LIGHTNING_ROD = LightningRod
-            val WOLF_AXE = WolfAxe
-            val SEER_ITEM = SeerItem
-            val MEDIUM_ITEM = MediumItem
-            val WOLF_GUIDE = WolfGuide
-            val FAKE_SEER_ITEM = FakeSeerItem
-            val FAKE_MEDIUM_ITEM = FakeMediumItem
-            val HEALTH_CHARGER = HealthCharger
-            val DOCTOR_SWORD = DoctorSword
-            val ONE_SHOT_BOW = OneShotCrossbow
-            val TOTEM = Totem
-            val SPEED_POTION = SpeedPotion
-            val STONE_SWORD = StoneSword
-            val LAST_RESORT = LastResort
-            val DEAD_BODY_REMOVER = DeadBodyRemover
-            val MULTIPLE_SEER_ITEM = MultipleSeerItem
+
+            init {
+                // config.ymlから全てのアイテムを取得
+                val itemIds = WereWolf3.ITEMS_CONFIG.getKeys(false).map { WereWolf3.ITEMS_CONFIG.getString("${it}.class") }
+                // すべてのクラスを初期化する
+                itemIds.forEach { try { Class.forName(it) } catch(e: Exception) { WereWolf3.INSTANCE.logger.warning("$it class not found.") } }
+            }
         }
     }
 }

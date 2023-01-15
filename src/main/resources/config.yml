@@ -1,0 +1,260 @@
+be_prefix: "BE."
+general:
+  point_flush_speed: 15
+game:
+  start_money: 800
+  starting_time: 400
+  day_time: 2400 # 2 minute
+  night_time: 3600 # 3 minute
+  add_money: 200 # per 30 sec
+  max_days: 3 # 最大日数。最大この日数+1日になる(人狼の"苦肉の策"アイテム)
+  end_time: DAY # DAY or NIGHT
+  dead_body_prize: 300 # 死体発見時の賞金
+  conversation_distance: 20.0 # 夜に会話可能な半径
+  team_kill_bonus: 300 # 村人が同士討ちした際に人狼に入るボーナス
+items:
+  seer:
+    price: 300
+    roles:
+      - SEER
+    seer_time: 80
+  multiple_seer:
+    price: 300
+    roles:
+      - SEER
+    distance: 5.0
+    seer_time: 30
+  medium:
+    price: 300
+    roles:
+      - MEDIUM
+  bomb_ball:
+    price: 300
+    roles:
+      - WOLF
+    damage_distance: 11
+    death_distance: 5
+    fuse_time: 12
+    max_damage: 18
+    warning_count: 6
+  doctor_sword:
+    price: 300
+    roles:
+      - DOCTOR
+    health_amount: 40.0
+  wolf_axe:
+    price: 300
+    charge: 50
+    roles:
+      - WOLF
+  fake_seer:
+    price: 300
+    roles:
+      - MADMAN
+  fake_medium:
+    price: 300
+    roles:
+      - MADMAN
+  stan_ball:
+    price: 300
+    radius: 5.0
+    stan_time: 140
+    roles:
+      - VILLAGER
+      - DOCTOR
+      - WOLF
+      - MADMAN
+      - SEER
+      - MEDIUM
+  glow_ink:
+    price: 300
+    glowing_time: 300
+    roles:
+      - VILLAGER
+      - DOCTOR
+      - WOLF
+      - MADMAN
+      - SEER
+      - MEDIUM
+  lightning_rod:
+    price: 300
+    blindness_time: 300
+    roles:
+      - WOLF
+  health_charger:
+    price: 300
+    roles:
+      - DOCTOR
+    heal_amount: 1.0
+    distance: 3.0
+  heal_potion:
+    price: 300
+    roles:
+      - VILLAGER
+      - DOCTOR
+      - WOLF
+      - MADMAN
+      - SEER
+      - MEDIUM
+    heal_amount: 10.0
+  assassin_sword:
+    price: 300
+    roles:
+      - WOLF
+    attack_angle: 70.0
+  invisible_potion:
+    price: 300
+    roles:
+      - VILLAGER
+      - DOCTOR
+      - WOLF
+      - MADMAN
+      - SEER
+      - MEDIUM
+    time: 600
+  wolf_guide:
+    price: 300
+    roles:
+      - MADMAN
+    search_time: 60
+  one_shot_crossbow:
+    price: 300
+    roles:
+      - VILLAGER
+      - DOCTOR
+      - WOLF
+      - MADMAN
+      - SEER
+      - MEDIUM
+  totem_of_undying:
+    price: 300
+    roles:
+      - VILLAGER
+      - DOCTOR
+      - WOLF
+      - MADMAN
+      - SEER
+      - MEDIUM
+    speed_level: 2
+    speed_time: 200
+  speed_potion:
+    price: 300
+    roles:
+      - VILLAGER
+      - DOCTOR
+      - WOLF
+      - MADMAN
+      - SEER
+      - MEDIUM
+    time: 600
+    level: 6
+  stone_sword:
+    price: 300
+    roles:
+      - VILLAGER
+      - DOCTOR
+      - WOLF
+      - MADMAN
+      - SEER
+      - MEDIUM
+  last_resort:
+    price: 300
+    roles:
+      - WOLF
+  dead_body_remover:
+    price: 300
+    roles:
+      - VILLAGER
+      - DOCTOR
+      - WOLF
+      - MADMAN
+      - SEER
+      - MEDIUM
+roles:
+  seer:
+    items:
+      - "multiple_seer"
+    priority: 1
+    name: 占い師
+    team: VILLAGER
+    color: LIGHT_PURPLE
+    num: 10.0
+    unit: PERCENT
+    min_players: 4
+    min: 0
+    description: 占い師はプレイヤーを占い、そのプレイヤーが人狼かどうかを知ることができます。占い師は人狼たちに対して有利な立場にありますが、占い師を見つけ出して殺すことも人狼たちの重要な作戦です。また、占い師は自分の結果を正しく判断し、村人たちと協力しながらゲームを進めることが重要です。
+  madman:
+    items:
+      - "stan_ball"
+    priority: 2
+    name: 狂人
+    team: WOLF
+    color: DARK_RED
+    num: 5.0
+    unit: PERCENT
+    min_players: 7
+    min: 0
+    description: 狂人は人狼陣営の一員とされます。狂人は、人狼たちに対して独自の戦略を練ってゲームを進めます。狂人は、人狼たちが人狼だと思われるような行動を避けるよう心がけ、人狼を見破ることが重要です。時には人狼をかばうために自分が怪しい行動を取って殺される必要もあるかもしれません。
+  medium:
+    items:
+      - "medium"
+    priority: 2
+    name: 霊媒師
+    team: VILLAGER
+    color: DARK_PURPLE
+    num: 10.0
+    unit: PERCENT
+    min_players: 8
+    min: 0
+    description: 霊媒師はプレイヤーを霊媒し、そのプレイヤーが死亡しているかどうかを知ることができます。また、死体からそのプレイヤーの役職を知ることもできます。霊媒師は、人狼ゲームで重要な役割を果たしますが、人狼たちがその能力を把握している場合は危険が伴います。
+  wolf:
+    items:
+      - "assassin_sword"
+    priority: 3
+    name: 人狼
+    team: WOLF
+    color: DARK_RED
+    num: 15.0
+    unit: PERCENT
+    min_players: 0
+    min: 2
+    description: 人狼たちが一見村人のように振る舞い、村人陣営に気づかれないように工夫しながら村人陣営を全滅させることが目標です。人狼は村人たちよりも少ない人数でゲームを勝ち抜くために巧妙な戦略を練る必要があります。また人狼は占い師に占われると人狼とバレてしまいます。そして人狼の唯一の仲間として狂人という役職がいるため狂人と協力していくことで戦略を立てることが簡単になります。
+  doctor:
+    items:
+      - "doctor_sword"
+    priority: 4
+    name: 医者
+    team: VILLAGER
+    color: AQUA
+    num: 10.0
+    unit: PERCENT
+    min_players: 5
+    min: 0
+    description: 医者は村人陣営の役職の一つでダメージを受けたプレイヤーの体力を回復することができます。また、医者は人狼ゲームで重要な役割を果たしますが、人狼たちがその能力を把握している場合は危険が伴うため、自分が医者であることを隠すことが望ましい場合もあります
+  villager:
+    items:
+      - "stan_ball"
+    priority: 5
+    name: 村人
+    team: VILLAGER
+    color: GOLD
+    num: -1
+    unit: PERCENT
+    min_players: 0
+    min: 3
+    description: 村人は全滅しないように最後まで生き残ることが目標です。また村人は占い師や医者のように他の役職が持っているような特殊能力を持っていないため他の村陣営の役職と協力しながらゲームを進めることが重要です。
+message_commands:
+  - "/msg"
+  - "/tell"
+  - "/w"
+  - "/teammsg"
+  - "/tm"
+  - "/say"
+  - "/me"
+  - "/minecraft:msg"
+  - "/minecraft:tell"
+  - "/minecraft:w"
+  - "/minecraft:teammsg"
+  - "/minecraft:tm"
+  - "/minecraft:say"
+  - "/minecraft:me"

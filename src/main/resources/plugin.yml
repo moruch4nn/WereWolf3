@@ -1,0 +1,28 @@
+main: dev.mr3n.werewolf3.WereWolf3
+api-version: 1.19
+name: WereWolf3
+version: 1.0
+depend:
+  - ProtocolLib
+softdepend:
+  - PlugManX
+commands:
+  start:
+    description: 人狼を開始します。
+    permission: werewolf3.admin.start
+  debug:
+    permission: werewolf3.admin.debug
+  end:
+    description: 人狼を終了します。
+    permission: werewolf3.admin.end
+  shop:
+    description: ショップを開きます。
+    aliases:
+      - s
+permissions:
+  werewolf3.admin.start:
+    default: op
+  werewolf3.admin.end:
+    default: op
+  werewolf3.admin.debug:
+    default: op

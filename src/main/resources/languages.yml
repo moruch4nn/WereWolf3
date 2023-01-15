@@ -1,0 +1,329 @@
+name: "&4&l人狼ＰＶＰ"
+prefix: "&4&l[人狼PvP]&f"
+chat_format: "%name%&a: &f%message%"
+death_chat_format: "&7[死亡者チャット]%name%&7: %message%"
+none: "なし"
+everyone: "全員"
+force_end: "GMがゲームを終了しました。"
+send_message_at_night: "&e&l[半径%distance%m以内のプレイヤーにメッセージを送信しました！]"
+money_unit: "円"
+wolf_chat_format: "&c[人狼グルチャ]%name%&c: %message%"
+shop:
+  name: "&dアイテムショップ"
+  close: "&c閉じる"
+  bought: "%item%&fを&c%price%&fで購入しました"
+  cant_buy: "残高が不足しています。%item%&fを購入するには&c%price%&f必要です。"
+  price: "価格: &c%price%"
+messages:
+  please_wait_for_start: "開始までしばらくお待ちください"
+  please_wait_for_end: "終了までしばらくお待ちください。"
+  player_joined: "%player% が人狼に参加しました。"
+  player_rejoined: "%player% が戻りました。"
+  coming_out: "%color%%player%が%role%をCoしました。"
+  wolfs: "&c人狼は: %wolfs% &cです。"
+  result:
+    header: "========== 結果 =========="
+    prefix: "&a"
+    winner: "%color%%team%陣営&fが勝利しました！"
+    kills_info: "内訳* 敵キル数: %kills%, 身内キル: %kill_teams%"
+  found_dead_body: "&c%player% の死体が発見された..."
+  cant_start_with_ex: "&c!から始まるチャットは人狼チャット用のため使用できません。"
+  team_kill_bonus: "村人陣営が同士討ちしたため&c%money%獲得しました。"
+  be_cannot_use_item: "統合版ではこのアイテムを使用できません。対応をお待ち下さい。\nまた、%item%は次のアイテムで代用できるかもしれません: %substitute%"
+  how_to_speak_in_wolf_group: "&4[&k!&4] &fチャットの最初に&c!&fをつけると人狼にしか見えないメッセージを送れます！"
+title:
+  start:
+    title: "役職: %role%"
+    subtitle: "%time%秒後にゲームが開始します"
+    messages:
+      info: "&4黒陣営(人狼、狂人など): %wolf_teams%人\n&b白陣営(村人、占師など): %villager_teams%人"
+  time:
+    title: "%emoji%%time%になりました%emoji%"
+  win:
+    title: "%color%&l%role%の勝利"
+    reason:
+      anni: "%role%が全滅しました。"
+      time_up: "時間切れになりました。"
+  you_are_dead:
+    title: "&4&l死亡しました"
+    subtitle: "試合を観戦できます。"
+    subtitle_with_killer: "%killer% に殺された。"
+carrying_dead_body:
+  carrying:
+    title: "死体運搬中"
+    color: "&c"
+    subtitle: "スニークを解除すると離します。"
+  let_go:
+    title: "死体を離した"
+    color: "&c"
+    subtitle: "スニークを続けることで運搬できます"
+  too_far: "死体を運ぶにはもっと死体に近づく必要があります。"
+item:
+  roles: "役職: %roles%"
+  shop:
+    open:
+      name: "&dショップを開く"
+      description: "右クリックすることでショップを利用できます。"
+  co_helmet:
+    name: "%color%%role%をCoする"
+  doctor_sword:
+    name: "&b医者の剣(回復残量:%amount%)"
+    description: "殴ることで対象のプレイヤーの体力を回復させます。"
+    title:
+      heal:
+        color: "&c"
+        title: "HEALING"
+      sword:
+        color: "&b"
+        title: "医者の剣"
+    messages:
+      not_working: "ダメージを受けていないようです。"
+      healed: "回復されました。"
+      healing: "%player%を回復しています。"
+  seer:
+    name: "&d占いアイテム"
+    description: "プレイヤーを右クリック長押しすると\nそのプレイヤーを占うことができます。\n夜にしか使えません。"
+    title:
+      seer:
+        color: "&d"
+        title: "占い"
+    messages:
+      canceled: "占いをキャンセルしました。"
+      init: "%player%を占い中..."
+      night_only: "夜にしか使用できません。"
+      hint:
+        how_to: "プレヤーを右クリック長押しすることで占うことができます。"
+      result:
+        wolf: "%player%は&c人狼です。"
+        villager: "%player%は&c人狼では&nありません。"
+  multiple_seer:
+    name: "&d範囲占いアイテム"
+    description: "半径数m以内に人狼かいるかどうかを\n知ることができる。"
+    title:
+      seer:
+        color: "&d"
+        title: "占い"
+    messages:
+      init: "占い中..."
+      result:
+        wolf: "範囲内に&c人狼がいます。"
+        villager: "範囲内に&c人狼は&nいません。"
+  medium:
+    name: "&d霊媒アイテム"
+    description: "プレイヤーの死体のモヤを右クリックすることで\nそのプレイヤーの遺言や役職などを確認することができます。"
+    title:
+      medium:
+        color: "&5"
+        title: "霊媒"
+    messages:
+      success: "霊媒が完了しました。"
+      header: "&5========== 霊媒 =========="
+      will: "&5遺言&7: &f%will%"
+      team: "&5陣営&7: &f%team%陣営"
+      time: "&5死亡時刻&7: &f%sec%秒前"
+  bomb_ball:
+    name: "&4投げ爆弾"
+    description: "着弾点から広範囲に\n即死級のダメージを与える。\n爆発音はワールド内&n全員に聞こえる。"
+    title:
+      warning:
+        color: "&4"
+        title: "EXPLODE"
+  wolf_axe:
+    name: "&4人狼の斧"
+    description: "チャージすることで&c一撃&7で\nプレイヤーを倒すことができる斧。\nチャージ完了時、および使用した際\n&c大きな音が鳴る&7。"
+    title:
+      wolf_axe:
+        color: "&4"
+        title: "人狼の斧"
+      failed:
+        color: "&c"
+        title: "FAILED"
+      success:
+        color: "&a"
+        title: "SUCCESS"
+    messages:
+      charging: "チャージしています。"
+      charged: "チャージ完了"
+      not_enough_charge: "チャージが足りなかった。"
+      used: "一撃の斧を使用した"
+  fake_seer:
+    name: "&dニセ占いアイテム(偽物)"
+    description: "偽物の占いアイテム。プレイヤーを騙す以外に使用する手段はない。"
+  fake_medium:
+    name: "&dニセ霊媒アイテム(偽物)"
+    description: "偽物の霊媒アイテム。"
+  stan_ball:
+    name: "&cスタンボール"
+    description: "着弾点で&c爆発&7し巻き込まれたプレイヤーは\n数秒間&cほとんど動けない状態&fになる。"
+    messages:
+      stan: "数秒間動けなくなります。"
+    title:
+      stan:
+        color: "&4"
+        title: "STAN!"
+  glow_ink:
+    name: "&aピカピカインク"
+    description: "使用することで&c全員に\n&c発光効果を付与&7する。\n例外に&n透明なプレイヤーは発光しない。"
+    title:
+      glowing:
+        color: "&a"
+        title: "GLOWING"
+    messages:
+      glowing: "体が発光しています。"
+      invisible: "透明なため発光していません。"
+      for_be: "BEエディションは仕様上発光が表示されません。対応をお待ち下さい。"
+  lightning_rod:
+    name: "&a停電"
+    description: "人狼以外のすべてのプレイヤーに\n盲目の効果を付与する。"
+    title:
+      blindness:
+        color: "&e"
+        title: "停電"
+    messages:
+      blindness: "人狼が停電を使用した。"
+      for_wolf: "プレイヤーに盲目を付与中: %sec%"
+  health_charger:
+    name: "&cヘルスチャージャー"
+    description: "設置することで周囲のプレイヤーの体力を回復する。\n設置するには&c3x3のスペースが必要&7。"
+    title:
+      charger:
+        color: "&c"
+        title: "ヘルスチャージャー"
+    messages:
+      cant_placeable: "設置するには3x3のスペースが必要です。"
+      healing: "ヘルスチャージャーで体力を回復しています。"
+  heal_potion:
+    name: "&c回復ポーション"
+    description: "&7飲むことで&c❤%amount%&7回復するポーション。"
+    title:
+      healing:
+        title: "HEALING"
+        color: "&c"
+    messages:
+      healing: "&c❤%amount%&f回復しました。"
+  assassin_sword:
+    name: "&c暗殺の剣"
+    description: "&c背後から&7プレイヤーに\n斬りかかることで&c一撃&7で\nプレイヤーを仕留めることができる剣。"
+    title:
+      assassin_failed:
+        title: "FAILED"
+        color: "&c"
+      assassin_success:
+        title: "SUCCESS"
+        color: "&a"
+    messages:
+      need_from_back: "背後から斬りかかる必要があります。"
+      success: "暗殺に成功しました。"
+  invisible_potion:
+    name: "&b透明化ポーション"
+    description: "飲むことで&c%time%秒間透明になれる&7。\n装備は消えるが手に持っている\nアイテムは見えてしまう。\n透明化中は&c発光の効果を完全に無効化&7する。"
+  wolf_guide:
+    name: "&c人狼ガイド"
+    description: "でランダムで一匹の人狼の名前を知ることができる。\nまた知った人狼をマーキングすることができる。"
+    title:
+      guide:
+        title: "人狼ガイド"
+        color: "&c"
+    messages:
+      wolf_not_found: "人狼がいないようだ。"
+      searching: "検索中..."
+      searched: "&c%player%&fが人狼の中の一匹です。"
+  one_shot_crossbow:
+    name: "&c一撃のクロスボウ"
+    description: "プレイヤーを&c一撃&7で殺害できる弓。\n&n一度使用すると壊れてしまう。"
+    title:
+      bow:
+        title: "一撃のクロスボウ"
+        color: "&c"
+    messages:
+      used: "一撃の弓が壊れてしまった。"
+  totem_of_undying:
+    name: "&b不死のトーテム"
+    description: "手に持つことで&c夜に即死攻撃を一度のみ防ぐ&7ことができる。"
+  speed_potion:
+    name: "&b俊敏のポーション"
+    description: "飲むことで&c%time%&7秒間足がとても早くなる。"
+  stone_sword:
+    name: "&eちょっと強い石の剣"
+    description: "敵を大抵3-4発で倒せる程度の\n攻撃力はあるちょっと強い剣"
+  last_resort:
+    name: "苦肉の策"
+    description: "人狼、及び狂人の名前を全員に公開する代わりに\n試合時間一日(5分程度)延長される。"
+    title:
+      last_resort:
+        title: "苦肉の策"
+        color: "&4"
+    messages:
+      subtitle: "残り日数が1日追加される..."
+      description: "&f人狼が &4苦肉の策&f を使用しました。\n試合時間が&c1日延長&fされる代わりに、&c&nすべての人狼のプレイヤー名が公開&fされます。"
+      wolfs: "&4&l人狼一覧: &f今回の人狼は %wolfs% です。"
+      bought: "&4苦肉の策&f を%player%が購入した"
+      what: "&4苦肉の策&f の詳細は詳しくはショップをご確認ください。"
+      already_bought: "すでにこのアイテムは人狼に購入されています。このアイテムは試合中に一度しか購入できません。"
+  dead_body_remover:
+    name: "&c死体消し"
+    description: "任意のプレイヤーの死体を\n燃やして隠蔽することができる。"
+    title:
+      remover:
+        title: "BURNING"
+        color: "&4"
+    messages:
+      subtitle: "%player%の死体を燃やした"
+  with_you:
+    name: "&7一緒にいるよ"
+    description: "これでプレイヤーをクリックをすることで\nクイックチャットを使用できます。"
+    messages:
+      - "%player% と一緒にいます"
+  trust_you:
+    name: "&e村人陣営だと思う"
+    description: "これでプレイヤーをクリックをすることで\nクイックチャットを使用できます。"
+    messages:
+      - "%player% は信用できる気がする"
+      - "%player% は村人陣営だと思う"
+  you_are_wolf:
+    name: "&4こいつやばい！人狼や！"
+    description: "これでプレイヤーをクリックをすることで\nクイックチャットを使用できます。"
+    messages:
+      - "%player%人狼！！！！"
+time:
+  day:
+    name: "&6朝"
+    emoji: "&6☀"
+    description: "全員と会話ができます。残り%day%日..."
+  night:
+    name: "&9夜"
+    emoji: "&e☽"
+    description: "近くの人とのみ会話できます。"
+bossbar:
+  title: "%emoji%%time%のターン: %time_left%%emoji%"
+sidebar:
+  title: "&4&l人狼&c&lPvP"
+  bottom: "&4///////"
+  global:
+    status:
+      display: "&c状態: &f"
+      waiting: "待機中"
+      starting: "開始前準備"
+    role:
+      display: "&c役職: &f"
+  starting:
+    players:
+      display: "&c残り人数(推定): &f"
+    time:
+      display: "&c準備時間: &f"
+  running:
+    players:
+      display: "&c残り人数(推定): &f"
+    money:
+      display: "&e所持金: "
+    day:
+      display: "&c残り日数: "
+  waiting:
+    players:
+      display: "&c現在の人数: &f"
+    time:
+      display: "&c開始予定: &f"
+      soon: "もうすぐ"
+  dead:
+    players:
+      display: "&c残り人数: &f"

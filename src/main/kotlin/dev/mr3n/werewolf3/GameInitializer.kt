@@ -36,7 +36,7 @@ object GameInitializer {
         // ゲームIDを設定。
         WereWolf3.GAME_ID = UUID.randomUUID().toString()
         // ゲームのステータスを設定、
-        WereWolf3.STATUS = Status.STARTING
+        WereWolf3.STATUS = GameStatus.STARTING
         // 時間を朝に
         location.world!!.time = 0L
         // 日にちを0に設定
@@ -123,7 +123,7 @@ object GameInitializer {
             player.sidebar = RunningSidebar(player)
             player.role?.items?.map { it.itemStack }?.forEach { player.inventory.addItem(it) }
         }
-        WereWolf3.STATUS = Status.RUNNING
-        WereWolf3.TIME_OF_DAY = Time.DAY
+        WereWolf3.STATUS = GameStatus.RUNNING
+        WereWolf3.TIME_OF_DAY = Time.MORNING
     }
 }

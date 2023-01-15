@@ -5,7 +5,7 @@ import com.comphenix.protocol.ProtocolManager
 import com.comphenix.protocol.wrappers.EnumWrappers
 import dev.moru3.minepie.Executor.Companion.runTaskTimerAsync
 import dev.moru3.minepie.config.Config
-import dev.mr3n.werewolf3.Status.*
+import dev.mr3n.werewolf3.GameStatus.*
 import dev.mr3n.werewolf3.commands.EndCommand
 import dev.mr3n.werewolf3.commands.ShopCommand
 import dev.mr3n.werewolf3.commands.StartCommand
@@ -67,7 +67,7 @@ class WereWolf3: JavaPlugin() {
         Role.ROLES
         DeadBody.DEAD_BODIES
         TeamPacketUtil
-        Time.DAY.title
+        Time.MORNING.title
         Time.NIGHT.title
         // <<< クラスの初期化 <<<
         this.getCommand("debug")?.also {
@@ -209,8 +209,8 @@ class WereWolf3: JavaPlugin() {
         // 現在実行中のゲームID
         var GAME_ID: String? = null
         // 現在のゲームステータス
-        var STATUS: Status = WAITING
-        // 残り時間
+        var STATUS: GameStatus = WAITING
+        // 現在のターン(昼/夜)の残り時間。/ゲーム全体残り時間ではありません。
         var TIME_LEFT = 0
         // 残り時間の長さ(カウントが減らされる前の長さ)
         var PLAYERS_EST = 0
@@ -233,7 +233,7 @@ class WereWolf3: JavaPlugin() {
         val isPlugmanLoaded: Boolean by lazy { Bukkit.getPluginManager().isPluginEnabled("PlugManX") }
 
         // 現在の時刻(朝/夜)
-        var TIME_OF_DAY: Time = Time.DAY
+        var TIME_OF_DAY: Time = Time.MORNING
             set(time) {
                 field = time
                 // 朝/夜の変更の処理を実行

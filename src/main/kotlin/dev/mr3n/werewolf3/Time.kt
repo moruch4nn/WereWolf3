@@ -11,7 +11,7 @@ import org.bukkit.SoundCategory
 import org.bukkit.boss.BarColor
 
 enum class Time(val barColor: BarColor) {
-    DAY(BarColor.YELLOW),
+    MORNING(BarColor.YELLOW),
     NIGHT(BarColor.PURPLE);
 
     fun lowercase() = this.toString().lowercase()
@@ -33,7 +33,7 @@ enum class Time(val barColor: BarColor) {
      */
     operator fun invoke() {
         when(this) {
-            DAY -> { morning() }
+            MORNING -> { morning() }
             NIGHT -> { night() }
         }
     }
@@ -46,8 +46,8 @@ enum class Time(val barColor: BarColor) {
      */
     fun next(): Time {
         return when(this) {
-            DAY -> { NIGHT }
-            NIGHT -> { DAY }
+            MORNING -> { NIGHT }
+            NIGHT -> { MORNING }
         }
     }
 
@@ -93,7 +93,7 @@ enum class Time(val barColor: BarColor) {
         fun night() {
             // ゲームが実行中ではない場合return
             if(!WereWolf3.running) { return }
-            if(Constants.END_TIME==DAY&&WereWolf3.DAYS>=Constants.MAX_DAYS) {
+            if(Constants.END_TIME==MORNING&&WereWolf3.DAYS>=Constants.MAX_DAYS) {
                 GameTerminator.end(Role.Team.VILLAGER, languages("title.win.reason.time_up"))
                 return
             }

@@ -24,8 +24,8 @@ object GameTerminator {
      * 結果発表とともにゲームを終了する際に使用します。
      */
     fun end(win: Role.Team, reason: String) {
-        if(WereWolf3.STATUS==Status.ENDING||WereWolf3.STATUS==Status.WAITING) { return }
-        WereWolf3.STATUS = Status.ENDING
+        if(WereWolf3.STATUS==GameStatus.ENDING||WereWolf3.STATUS==GameStatus.WAITING) { return }
+        WereWolf3.STATUS = GameStatus.ENDING
         // 役職 to プレイヤー一覧 のマップ
         val players = Role.ROLES.map { it.key to it.value.map { uniqueId -> Bukkit.getOfflinePlayer(uniqueId) } }
         WereWolf3.PLAYERS.forEach { player ->
@@ -67,7 +67,7 @@ object GameTerminator {
      */
     fun run(shutdown: Boolean = false) {
         try {
-            WereWolf3.STATUS = Status.WAITING
+            WereWolf3.STATUS = GameStatus.WAITING
             WereWolf3.GAME_ID = null
         } catch(_: Exception) { }
 

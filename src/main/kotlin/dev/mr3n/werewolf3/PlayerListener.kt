@@ -197,7 +197,7 @@ object PlayerListener: Listener {
         if(player.gameMode==GameMode.SPECTATOR) {
             event.isCancelled = true
         } else {
-            if (WereWolf3.STATUS == Status.RUNNING) { return }
+            if (WereWolf3.STATUS == GameStatus.RUNNING) { return }
             event.isCancelled = true
         }
     }

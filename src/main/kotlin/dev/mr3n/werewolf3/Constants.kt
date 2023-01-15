@@ -16,7 +16,7 @@ object Constants {
     val ADD_MONEY: Int = constant("game.add_money")
     val START_MONEY: Int = constant("game.start_money")
     val MAX_DAYS: Int = constant("game.max_days")
-    val END_TIME: Time = try { Time.valueOf(constant("end_time")) } catch(_: Exception) { Time.DAY }
+    val END_TIME: Time = try { Time.valueOf(constant("end_time")) } catch(_: Exception) { Time.MORNING }
     val DEAD_BODY_PRIZE: Int = constant("game.dead_body_prize")
     val CONVERSATION_DISTANCE: Double = constant("game.conversation_distance")
     val BE_PREFIX: String = constant("bedrock_edition.prefix")

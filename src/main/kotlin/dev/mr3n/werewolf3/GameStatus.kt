@@ -3,7 +3,7 @@ package dev.mr3n.werewolf3
 /**
  * ゲームのステータス
  */
-enum class Status(val id: Int) {
+enum class GameStatus(val id: Int) {
     /**
      * ゲームが開始していない時、つまり待機中の時のステータスです。
      */

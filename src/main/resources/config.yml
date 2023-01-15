@@ -1,6 +1,7 @@
-be_prefix: "BE."
 general:
   point_flush_speed: 15
+  languages:
+    prefix:
 game:
   start_money: 800
   starting_time: 400
@@ -12,164 +13,9 @@ game:
   dead_body_prize: 300 # 死体発見時の賞金
   conversation_distance: 20.0 # 夜に会話可能な半径
   team_kill_bonus: 300 # 村人が同士討ちした際に人狼に入るボーナス
-items:
-  seer:
-    price: 300
-    roles:
-      - SEER
-    seer_time: 80
-  multiple_seer:
-    price: 300
-    roles:
-      - SEER
-    distance: 5.0
-    seer_time: 30
-  medium:
-    price: 300
-    roles:
-      - MEDIUM
-  bomb_ball:
-    price: 300
-    roles:
-      - WOLF
-    damage_distance: 11
-    death_distance: 5
-    fuse_time: 12
-    max_damage: 18
-    warning_count: 6
-  doctor_sword:
-    price: 300
-    roles:
-      - DOCTOR
-    health_amount: 40.0
-  wolf_axe:
-    price: 300
-    charge: 50
-    roles:
-      - WOLF
-  fake_seer:
-    price: 300
-    roles:
-      - MADMAN
-  fake_medium:
-    price: 300
-    roles:
-      - MADMAN
-  stan_ball:
-    price: 300
-    radius: 5.0
-    stan_time: 140
-    roles:
-      - VILLAGER
-      - DOCTOR
-      - WOLF
-      - MADMAN
-      - SEER
-      - MEDIUM
-  glow_ink:
-    price: 300
-    glowing_time: 300
-    roles:
-      - VILLAGER
-      - DOCTOR
-      - WOLF
-      - MADMAN
-      - SEER
-      - MEDIUM
-  lightning_rod:
-    price: 300
-    blindness_time: 300
-    roles:
-      - WOLF
-  health_charger:
-    price: 300
-    roles:
-      - DOCTOR
-    heal_amount: 1.0
-    distance: 3.0
-  heal_potion:
-    price: 300
-    roles:
-      - VILLAGER
-      - DOCTOR
-      - WOLF
-      - MADMAN
-      - SEER
-      - MEDIUM
-    heal_amount: 10.0
-  assassin_sword:
-    price: 300
-    roles:
-      - WOLF
-    attack_angle: 70.0
-  invisible_potion:
-    price: 300
-    roles:
-      - VILLAGER
-      - DOCTOR
-      - WOLF
-      - MADMAN
-      - SEER
-      - MEDIUM
-    time: 600
-  wolf_guide:
-    price: 300
-    roles:
-      - MADMAN
-    search_time: 60
-  one_shot_crossbow:
-    price: 300
-    roles:
-      - VILLAGER
-      - DOCTOR
-      - WOLF
-      - MADMAN
-      - SEER
-      - MEDIUM
-  totem_of_undying:
-    price: 300
-    roles:
-      - VILLAGER
-      - DOCTOR
-      - WOLF
-      - MADMAN
-      - SEER
-      - MEDIUM
-    speed_level: 2
-    speed_time: 200
-  speed_potion:
-    price: 300
-    roles:
-      - VILLAGER
-      - DOCTOR
-      - WOLF
-      - MADMAN
-      - SEER
-      - MEDIUM
-    time: 600
-    level: 6
-  stone_sword:
-    price: 300
-    roles:
-      - VILLAGER
-      - DOCTOR
-      - WOLF
-      - MADMAN
-      - SEER
-      - MEDIUM
-  last_resort:
-    price: 300
-    roles:
-      - WOLF
-  dead_body_remover:
-    price: 300
-    roles:
-      - VILLAGER
-      - DOCTOR
-      - WOLF
-      - MADMAN
-      - SEER
-      - MEDIUM
+bedrock_edition:
+  prefix: "BE." # for geyser and floodgate servers.
+
 roles:
   seer:
     items:

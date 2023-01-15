@@ -20,8 +20,8 @@ import org.bukkit.util.Vector
 object StanBall: IShopItem.ShopItem("stan_ball", Material.SNOWBALL) {
     private const val ENTITY_TYPE = "STAN_BALL"
 
-    private val STAN_RADIUS: Int = constant("radius")
-    private val STAN_TIME: Int = constant("stan_time")
+    private val STAN_RADIUS: Int = itemConstant("radius")
+    private val STAN_TIME: Int = itemConstant("stan_time")
 
     private val STAN_TITLE_TEXT = titleText("stan")
 

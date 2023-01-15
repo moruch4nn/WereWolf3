@@ -14,9 +14,9 @@ import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.util.Vector
 
 object HealthCharger: IShopItem.ShopItem("health_charger", Material.REDSTONE_ORE) {
-    private val HEAL_AMOUNT: Double = constant("heal_amount")
+    private val HEAL_AMOUNT: Double = itemConstant("heal_amount")
 
-    private val DISTANCE: Double = constant("distance")
+    private val DISTANCE: Double = itemConstant("distance")
 
     private val CHARGER_TITLE_TEXT = titleText("charger")
 

@@ -22,11 +22,11 @@ object BombBall: IShopItem.ShopItem("bomb_ball", Material.SNOWBALL) {
 
     private const val ENTITY_TYPE = "BOMB_BALL"
 
-    private val DAMAGE_DISTANCE: Int = constant("damage_distance")
-    private val DEATH_DISTANCE: Int = constant("death_distance")
-    private val FUSE_TIME: Long = constant("fuse_time")
-    private val MAX_DAMAGE: Int = constant("max_damage")
-    private val WARNING_COUNT: Int = constant("warning_count")
+    private val DAMAGE_DISTANCE: Int = itemConstant("damage_distance")
+    private val DEATH_DISTANCE: Int = itemConstant("death_distance")
+    private val FUSE_TIME: Long = itemConstant("fuse_time")
+    private val MAX_DAMAGE: Int = itemConstant("max_damage")
+    private val WARNING_COUNT: Int = itemConstant("warning_count")
 
     /**
      * 距離から爆発玉の爆発ダメージを計算します。

@@ -17,7 +17,7 @@ import org.bukkit.inventory.meta.Damageable
 import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.persistence.PersistentDataType
 
-object OneShotBow: IShopItem.ShopItem("one_shot_crossbow", Material.CROSSBOW) {
+object OneShotCrossbow: IShopItem.ShopItem("one_shot_crossbow", Material.CROSSBOW) {
     override fun onSetItemMeta(itemMeta: ItemMeta) {
         if(itemMeta !is Damageable) { return }
         itemMeta.isUnbreakable = true

@@ -25,7 +25,7 @@ enum class Role() {
     MEDIUM
     ;
 
-    val config = WereWolf3.CONFIG.config()?:throw NullPointerException()
+    val config = WereWolf3.CONFIG
 
     // 役職名を小文字で
     fun lowercase() = this.toString().lowercase()

@@ -16,11 +16,10 @@ import java.util.*
  * このクラスを継承することで最低限のコードのみでクイックチャットのアイテムを作成することがd系マス。
  */
 abstract class QuickChat(id: String, material: Material, val coolDownMs: Long): IShopItem.ShopItem(id, material) {
-    override val price: Int = Int.MAX_VALUE
     override val roles: List<Role> = listOf()
     private val lastUse = mutableMapOf<UUID, Long>()
     override fun buy(player: Player): Boolean = false
-    val messages = constants<String>("messages")
+    val messages = itemConstants<String>("messages")
     fun message(player: String): String = messages.randomOrNull()?.replace("%player%", player)?:"THIS IS BUG. PLEASE REPORT TO ADMIN."
 
     init {

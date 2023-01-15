@@ -9,7 +9,7 @@ import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.inventory.meta.PotionMeta
 
 object HealPotion: IShopItem.ShopItem("heal_potion", Material.POTION) {
-    private val HEAL_AMOUNT: Double = constant("heal_amount")
+    private val HEAL_AMOUNT: Double = itemConstant("heal_amount")
 
     private val CHARGER_TITLE_TEXT = titleText("healing")
 

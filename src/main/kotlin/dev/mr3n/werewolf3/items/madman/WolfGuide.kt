@@ -26,7 +26,7 @@ object WolfGuide: IShopItem.ShopItem("wolf_guide", Material.BOOK) {
 
     private val GUIDE_TITLE_TEXT = titleText("guide")
 
-    private val SEARCH_TIME = constant<Long>("search_time")
+    private val SEARCH_TIME = itemConstant<Long>("search_time")
 
     init {
         WereWolf3.INSTANCE.registerEvent<PlayerInteractEvent> { event ->

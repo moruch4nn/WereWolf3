@@ -1,6 +1,6 @@
 package dev.mr3n.werewolf3.commands
 
-import dev.mr3n.werewolf3.ShopMenu.openShopMenu
+import dev.mr3n.werewolf3.ItemShop.openShopMenu
 import dev.mr3n.werewolf3.Status
 import dev.mr3n.werewolf3.WereWolf3
 import org.bukkit.Sound

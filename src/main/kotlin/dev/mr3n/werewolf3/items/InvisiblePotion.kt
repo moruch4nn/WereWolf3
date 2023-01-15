@@ -17,7 +17,7 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 
 object InvisiblePotion: IShopItem.ShopItem("invisible_potion", Material.POTION) {
-    private val TIME: Int = constant("time")
+    private val TIME: Int = itemConstant("time")
 
     override val description: List<String> = super.description.map { it.replace("%time%", "${TIME/20}") }
 

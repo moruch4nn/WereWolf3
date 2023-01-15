@@ -18,7 +18,7 @@ object WolfAxe: IShopItem.ShopItem("wolf_axe",Material.STONE_AXE) {
 
     private val FAILED_TITLE_TEXT = titleText("item.$id.title.failed")
 
-    private val CHARGE: Int = constant("charge")
+    private val CHARGE: Int = itemConstant("charge")
 
     private val CHARGES = mutableMapOf<Player, Int>()
 

@@ -1,24 +1,16 @@
 package dev.mr3n.werewolf3
 
 import dev.moru3.minepie.customgui.inventory.CustomContentsSyncGui.Companion.createCustomContentsGui
-import dev.moru3.minepie.events.EventRegister.Companion.registerEvent
 import dev.moru3.minepie.item.EasyItem
 import dev.mr3n.werewolf3.items.IShopItem
 import dev.mr3n.werewolf3.utils.addLore
-import dev.mr3n.werewolf3.utils.getContainerValue
 import dev.mr3n.werewolf3.utils.languages
 import dev.mr3n.werewolf3.utils.role
-import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.entity.Player
-import org.bukkit.event.Cancellable
 import org.bukkit.event.inventory.ClickType
-import org.bukkit.event.inventory.InventoryClickEvent
-import org.bukkit.event.player.PlayerInteractEvent
-import org.bukkit.inventory.ItemStack
-import org.bukkit.persistence.PersistentDataType
 
-object ShopMenu {
+object ItemShop {
     val SHOP_ID: String
         get() = "WEREWOLF_SHOP"
     private val LIGHT_GRAY_STAINED_GLASS_PANE = EasyItem(Material.LIGHT_GRAY_STAINED_GLASS_PANE, " ")
@@ -47,26 +39,5 @@ object ShopMenu {
             }
             repeat(9 * 6) { addContents(LIGHT_GRAY_STAINED_GLASS_PANE) }
         }.open(player)
-    }
-
-    private fun onClick(event: Cancellable, player: Player, item: ItemStack) {
-        val itemType = item.getContainerValue(Keys.ITEM_TYPE, PersistentDataType.STRING)?:return
-        if(itemType == SHOP_ID) {
-            event.isCancelled = true
-            player.openShopMenu()
-        }
-    }
-
-    init {
-        WereWolf3.INSTANCE.registerEvent<InventoryClickEvent>() { event ->
-            val item = event.currentItem?:return@registerEvent
-            val player = event.whoClicked
-            if(player !is Player) { return@registerEvent }
-            onClick(event, player, item)
-        }
-        WereWolf3.INSTANCE.registerEvent<PlayerInteractEvent>() { event ->
-            val item = event.item?:return@registerEvent
-            onClick(event, event.player, item)
-        }
     }
 }

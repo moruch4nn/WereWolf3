@@ -16,7 +16,7 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 
 object GlowInk: IShopItem.ShopItem("glow_ink", Material.GLOW_INK_SAC) {
-    private val GLOWING_TIME: Long = constant("glowing_time")
+    private val GLOWING_TIME: Long = itemConstant("glowing_time")
 
     private val GLOW_TITLE_TEXT = titleText("glowing")
 

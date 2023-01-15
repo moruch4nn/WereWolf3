@@ -3,6 +3,7 @@ package dev.mr3n.werewolf3.items
 import dev.moru3.minepie.item.EasyItem
 import dev.mr3n.werewolf3.Constants
 import dev.mr3n.werewolf3.Keys
+import dev.mr3n.werewolf3.WereWolf3
 import dev.mr3n.werewolf3.items.doctor.DoctorSword
 import dev.mr3n.werewolf3.items.doctor.HealthCharger
 import dev.mr3n.werewolf3.items.madman.FakeMediumItem
@@ -73,19 +74,19 @@ interface IShopItem {
     fun buy(player: Player): Boolean
 
     abstract class ShopItem(final override val id: String, val material: Material): IShopItem {
+        override val price: Int = itemConstant("price")
+        override val roles: List<Role> = itemConstants<String>("roles").map{Role.valueOf(it)}
+        override val displayName: String = WereWolf3.ITEMS_CONFIG.languages("${id}.languages.name")
+        override val comment: String = WereWolf3.ITEMS_CONFIG.languages("${id}.languages.comment")
+        override val description = WereWolf3.ITEMS_CONFIG.languages("${id}.languages.description").split("\n")
 
-        override val price: Int = constant("price")
-        override val roles: List<Role> = constants<String>("roles").map{Role.valueOf(it)}
-        override val displayName: String = languages("item.${id}.name")
-        override val comment: String = languages("item.${id}.comment")
-        override val description = languages("item.${id}.description").split("\n")
         private val lore: List<String>
             get() {
                 return if(roles.isEmpty()) {
                     description
                 } else {
                     val roles = if(roles.size >= Role.values().size) languages("everyone") else roles.joinToString("${ChatColor.WHITE},") { it.asString() }
-                    description.toMutableList().apply { add("");add(languages("item.roles", "%roles%" to roles)) }
+                    description.toMutableList().apply { add("");add(languages("items.general.languages.roles", "%roles%" to roles)) }
                 }
             }
         override val itemStack: ItemStack
@@ -98,17 +99,17 @@ interface IShopItem {
             }
 
         fun messages(key: String, vararg values: Pair<String, Any>): String {
-            return languages("item.${id}.messages.${key}", *values)
+            return WereWolf3.ITEMS_CONFIG.languages("${id}.languages.messages.${key}", *values)
         }
 
-        fun titleText(name: String): String = dev.mr3n.werewolf3.utils.titleText("item.$id.title.$name")
+        fun titleText(name: String): String = dev.mr3n.werewolf3.utils.titleText("item.${id}.languages.title.$name")
 
-        protected inline fun <reified T> constant(key: String): T {
-            return dev.mr3n.werewolf3.utils.constant("items.${id}.${key}")
+        protected inline fun <reified T> itemConstant(key: String): T {
+            return WereWolf3.ITEMS_CONFIG.constant("${id}.languages.${key}")
         }
 
-        protected inline fun <reified T> constants(key: String): List<T> {
-            return dev.mr3n.werewolf3.utils.constants<T>("items.${id}.${key}")
+        protected inline fun <reified T> itemConstants(key: String): List<T> {
+            return WereWolf3.ITEMS_CONFIG.constants("${id}.languages.${key}")
         }
 
         override fun isSimilar(itemStack: ItemStack): Boolean {
@@ -121,10 +122,10 @@ interface IShopItem {
             return if(player.money >= price) {
                 player.money -= price
                 player.inventory.addItem(itemStack)
-                player.sendMessage(languages("shop.bought", "%item%" to displayName, "%price%" to "${price}${Constants.MONEY_UNIT}").asPrefixed())
+                player.sendMessage(languages("shop.messages.bought", "%item%" to displayName, "%price%" to "${price}${Constants.MONEY_UNIT}").asPrefixed())
                 true
             } else {
-                player.sendMessage(languages("shop.cant_buy", "%item%" to displayName, "%price%" to "${price}${Constants.MONEY_UNIT}").asPrefixed())
+                player.sendMessage(languages("shop.messages.not_enough_money", "%item%" to displayName, "%price%" to "${price}${Constants.MONEY_UNIT}").asPrefixed())
                 false
             }
         }
@@ -154,7 +155,7 @@ interface IShopItem {
             val FAKE_MEDIUM_ITEM = FakeMediumItem
             val HEALTH_CHARGER = HealthCharger
             val DOCTOR_SWORD = DoctorSword
-            val ONE_SHOT_BOW = OneShotBow
+            val ONE_SHOT_BOW = OneShotCrossbow
             val TOTEM = Totem
             val SPEED_POTION = SpeedPotion
             val STONE_SWORD = StoneSword

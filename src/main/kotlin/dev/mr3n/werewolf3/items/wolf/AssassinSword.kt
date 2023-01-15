@@ -15,7 +15,7 @@ object AssassinSword: IShopItem.ShopItem("assassin_sword", Material.IRON_SWORD) 
 
     private val FAILED_TITLE_TEXT = titleText("item.$id.title.assassin_failed")
 
-    private val ATTACK_ANGLE: Double = constant("attack_angle")
+    private val ATTACK_ANGLE: Double = itemConstant("attack_angle")
 
     init {
         WereWolf3.INSTANCE.registerEvent<EntityDamageByEntityEvent> { event ->

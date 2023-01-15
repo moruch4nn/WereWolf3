@@ -15,9 +15,9 @@ import kotlin.math.sin
 object MultipleSeerItem: IShopItem.ShopItem("multiple_seer", Material.ENDER_EYE) {
     private val SEER_TITLE_TEXT = titleText("seer")
 
-    private val SEER_TIME: Long = constant("seer_time")
+    private val SEER_TIME: Long = itemConstant("seer_time")
 
-    private val DISTANCE: Double = constant("distance")
+    private val DISTANCE: Double = itemConstant("distance")
 
     // なんか明るめの紫色みたいなやつ。ChatColor.LIGHT_PURPLE。名前統一してくれ
     private val PARTICLE_COLOR = Particle.DustOptions(Color.FUCHSIA, 1f)

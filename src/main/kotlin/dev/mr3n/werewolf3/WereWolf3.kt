@@ -27,14 +27,15 @@ import org.bukkit.Location
 import org.bukkit.boss.BarColor
 import org.bukkit.boss.BarStyle
 import org.bukkit.boss.BossBar
+import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.plugin.java.JavaPlugin
 
 class WereWolf3: JavaPlugin() {
     override fun onEnable() {
-        CONFIG.saveDefaultConfig()
-        LANGUAGES.saveDefaultConfig()
+        CONFIG.getKeys(true)
+        LANGUAGES_CONFIG.getKeys(true)
         // ゲームルールを設定
         Bukkit.getWorlds()[0].apply {
             setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false)
@@ -249,9 +250,10 @@ class WereWolf3: JavaPlugin() {
         lateinit var INSTANCE: WereWolf3
             private set
         // languages.ymlファイル
-        val LANGUAGES: Config by lazy { Config(INSTANCE,"languages.yml") }
+        val LANGUAGES_CONFIG: FileConfiguration by lazy { Config(INSTANCE,"languages.yml").config()!! }
         // config.ymlファイル
-        val CONFIG: Config by lazy { Config(INSTANCE,"config.yml") }
+        val CONFIG: FileConfiguration by lazy { Config(INSTANCE,"config.yml").config()!! }
+        val ITEMS_CONFIG: FileConfiguration by lazy { Config(INSTANCE, "items.yml").config()!! }
 
         /**
          * 人狼を開始する関数です。

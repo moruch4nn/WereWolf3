@@ -23,7 +23,7 @@ object SeerItem: IShopItem.ShopItem("seer", Material.MUSIC_DISC_CHIRP) {
     // map<占い師,triple<最後クリックした際のタイムスタンプ,対象者,クリックしたミリ秒>>
     private val LAST_CLICKED = mutableMapOf<UUID, SeerInfo>()
 
-    private val SEER_TIME: Long = constant("seer_time")
+    private val SEER_TIME: Long = itemConstant("seer_time")
 
     override fun buy(player: Player): Boolean {
         if(player.isBE) {

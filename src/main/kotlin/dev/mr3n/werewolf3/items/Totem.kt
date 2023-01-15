@@ -14,9 +14,9 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 
 object Totem: IShopItem.ShopItem("totem_of_undying", Material.TOTEM_OF_UNDYING) {
-    private val SPEED_LEVEL: Int = constant("speed_level")
+    private val SPEED_LEVEL: Int = itemConstant("speed_level")
 
-    private val SPEED_TIME: Int = constant("speed_time")
+    private val SPEED_TIME: Int = itemConstant("speed_time")
 
     init {
         // バニラのトーテムを無効化

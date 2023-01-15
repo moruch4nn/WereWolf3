@@ -12,9 +12,9 @@ import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 
 object SpeedPotion: IShopItem.ShopItem("speed_potion", Material.POTION) {
-    private val TIME: Int = constant("time")
+    private val TIME: Int = itemConstant("time")
 
-    private val LEVEL: Int = constant("level")
+    private val LEVEL: Int = itemConstant("level")
 
     override val description: List<String> = super.description.map { it.replace("%time%", "${TIME/20}") }
 

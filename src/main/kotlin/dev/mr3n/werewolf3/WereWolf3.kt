@@ -36,6 +36,7 @@ class WereWolf3: JavaPlugin() {
     override fun onEnable() {
         CONFIG.getKeys(true)
         LANGUAGES_CONFIG.getKeys(true)
+        ITEMS_CONFIG.getKeys(true)
         // ゲームルールを設定
         Bukkit.getWorlds()[0].apply {
             setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false)
@@ -61,7 +62,7 @@ class WereWolf3: JavaPlugin() {
             it.tabCompleter = ShopCommand
         }
         // >>> クラスの初期化 >>>
-        IShopItem.ShopItem.ITEMS
+        IShopItem.ShopItem.Companion
         SpectatorPacketUtil.init()
         GameTerminator.init()
         Role.ROLES
@@ -250,10 +251,10 @@ class WereWolf3: JavaPlugin() {
         lateinit var INSTANCE: WereWolf3
             private set
         // languages.ymlファイル
-        val LANGUAGES_CONFIG: FileConfiguration by lazy { Config(INSTANCE,"languages.yml").config()!! }
+        val LANGUAGES_CONFIG: FileConfiguration by lazy { Config(INSTANCE,"languages.yml").apply{saveDefaultConfig()}.config()!! }
         // config.ymlファイル
-        val CONFIG: FileConfiguration by lazy { Config(INSTANCE,"config.yml").config()!! }
-        val ITEMS_CONFIG: FileConfiguration by lazy { Config(INSTANCE, "items.yml").config()!! }
+        val CONFIG: FileConfiguration by lazy { Config(INSTANCE,"config.yml").apply{saveDefaultConfig()}.config()!! }
+        val ITEMS_CONFIG: FileConfiguration by lazy { Config(INSTANCE, "items.yml").apply{saveDefaultConfig()}.config()!! }
 
         /**
          * 人狼を開始する関数です。

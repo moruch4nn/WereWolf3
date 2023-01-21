@@ -18,7 +18,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerInteractEvent
 
 object LastResort: IShopItem.ShopItem("last_resort",Material.END_CRYSTAL) {
-    private val LAST_RESORT_TITLE_TEXT = titleText("item.$id.title.last_resort")
+    private val LAST_RESORT_TITLE_TEXT = titleText("last_resort")
 
     private var hasBought = false
 

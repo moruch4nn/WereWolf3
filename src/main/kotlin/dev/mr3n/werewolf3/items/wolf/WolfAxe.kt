@@ -12,11 +12,11 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.player.PlayerItemHeldEvent
 
 object WolfAxe: IShopItem.ShopItem("wolf_axe",Material.STONE_AXE) {
-    private val WOLF_AXE_TITLE_TEXT = titleText("item.$id.title.wolf_axe")
+    private val WOLF_AXE_TITLE_TEXT = titleText("wolf_axe")
 
-    private val SUCCESS_TITLE_TEXT = titleText("item.$id.title.success")
+    private val SUCCESS_TITLE_TEXT = titleText("success")
 
-    private val FAILED_TITLE_TEXT = titleText("item.$id.title.failed")
+    private val FAILED_TITLE_TEXT = titleText("failed")
 
     private val CHARGE: Int = itemConstant("charge")
 

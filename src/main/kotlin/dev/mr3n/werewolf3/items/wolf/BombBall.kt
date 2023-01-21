@@ -18,7 +18,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 
 object BombBall: IShopItem.ShopItem("bomb_ball", Material.SNOWBALL) {
-    private val WARNING_TITLE_TEXT = titleText("item.$id.title.warning")
+    private val WARNING_TITLE_TEXT = titleText("warning")
 
     private const val ENTITY_TYPE = "BOMB_BALL"
 

@@ -93,14 +93,14 @@ interface IShopItem {
             return WereWolf3.ITEMS_CONFIG.languages("${id}.languages.messages.${key}", *values)
         }
 
-        fun titleText(name: String): String = dev.mr3n.werewolf3.utils.titleText("item.${id}.languages.title.$name")
+        fun titleText(name: String): String = WereWolf3.ITEMS_CONFIG.languages("${id}.languages.title.${name}.title").toTitleText(WereWolf3.ITEMS_CONFIG.languages("${id}.languages.title.${name}.color"))
 
         protected inline fun <reified T> itemConstant(key: String): T {
-            return WereWolf3.ITEMS_CONFIG.constant("${id}.languages.${key}")
+            return WereWolf3.ITEMS_CONFIG.constant("${id}.${key}")
         }
 
         protected inline fun <reified T> itemConstants(key: String): List<T> {
-            return WereWolf3.ITEMS_CONFIG.constants("${id}.languages.${key}")
+            return WereWolf3.ITEMS_CONFIG.constants("${id}.${key}")
         }
 
         override fun isSimilar(itemStack: ItemStack): Boolean {

@@ -3,7 +3,6 @@ package dev.mr3n.werewolf3.utils
 import org.bukkit.Bukkit
 import org.bukkit.Location
 import org.bukkit.entity.Player
-import org.bukkit.util.Vector
 
 fun getPlayerSightHeight(player: Player): Location {
     val start = player.location.clone()

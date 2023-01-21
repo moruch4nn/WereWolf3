@@ -11,8 +11,7 @@ import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.bukkit.event.EventPriority
 import org.bukkit.event.player.AsyncPlayerChatEvent
-import java.util.SortedMap
-import java.util.TreeMap
+import java.util.*
 
 fun Player.conversationalDistance(priority: Int, distance: Double) {
     val map = ConversationalUtil.players[this]?:TreeMap()

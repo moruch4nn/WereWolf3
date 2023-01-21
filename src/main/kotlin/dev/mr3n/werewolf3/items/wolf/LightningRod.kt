@@ -19,7 +19,7 @@ import org.bukkit.potion.PotionEffectType
 object LightningRod: IShopItem.ShopItem("lightning_rod", Material.LIGHTNING_ROD) {
     private val BLINDNESS_TIME: Long = itemConstant("blindness_time")
 
-    private val BLINDNESS_TITLE_TEXT = titleText("item.${id}.title.blindness")
+    private val BLINDNESS_TITLE_TEXT = titleText("blindness")
 
     private var blindness = 0L
 

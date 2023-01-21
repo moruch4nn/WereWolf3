@@ -11,9 +11,9 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent
 import kotlin.math.abs
 
 object AssassinSword: IShopItem.ShopItem("assassin_sword", Material.IRON_SWORD) {
-    private val SUCCESS_TITLE_TEXT = titleText("item.$id.title.assassin_success")
+    private val SUCCESS_TITLE_TEXT = titleText("assassin_success")
 
-    private val FAILED_TITLE_TEXT = titleText("item.$id.title.assassin_failed")
+    private val FAILED_TITLE_TEXT = titleText("assassin_failed")
 
     private val ATTACK_ANGLE: Double = itemConstant("attack_angle")
 

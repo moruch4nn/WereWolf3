@@ -91,7 +91,7 @@ enum class Role() {
                 meta.container.set(HELMET_ROLE_TAG_KEY,RoleTagType,this)
                 meta.setColor(Color.fromRGB(color.red,color.green,color.blue))
                 meta.isUnbreakable = true
-                meta.setDisplayName(languages("item.co_helmet.name", "%color%" to this.color, "%role%" to this.displayName))
+                meta.setDisplayName(languages("items.co_helmet.name", "%color%" to this.color, "%role%" to this.displayName))
             }
         }
 

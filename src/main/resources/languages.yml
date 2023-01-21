@@ -66,7 +66,7 @@ items:
   co_helmet:
     name: "%color%%role%をCoする"
 time:
-  day:
+  morning:
     name: "&6朝"
     emoji: "&6☀"
     description: "全員と会話ができます。残り%day%日..."

@@ -1,3 +1,15 @@
+voice_chat:
+  discord:
+    enable: false
+    bot_token: ""
+    voice_channel_id: ""
+    dead_voice_chat_id: ""
+  web_ui:
+    enable: false
+    url_link: ""
+    api_key: ""
+    secret: ""
+
 general:
   point_flush_speed: 15
   languages:
@@ -15,7 +27,6 @@ game:
   team_kill_bonus: 300 # 村人が同士討ちした際に人狼に入るボーナス
 bedrock_edition:
   prefix: "BE." # for geyser and floodgate servers.
-
 roles:
   seer:
     items:

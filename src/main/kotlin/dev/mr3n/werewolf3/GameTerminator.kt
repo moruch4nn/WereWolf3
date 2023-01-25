@@ -87,6 +87,7 @@ object GameTerminator {
         } catch(e: Exception) { e.printStackTrace() }
         try {
             Bukkit.getOnlinePlayers().forEach { player ->
+                // プレイヤーの会話可能範囲の制限をなくす
                 player.clearConversationalDistance()
                 // サイドバーを待機中のものに変更
                 player.sidebar = WaitingSidebar()

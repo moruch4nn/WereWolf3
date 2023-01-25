@@ -13,20 +13,32 @@ import org.bukkit.event.EventPriority
 import org.bukkit.event.player.AsyncPlayerChatEvent
 import java.util.*
 
+/**
+ * プレイヤーの会話可能範囲を設定する
+ */
 fun Player.conversationalDistance(priority: Int, distance: Double) {
     val map = ConversationalUtil.players[this]?:TreeMap()
     map[priority] = distance
     ConversationalUtil.players[this] = map
 }
 
+/**
+ * プレイヤーの会話可能範囲の制限をなくす
+ */
 fun Player.clearConversationalDistance() {
     ConversationalUtil.players[this]?.clear()
 }
 
+/**
+ * プレイヤーの特定のpriorityの会話可能範囲の制限を消す
+ */
 fun Player.remConversationalDistance(priority: Int) {
     ConversationalUtil.players[this]?.remove(priority)
 }
 
+/**
+ * Playerとtargetが会話できるかどうかをtrue/falseで返す。
+ */
 fun Player.canConversationWith(target: Player): Boolean {
     val player = this
     // 二人のプレイヤーの距離を取得
@@ -38,6 +50,9 @@ fun Player.canConversationWith(target: Player): Boolean {
     return true
 }
 
+/**
+ * プレイヤーの会話可能範囲
+ */
 val Player.conversationalDistance: Double
     get() {
         val map = ConversationalUtil.players[this]?:TreeMap()
@@ -48,8 +63,11 @@ object ConversationalUtil {
     val players = mutableMapOf<Player, SortedMap<Int, Double>>()
 
     init {
+        // プレイヤーがチャットした際に実行
         WereWolf3.INSTANCE.registerEvent<AsyncPlayerChatEvent>(p = EventPriority.HIGHEST, ic = true) { event ->
+            // プレイヤーの会話可能範囲 / メートル
             val conversationalDistance = event.player.conversationalDistance
+            // 0だった場合は会話できないのでイベントキャンセル
             if(conversationalDistance == 0.0) {
                 event.isCancelled = true
             } else if(conversationalDistance > 0) {

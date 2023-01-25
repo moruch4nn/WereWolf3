@@ -11,8 +11,6 @@ import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType
 
 object ItemShop {
-    val SHOP_ID: String
-        get() = "WEREWOLF_SHOP"
     private val LIGHT_GRAY_STAINED_GLASS_PANE = EasyItem(Material.LIGHT_GRAY_STAINED_GLASS_PANE, " ")
     private val RED_STAINED_GLASS_PANE = EasyItem(Material.RED_STAINED_GLASS_PANE, " ")
 

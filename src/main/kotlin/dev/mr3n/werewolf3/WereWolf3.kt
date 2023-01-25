@@ -18,7 +18,6 @@ import dev.mr3n.werewolf3.sidebar.StartingSidebar
 import dev.mr3n.werewolf3.sidebar.WaitingSidebar
 import dev.mr3n.werewolf3.utils.hasObstacleInSightPath
 import dev.mr3n.werewolf3.utils.languages
-import dev.mr3n.werewolf3.utils.parseTime
 import dev.mr3n.werewolf3.utils.role
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
@@ -49,14 +48,17 @@ class WereWolf3: JavaPlugin() {
         Bukkit.getPluginManager().registerEvents(PlayerListener,this)
         // すでにサーバーにいるプレイヤーのjoin eventを発生させる(初期化用)
         Bukkit.getOnlinePlayers().forEach { PlayerListener.onJoin(PlayerJoinEvent(it,null)) }
+        // /start コマンドの登録
         this.getCommand("start")?.also {
             it.setExecutor(StartCommand)
             it.tabCompleter = StartCommand
         }
+        // /end コマンドの登録
         this.getCommand("end")?.also {
             it.setExecutor(EndCommand)
             it.tabCompleter = EndCommand
         }
+        // /shop コマンドの登録
         this.getCommand("shop")?.also {
             it.setExecutor(ShopCommand)
             it.tabCompleter = ShopCommand
@@ -71,63 +73,37 @@ class WereWolf3: JavaPlugin() {
         Time.MORNING.title
         Time.NIGHT.title
         // <<< クラスの初期化 <<<
-        this.getCommand("debug")?.also {
-            it.setExecutor { sender, _, _, args ->
-                if(sender !is Player) { return@setExecutor true  }
-                when(args.getOrNull(0)) {
-                    "test1" -> {
-                        sender.inventory.addItem(IShopItem.ShopItem.ITEMS_BY_ID[args.getOrNull(1)]?.itemStack)
-                    }
-                    "test2" -> {
-                        val players = args.getOrNull(1)?.toIntOrNull()?:return@setExecutor true
-                        val result = Role.values().associateWith { it.calc(players) }
-                        val wolfTeams = result.filter { it.key.team==Role.Team.WOLF }
-                        sender.sendMessage(result.mapKeys { it.key.displayName }.toString())
-                        sender.sendMessage("人狼陣営: ${wolfTeams.map { it.value }.sum()}, 村人陣営: ${players - wolfTeams.map { it.value }.sum()}")
-                    }
-                }
-                true
-            }
-        }
 
+        // >>> プレイヤー間に障害物がある場合プレイヤーを透明にする処理:非同期 >>>
         this.runTaskTimerAsync(3, 3) {
             when(STATUS) {
+                // if:ゲームが実行中の場合のみ実行
                 RUNNING, STARTING -> {
+                    // for:ゲームに参加しているすべてのプレイヤー
                     PLAYERS.forEach { player ->
-                        val visiblePlayers = PLAYERS
-                            .filter { player2 -> player2 != player }
-                            .filter { player2 -> player2.gameMode != GameMode.SPECTATOR }
-                            .filterNot { player2 ->
-                                // プレイヤー間に障害物があるかどうか。ある場合はtrueなのでfilterNotでfalseのみ残す
-                                player.hasObstacleInSightPath(player2)
-                            }
+                        // プレイヤー同士が見えている場合
                         PLAYERS.forEach s@{ player2 ->
-                            if (player.role == Role.WOLF && player2.role == Role.WOLF) { return@s }
-                            if (visiblePlayers.contains(player2)) {
-                                InvisibleEquipmentPacketUtil.remove(player, player2, 0)
-                                MetadataPacketUtil.removeFromInvisible(player, player2)
-                            } else {
-                                InvisibleEquipmentPacketUtil.add(player, player2, 0, *EnumWrappers.ItemSlot.values())
-                                MetadataPacketUtil.addToInvisible(player, player2)
+                                if(player2 == player) { return@s }
+                                if(player2.gameMode == GameMode.SPECTATOR) { return@s }
+                                // 人狼同士は離れてもお互いが見えるように
+                                if (player.role == Role.WOLF && player2.role == Role.WOLF) { return@s }
+                                // プレイヤー間に障害物があるかどうか。ある場合はtrueなのでfilterNotでfalseのみ残す
+                                if(player.hasObstacleInSightPath(player2)) {
+                                    // if:プレイヤーとの間に障害物がある場合
+                                    InvisibleEquipmentPacketUtil.add(player, player2, 0, *EnumWrappers.ItemSlot.values())
+                                    MetadataPacketUtil.addToInvisible(player, player2)
+                                } else {
+                                    // if:プレイヤーとの間に障害物がない場合
+                                    InvisibleEquipmentPacketUtil.remove(player, player2, 0)
+                                    MetadataPacketUtil.removeFromInvisible(player, player2)
+                                }
                             }
-                        }
-                        val visibleDeadBodies = DeadBody.DEAD_BODIES
-                            .filterNot { deadBody ->
-                                // 死体とプレイヤーの間に障害物があるかどうか。ある場合はtrueなのでfilterNotでfalseのみ残す
-                                player.hasObstacleInSightPath(deadBody.location.clone())
-                            }
-                        DeadBody.DEAD_BODIES.forEach { deadBody ->
-                            if(visibleDeadBodies.contains(deadBody)) {
-                                deadBody.show(listOf(player))
-                            } else {
-                                deadBody.hide(listOf(player))
-                            }
-                        }
                     }
                 }
                 else -> {}
             }
         }
+        // <<< プレイヤー間に障害物がある場合プレイヤーを透明にする処理:非同期 <<<
 
         // 毎tickループ
         TickTask.task { loopCount ->
@@ -166,24 +142,7 @@ class WereWolf3: JavaPlugin() {
                     if(TIME_LEFT<=0) { GameInitializer.run() }
                 }
                 RUNNING -> {
-                    // 残り時間を減らす
-                    TIME_LEFT--
-                    // 時間が来たら朝/夜反転
-                    if(TIME_LEFT<=0) { TIME_OF_DAY = TIME_OF_DAY.next() }
-                    // ボスバーの進行度を現在の残り時間に合わせる
-                    BOSSBAR.progress = TIME_LEFT * (1.0 / GAME_TIME)
-                    // ボスバーのタイトルにタイマーを表示
-                    BOSSBAR.setTitle(languages("bossbar.title","%time%" to TIME_OF_DAY.displayName, "%emoji%" to TIME_OF_DAY.emoji, "%time_left%" to (TIME_LEFT / 20).parseTime()))
                     GameRunner.running(loopCount = loopCount)
-                    // 生きているプレイヤー一覧(スペクテイターじゃないプレイヤー)
-                    val alivePlayers = PLAYERS.filter { p->p.gameMode!=GameMode.SPECTATOR }
-                    if(alivePlayers.count { p->p.role?.team==Role.Team.WOLF }<=0) {
-                        // 人狼陣営の数が0になった場合ゲームを終了
-                        GameTerminator.end(Role.Team.VILLAGER, languages("title.win.reason.anni", "%role%" to Role.Team.WOLF.displayName))
-                    } else if(alivePlayers.count { p->p.role?.team==Role.Team.VILLAGER && p.role != Role.MADMAN }<=0) {
-                        // 村人陣営の数が0になった場合ゲームを終了
-                        GameTerminator.end(Role.Team.WOLF, languages("title.win.reason.anni", "%role%" to Role.Team.VILLAGER.displayName))
-                    }
                 }
                 ENDING -> {}
             }

@@ -16,8 +16,15 @@ enum class Time(val barColor: BarColor) {
 
     fun lowercase() = this.toString().lowercase()
 
+    /**
+     * 時間の表示名
+     */
     val displayName: String
         get() = languages("time.${lowercase()}.name")
+
+    /**
+     * 時間に合う絵文字~EMOJI~
+     */
     val emoji: String
         get() = languages("time.${lowercase()}.emoji")
 

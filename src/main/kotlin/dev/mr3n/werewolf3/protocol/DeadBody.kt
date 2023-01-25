@@ -6,6 +6,7 @@ import dev.moru3.minepie.Executor.Companion.runTaskTimer
 import dev.moru3.minepie.Executor.Companion.runTaskTimerAsync
 import dev.moru3.minepie.events.EventRegister.Companion.registerEvent
 import dev.mr3n.werewolf3.Constants
+import dev.mr3n.werewolf3.GameStatus
 import dev.mr3n.werewolf3.WereWolf3
 import dev.mr3n.werewolf3.events.WereWolf3DeadBodyClickEvent
 import dev.mr3n.werewolf3.utils.*
@@ -231,8 +232,6 @@ class DeadBody(val player: Player) {
     }
 
     companion object {
-        private const val ENTITY_TYPE = "DEAD_BODY_MARKER"
-
         // 現在存在している死体の一覧です。
         val DEAD_BODIES = CopyOnWriteArrayList<DeadBody>()
 
@@ -319,6 +318,32 @@ class DeadBody(val player: Player) {
                     player.sendMessage(languages("carrying_dead_body.too_far").asPrefixed())
                 }
             }
+
+            // >>> プレイヤーと死体の間に障害物がある場合プレイヤーを透明にする処理 >>>
+            WereWolf3.INSTANCE.runTaskTimerAsync(3, 3) {
+                when(WereWolf3.STATUS) {
+                    // if:ゲームが実行中の場合のみ実行
+                    GameStatus.RUNNING, GameStatus.STARTING -> {
+                        // for:ゲームに参加しているすべてのプレイヤーをfor
+                        WereWolf3.PLAYERS.forEach { player ->
+                            val visibleDeadBodies = DEAD_BODIES
+                                .filterNot { deadBody ->
+                                    // 死体とプレイヤーの間に障害物があるかどうか。ある場合はtrueなのでfilterNotでfalseのみ残す
+                                    player.hasObstacleInSightPath(deadBody.location.clone())
+                                }
+                            DEAD_BODIES.forEach { deadBody ->
+                                if(visibleDeadBodies.contains(deadBody)) {
+                                    deadBody.show(listOf(player))
+                                } else {
+                                    deadBody.hide(listOf(player))
+                                }
+                            }
+                        }
+                    }
+                    else -> {}
+                }
+            }
+            // <<< プレイヤーと死体の間に障害物がある場合プレイヤーを透明にする処理 <<<
         }
     }
 }

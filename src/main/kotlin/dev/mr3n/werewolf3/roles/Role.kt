@@ -1,11 +1,11 @@
 package dev.mr3n.werewolf3.roles
 
+import dev.moru3.minepie.Executor.Companion.runTaskTimerAsync
 import dev.mr3n.werewolf3.WereWolf3
 import dev.mr3n.werewolf3.items.IShopItem
-import dev.mr3n.werewolf3.utils.constants
-import dev.mr3n.werewolf3.utils.container
-import dev.mr3n.werewolf3.utils.languages
+import dev.mr3n.werewolf3.utils.*
 import net.md_5.bungee.api.ChatColor
+import org.bukkit.Bukkit
 import org.bukkit.Color
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
@@ -98,6 +98,38 @@ enum class Role() {
     companion object {
         val HELMET_ROLE_TAG_KEY = NamespacedKey(WereWolf3.INSTANCE,"role")
         val ROLES = mutableMapOf<Role, List<UUID>>()
+
+        init {
+            // >>> カミングアウト帽子に関する処理 >>>
+            WereWolf3.INSTANCE.runTaskTimerAsync(1L,1L) {
+                Bukkit.getOnlinePlayers().forEach { player ->
+                    // プレイヤーのヘルメットを取得
+                    val helmet = player.inventory.helmet
+                    // ヘルメットのCoの役職を取得。nullだった場合はreturn
+                    val coRole = helmet?.getContainerValue(Role.HELMET_ROLE_TAG_KEY, RoleTagType)
+                    // まだCoしていない役職だった場合
+                    if (player.co != coRole) {
+                        if (coRole == null) {
+                            player.setDisplayName(player.name)
+                            player.setPlayerListName(player.name)
+                            // 何をcoしたかをほぞん
+                            player.co = null
+                        } else {
+                            // すべてのプレイヤーにCoした旨を伝える。
+                            WereWolf3.PLAYERS.forEach {
+                                it.sendMessage(languages("messages.coming_out", "%color%" to coRole.color, "%player%" to player.name, "%role%" to coRole.displayName))
+                            }
+                            // プレイヤーのprefixにCoした役職を表示
+                            player.setDisplayName("${coRole.color}[${coRole.displayName}Co]${player.name}")
+                            player.setPlayerListName("${coRole.color}[${coRole.displayName}Co]${player.name}")
+                            // 何をcoしたかをほぞん
+                            player.co = coRole
+                        }
+                    }
+                }
+            }
+            // <<< カミングアウト帽子に関する処理 <<<
+        }
     }
 
     // プレイヤー数の単位。

@@ -4,13 +4,14 @@ import dev.mr3n.werewolf3.roles.Role
 import dev.mr3n.werewolf3.sidebar.DeathSidebar
 import dev.mr3n.werewolf3.sidebar.ISideBar.Companion.sidebar
 import dev.mr3n.werewolf3.sidebar.RunningSidebar
-import dev.mr3n.werewolf3.utils.co
-import dev.mr3n.werewolf3.utils.getContainerValue
-import dev.mr3n.werewolf3.utils.languages
-import dev.mr3n.werewolf3.utils.money
+import dev.mr3n.werewolf3.utils.*
 import org.bukkit.GameMode
 
+
 object GameRunner {
+    /**
+     * ゲーム実行中(WereWolf3.STATUS == RUNNING)に毎チック実行される関数。
+     */
     fun running(loopCount: Int) {
         WereWolf3.PLAYERS.forEach { player ->
             // サイドバーの情報を更新する
@@ -23,31 +24,27 @@ object GameRunner {
                 sidebar.players(WereWolf3.PLAYERS.count { it.gameMode != GameMode.SPECTATOR })
             }
             if(player.gameMode != GameMode.SPECTATOR) {
-                // プレイヤーのヘルメットを取得
-                val helmet = player.inventory.helmet
-                // ヘルメットのCoの役職を取得。nullだった場合はreturn
-                val coRole = helmet?.getContainerValue(Role.HELMET_ROLE_TAG_KEY, Role.RoleTagType)
-                // まだCoしていない役職だった場合
-                if (player.co != coRole) {
-                    if (coRole == null) {
-                        player.setDisplayName(player.name)
-                        player.setPlayerListName(player.name)
-                        // 何をcoしたかをほぞん
-                        player.co = null
-                    } else {
-                        // すべてのプレイヤーにCoした旨を伝える。
-                        WereWolf3.PLAYERS.forEach {
-                            it.sendMessage(languages("messages.coming_out", "%color%" to coRole.color, "%player%" to player.name, "%role%" to coRole.displayName))
-                        }
-                        // プレイヤーのprefixにCoした役職を表示
-                        player.setDisplayName("${coRole.color}[${coRole.displayName}Co]${player.name}")
-                        player.setPlayerListName("${coRole.color}[${coRole.displayName}Co]${player.name}")
-                        // 何をcoしたかをほぞん
-                        player.co = coRole
-                    }
-                }
                 // 30秒おきにお金を追加する
                 if (loopCount % (20 * 30) == 0) { player.money += Constants.ADD_MONEY }
+            }
+
+            // 残り時間を減らす
+            WereWolf3.TIME_LEFT--
+            // 時間が来たら朝/夜反転
+            if(WereWolf3.TIME_LEFT <=0) { WereWolf3.TIME_OF_DAY = WereWolf3.TIME_OF_DAY.next() }
+            // ボスバーの進行度を現在の残り時間に合わせる
+            WereWolf3.BOSSBAR.progress = WereWolf3.TIME_LEFT * (1.0 / WereWolf3.GAME_TIME)
+            // ボスバーのタイトルにタイマーを表示
+            WereWolf3.BOSSBAR.setTitle(languages("bossbar.title","%time%" to WereWolf3.TIME_OF_DAY.displayName, "%emoji%" to WereWolf3.TIME_OF_DAY.emoji, "%time_left%" to (WereWolf3.TIME_LEFT / 20).parseTime()))
+
+            // 生きているプレイヤー一覧(スペクテイターじゃないプレイヤー)
+            val alivePlayers = WereWolf3.PLAYERS.filter { p->p.gameMode!=GameMode.SPECTATOR }
+            if(alivePlayers.count { p->p.role?.team==Role.Team.WOLF }<=0) {
+                // 人狼陣営の数が0になった場合ゲームを終了
+                GameTerminator.end(Role.Team.VILLAGER, languages("title.win.reason.anni", "%role%" to Role.Team.WOLF.displayName))
+            } else if(alivePlayers.count { p->p.role?.team==Role.Team.VILLAGER && p.role != Role.MADMAN }<=0) {
+                // 村人陣営(狂人は除く)の数が0になった場合ゲームを終了
+                GameTerminator.end(Role.Team.WOLF, languages("title.win.reason.anni", "%role%" to Role.Team.VILLAGER.displayName))
             }
         }
     }

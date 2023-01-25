@@ -194,11 +194,7 @@ object PlayerListener: Listener {
     fun onDamage(event: EntityDamageEvent) {
         val player = event.entity
         if(player !is Player) { return }
-        if(player.gameMode==GameMode.SPECTATOR) {
-            event.isCancelled = true
-        } else {
-            if (WereWolf3.STATUS == GameStatus.RUNNING) { return }
-            event.isCancelled = true
-        }
+        if(WereWolf3.STATUS == GameStatus.RUNNING) { return }
+        event.isCancelled = true
     }
 }

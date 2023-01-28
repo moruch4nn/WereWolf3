@@ -11,7 +11,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.player.PlayerItemHeldEvent
 
-object WolfAxe: IShopItem.ShopItem("wolf_axe",Material.STONE_AXE) {
+object WolfAxe: IShopItem.ShopItem("wolf_axe",Material.IRON_AXE) {
     private val WOLF_AXE_TITLE_TEXT = titleText("wolf_axe")
 
     private val SUCCESS_TITLE_TEXT = titleText("success")

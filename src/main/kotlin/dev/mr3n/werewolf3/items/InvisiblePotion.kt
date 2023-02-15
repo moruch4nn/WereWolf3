@@ -3,6 +3,7 @@ package dev.mr3n.werewolf3.items
 import com.comphenix.protocol.wrappers.EnumWrappers
 import dev.moru3.minepie.Executor.Companion.runTaskLater
 import dev.moru3.minepie.events.EventRegister.Companion.registerEvent
+import dev.mr3n.werewolf3.PLAYERS
 import dev.mr3n.werewolf3.WereWolf3
 import dev.mr3n.werewolf3.protocol.InvisibleEquipmentPacketUtil
 import org.bukkit.Color
@@ -16,6 +17,7 @@ import org.bukkit.inventory.meta.PotionMeta
 import org.bukkit.potion.PotionEffect
 import org.bukkit.potion.PotionEffectType
 
+@Suppress("unused")
 object InvisiblePotion: IShopItem.ShopItem("invisible_potion", Material.POTION) {
     private val TIME: Int = itemConstant("time")
 
@@ -31,12 +33,12 @@ object InvisiblePotion: IShopItem.ShopItem("invisible_potion", Material.POTION) 
         WereWolf3.INSTANCE.registerEvent<EntityPotionEffectEvent> { event ->
             val player = event.entity
             if(player !is Player) { return@registerEvent }
-            if(!WereWolf3.PLAYERS.contains(player)) { return@registerEvent }
+            if(!PLAYERS.contains(player)) { return@registerEvent }
             when(event.action) {
                 EntityPotionEffectEvent.Action.ADDED -> {
                     if(event.newEffect?.type!=PotionEffectType.INVISIBILITY) { return@registerEvent }
                     WereWolf3.INSTANCE.runTaskLater(1L) {
-                        WereWolf3.PLAYERS.forEach { sendTo ->
+                        PLAYERS.forEach { sendTo ->
                             InvisibleEquipmentPacketUtil.add(sendTo, player, 10, EnumWrappers.ItemSlot.HEAD, EnumWrappers.ItemSlot.CHEST, EnumWrappers.ItemSlot.LEGS, EnumWrappers.ItemSlot.FEET)
                         }
                     }
@@ -45,13 +47,13 @@ object InvisiblePotion: IShopItem.ShopItem("invisible_potion", Material.POTION) 
                     if(event.oldEffect?.type!=PotionEffectType.INVISIBILITY) { return@registerEvent }
                     // イベント発生直後はエフェクトが残っている判定なので1tick後に帽子を復元するパケットを送信
                     WereWolf3.INSTANCE.runTaskLater(1L) {
-                        WereWolf3.PLAYERS.forEach { sendTo -> InvisibleEquipmentPacketUtil.remove(sendTo, player, 10) }
+                        PLAYERS.forEach { sendTo -> InvisibleEquipmentPacketUtil.remove(sendTo, player, 10) }
                     }
                 }
                 EntityPotionEffectEvent.Action.CLEARED -> {
                     // イベント発生直後はエフェクトが残っている判定なので1tick後に帽子を復元するパケットを送信
                     WereWolf3.INSTANCE.runTaskLater(1L) {
-                        WereWolf3.PLAYERS.forEach { sendTo -> InvisibleEquipmentPacketUtil.remove(sendTo, player, 10) }
+                        PLAYERS.forEach { sendTo -> InvisibleEquipmentPacketUtil.remove(sendTo, player, 10) }
                     }
                 }
                 else -> {}
@@ -61,7 +63,7 @@ object InvisiblePotion: IShopItem.ShopItem("invisible_potion", Material.POTION) 
             val player = event.player
             val item = event.item
             if(!isSimilar(item)) { return@registerEvent }
-            if(!WereWolf3.PLAYERS.contains(player)) { return@registerEvent }
+            if(!PLAYERS.contains(player)) { return@registerEvent }
             player.addPotionEffect(PotionEffect(PotionEffectType.INVISIBILITY, TIME, 200, false, false, true))
             player.removePotionEffect(PotionEffectType.GLOWING)
             player.inventory.itemInMainHand.amount--

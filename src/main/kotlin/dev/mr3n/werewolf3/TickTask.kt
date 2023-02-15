@@ -3,7 +3,7 @@ package dev.mr3n.werewolf3
 import dev.moru3.minepie.Executor.Companion.runTaskTimer
 
 object TickTask {
-    var loopCount = 0
+    private var loopCount = 0
     private val tasks = mutableListOf<(Int)->Unit>()
     // ループタスクを追加
     fun task(task: (Int)->Unit) {

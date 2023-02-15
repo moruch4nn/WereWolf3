@@ -73,7 +73,7 @@ medium:
         title: "霊媒"
     messages:
       success: "霊媒が完了しました。"
-      header: "&5========== 霊媒 =========="
+      header: "&5========== 霊媒結果 =========="
       will: "&5遺言&7: &f%will%"
       team: "&5陣営&7: &f%team%陣営"
       time: "&5死亡時刻&7: &f%sec%秒前"
@@ -102,7 +102,7 @@ wolf_axe:
     - WOLF
   languages:
     name: "&4人狼の斧"
-    description: "チャージすることで&c一撃&7で\nプレイヤーを倒すことができる斧。\nチャージ完了時、および使用した際\n&c大きな音が鳴る&7。"
+    description: "チャージすることで&c一撃&7で\nプレイヤーを仕留めることができる斧。\nチャージ完了時、および使用した際\n&c大きな音が鳴る&7。"
     title:
       wolf_axe:
         color: "&4"
@@ -116,7 +116,7 @@ wolf_axe:
     messages:
       charging: "チャージしています。"
       charged: "チャージ完了"
-      not_enough_charge: "チャージが足りなかった。"
+      not_enough_charge: "チャージ不足"
       used: "一撃の斧を使用した"
 fake_seer:
   class: dev.mr3n.werewolf3.items.madman.FakeSeerItem
@@ -125,7 +125,7 @@ fake_seer:
     - MADMAN
   languages:
     name: "&dニセ占いアイテム(偽物)"
-    description: "偽物の占いアイテム。プレイヤーを騙す以外に使用する手段はない。"
+    description: "偽物の占いアイテム。プレイヤーを騙す以外特に使えない"
 fake_medium:
   class: dev.mr3n.werewolf3.items.madman.FakeMediumItem
   price: 300
@@ -133,7 +133,7 @@ fake_medium:
     - MADMAN
   languages:
     name: "&dニセ霊媒アイテム(偽物)"
-    description: "偽物の霊媒アイテム。"
+    description: "偽物の霊媒アイテム。プレイヤーを騙す以外特に使えない"
 stan_ball:
   class: dev.mr3n.werewolf3.items.StanBall
   price: 300
@@ -148,7 +148,7 @@ stan_ball:
     - MEDIUM
   languages:
     name: "&cスタンボール"
-    description: "着弾点で&c爆発&7し巻き込まれたプレイヤーは\n数秒間&cほとんど動けない状態&fになる。"
+    description: "着弾点で&c爆発&7し巻き込まれたプレイヤーは\n数秒間&cほとんど動けない状態&7になる。"
     messages:
       stan: "数秒間動けなくなります。"
     title:
@@ -175,17 +175,17 @@ glow_ink:
         title: "GLOWING"
     messages:
       glowing: "体が発光しています。"
-      invisible: "透明なため発光していません。"
+      invisible: "透明なため発光を回避しています"
       for_be: "BEエディションは仕様上発光が表示されません。対応をお待ち下さい。"
 lightning_rod:
   class: dev.mr3n.werewolf3.items.wolf.LightningLod
   price: 300
-  blindness_time: 300
+  blindness_time: 400
   roles:
     - WOLF
   languages:
     name: "&a停電"
-    description: "人狼以外のすべてのプレイヤーに\n盲目の効果を付与する。"
+    description: "人狼以外のすべてのプレイヤーに\n20秒間盲目の効果を付与する。"
     title:
       blindness:
         color: "&e"

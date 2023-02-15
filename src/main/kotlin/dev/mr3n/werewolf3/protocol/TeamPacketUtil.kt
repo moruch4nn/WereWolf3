@@ -5,6 +5,7 @@ import com.comphenix.protocol.events.PacketContainer
 import com.comphenix.protocol.utility.MinecraftReflection
 import com.comphenix.protocol.wrappers.WrappedChatComponent
 import dev.moru3.minepie.events.EventRegister.Companion.registerEvent
+import dev.mr3n.werewolf3.PROTOCOL_MANAGER
 import dev.mr3n.werewolf3.WereWolf3
 import org.bukkit.Bukkit
 import org.bukkit.ChatColor
@@ -14,14 +15,13 @@ import java.util.*
 
 object TeamPacketUtil {
     private val TEAMS = mutableMapOf<Player, MutableMap<ChatColor, MutableList<String>>>()
-    private val SAME_TEAM_ENTITIES = mutableMapOf<Player, MutableList<UUID>>()
 
     /**
      * 色用のチームを作成するパケットです。
      */
-    fun createTeamColorPacket(player: Player,color: ChatColor): PacketContainer {
+    fun createTeamColorPacket(color: ChatColor): PacketContainer {
         // チーム作成のためのパケットを生成
-        val packet = WereWolf3.PROTOCOL_MANAGER.createPacket(PacketType.Play.Server.SCOREBOARD_TEAM)
+        val packet = PROTOCOL_MANAGER.createPacket(PacketType.Play.Server.SCOREBOARD_TEAM)
         // チーム名を設定。この場合は色の名前にしています。
         packet.strings.write(0,"$color")
         // 操作内容は0、つまりチームの新規作成
@@ -45,7 +45,7 @@ object TeamPacketUtil {
 
     fun sendTeamJLPacket(player: Player, color: ChatColor, entities: List<String>, operation: Int) {
         // パケットを作成
-        val packet = WereWolf3.PROTOCOL_MANAGER.createPacket(PacketType.Play.Server.SCOREBOARD_TEAM)
+        val packet = PROTOCOL_MANAGER.createPacket(PacketType.Play.Server.SCOREBOARD_TEAM)
         // チーム名を指定
         packet.strings.write(0,"$color")
         // 操作を4，つまりエンティティの削除に設定
@@ -53,7 +53,7 @@ object TeamPacketUtil {
         // 追加するプレイヤーを格納
         packet.getSpecificModifier(Collection::class.java).write(0,entities)
         // パケットを送信
-        WereWolf3.PROTOCOL_MANAGER.sendServerPacket(player, packet)
+        PROTOCOL_MANAGER.sendServerPacket(player, packet)
     }
 
     /**
@@ -112,13 +112,13 @@ object TeamPacketUtil {
      */
     fun removeTeam(player: Player, color: ChatColor) {
         // パケットを作成
-        val packet = WereWolf3.PROTOCOL_MANAGER.createPacket(PacketType.Play.Server.SCOREBOARD_TEAM)
+        val packet = PROTOCOL_MANAGER.createPacket(PacketType.Play.Server.SCOREBOARD_TEAM)
         // 削除するチーム名を指定
         packet.strings.write(0,"$color")
         // 操作を１，つまりチームの削除に設定
         packet.integers.write(0,1)
         // パケットを送信
-        WereWolf3.PROTOCOL_MANAGER.sendServerPacket(player, packet)
+        PROTOCOL_MANAGER.sendServerPacket(player, packet)
     }
 
     init {
@@ -126,12 +126,12 @@ object TeamPacketUtil {
         WereWolf3.INSTANCE.registerEvent<PlayerJoinEvent> { event ->
             TEAMS[event.player]?.forEach { (color, _) ->
                 removeTeam(event.player, color)
-                WereWolf3.PROTOCOL_MANAGER.sendServerPacket(event.player, createTeamColorPacket(event.player,color))
+                PROTOCOL_MANAGER.sendServerPacket(event.player, createTeamColorPacket(color))
             }
         }
         Bukkit.getOnlinePlayers().forEach { player -> colours.forEach { color ->
             removeTeam(player, color)
-            WereWolf3.PROTOCOL_MANAGER.sendServerPacket(player, createTeamColorPacket(player,color))
+            PROTOCOL_MANAGER.sendServerPacket(player, createTeamColorPacket(color))
         } }
     }
 }

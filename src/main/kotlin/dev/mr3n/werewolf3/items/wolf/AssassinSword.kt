@@ -1,6 +1,7 @@
 package dev.mr3n.werewolf3.items.wolf
 
 import dev.moru3.minepie.events.EventRegister.Companion.registerEvent
+import dev.mr3n.werewolf3.PLAYERS
 import dev.mr3n.werewolf3.WereWolf3
 import dev.mr3n.werewolf3.items.IShopItem
 import dev.mr3n.werewolf3.utils.damageTo
@@ -10,6 +11,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import kotlin.math.abs
 
+@Suppress("unused")
 object AssassinSword: IShopItem.ShopItem("assassin_sword", Material.IRON_SWORD) {
     private val SUCCESS_TITLE_TEXT = titleText("assassin_success")
 
@@ -23,8 +25,8 @@ object AssassinSword: IShopItem.ShopItem("assassin_sword", Material.IRON_SWORD) 
             val target = event.entity
             if(player !is Player) { return@registerEvent }
             if(target !is Player) { return@registerEvent }
-            if(!WereWolf3.PLAYERS.contains(player)) { return@registerEvent }
-            if(!WereWolf3.PLAYERS.contains(target)) { return@registerEvent }
+            if(!PLAYERS.contains(player)) { return@registerEvent }
+            if(!PLAYERS.contains(target)) { return@registerEvent }
             val item = player.inventory.itemInMainHand
             if(!isSimilar(item)) { return@registerEvent }
             val direction = target.location.toVector().subtract(player.location.toVector())

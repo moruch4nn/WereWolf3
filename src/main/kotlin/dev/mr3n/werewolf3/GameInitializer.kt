@@ -30,25 +30,25 @@ object GameInitializer {
      * ゲームを初期化し、試合を開始します。
      */
     fun start(location: Location) {
-        if(WereWolf3.running) { return }
+        if(WereWolf3.isRunning) { return }
         // 死体を全削除
         DeadBody.DEAD_BODIES.forEach { it.destroy() }
         // ゲームIDを設定。
-        WereWolf3.GAME_ID = UUID.randomUUID().toString()
+        GAME_ID = UUID.randomUUID().toString()
         // ゲームのステータスを設定、
-        WereWolf3.STATUS = GameStatus.STARTING
+        STATUS = GameStatus.STARTING
         // 時間を朝に
         location.world!!.time = 0L
         // 日にちを0に設定
-        WereWolf3.DAYS = 0
+        DAYS = 0
         // 参加プレイヤー一覧。
         val players = Bukkit.getOnlinePlayers().toList()
         // プレイヤーにゲームIDを設定。
-        players.forEach { player -> player.gameId = WereWolf3.GAME_ID }
+        players.forEach { player -> player.gameId = GAME_ID }
         // プレイヤー人数から役職数を推定してリストに格納。 roleList.length == players.length
         val roleList = Role.values().map { role -> MutableList(role.calc(players.size)) { role } }.flatten().shuffled(RANDOM)
         // 推定プレイヤー数を参加人数に設定(死亡確認時に減らしていく)
-        WereWolf3.PLAYERS_EST = players.size
+        PLAYERS_EST = players.size
         // 役職リストとプレイヤーのリストを合体してfor
         players.zip(roleList).toMap().forEach { (player, role) ->
             // プレイヤーの役職を設定。
@@ -77,7 +77,7 @@ object GameInitializer {
             player.conversationalDistance(100,-1.0)
         }
         // 時間を設定
-        WereWolf3.TIME_LEFT = Constants.STARTING_TIME
+        TIME_LEFT = Constants.STARTING_TIME
 
         val wolfs = players.filter { it.role==Role.WOLF }
 
@@ -92,15 +92,15 @@ object GameInitializer {
             player.sendMessage(languages("messages.how_to_speak_in_wolf_group"))
         }
 
-        WereWolf3.PLAYERS.addAll(players)
+        PLAYERS.addAll(players)
     }
 
     /**
      * 役職発表など準備完了後に行う処理
      */
     fun run() {
-        val wolfs = WereWolf3.PLAYERS.filter { it.role?.team == Role.Team.WOLF }
-        WereWolf3.PLAYERS.forEach {  player ->
+        val wolfs = PLAYERS.filter { it.role?.team == Role.Team.WOLF }
+        PLAYERS.forEach {  player ->
             // アイテム配布時に人狼アイテムとかを持たないようにスロットを0に設定
             player.inventory.heldItemSlot = 0
             // ショップを開くアイテム
@@ -119,11 +119,11 @@ object GameInitializer {
             } }) // 矢を渡す。
             player.inventory.addItem(EasyItem(Material.ARROW))
             Role.values().forEachIndexed { index, role -> player.inventory.setItem(9+index, role.helmet) }
-            player.sendMessage(languages("title.start.messages.info", "%wolf_teams%" to wolfs.size, "%villager_teams%" to WereWolf3.PLAYERS.size - wolfs.size))
+            player.sendMessage(languages("title.start.messages.info", "%wolf_teams%" to wolfs.size, "%villager_teams%" to PLAYERS.size - wolfs.size))
             player.sidebar = RunningSidebar(player)
             player.role?.items?.map { it.itemStack }?.forEach { player.inventory.addItem(it) }
         }
-        WereWolf3.STATUS = GameStatus.RUNNING
-        WereWolf3.TIME_OF_DAY = Time.MORNING
+        STATUS = GameStatus.RUNNING
+        TIME_OF_DAY = Time.MORNING
     }
 }

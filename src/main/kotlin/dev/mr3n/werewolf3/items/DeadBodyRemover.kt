@@ -6,6 +6,7 @@ import dev.mr3n.werewolf3.events.WereWolf3DeadBodyClickEvent
 import org.bukkit.Material
 import org.bukkit.Sound
 
+@Suppress("unused")
 object DeadBodyRemover: IShopItem.ShopItem("dead_body_remover", Material.FLINT_AND_STEEL) {
     private val REMOVER_TITLE_TEXT = titleText("remover")
 

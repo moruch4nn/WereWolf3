@@ -13,7 +13,6 @@ import dev.mr3n.werewolf3.items.IShopItem
 import dev.mr3n.werewolf3.protocol.*
 import dev.mr3n.werewolf3.roles.Role
 import dev.mr3n.werewolf3.sidebar.ISideBar.Companion.sidebar
-import dev.mr3n.werewolf3.sidebar.RunningSidebar
 import dev.mr3n.werewolf3.sidebar.StartingSidebar
 import dev.mr3n.werewolf3.sidebar.WaitingSidebar
 import dev.mr3n.werewolf3.utils.hasObstacleInSightPath
@@ -30,6 +29,41 @@ import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.plugin.java.JavaPlugin
+
+// 上に常時表示しているボスバー
+val BOSSBAR: BossBar by lazy { Bukkit.createBossBar(languages("messages.please_wait_for_start"), BarColor.RED, BarStyle.SOLID) }
+// 現在実行中のゲームID
+var GAME_ID: String? = null
+// 現在のゲームステータス
+var STATUS: GameStatus = WAITING
+// 現在のターン(昼/夜)の残り時間。/ゲーム全体残り時間ではありません。
+var TIME_LEFT = 0
+// 残り時間の長さ(カウントが減らされる前の長さ)
+// このゲーム全体の長さ/何日 (固定)
+var GAME_LENGTH = 0
+// 現在の時刻が何日目かを表します。 (一日経つたびに減っていきます)
+var DAYS: Int = 0
+
+// 推定の残りプレイヤー数
+var PLAYERS_EST = 0
+
+// ゲームに参加中のプレイヤー
+val PLAYERS = mutableListOf<Player>()
+// EntityID to Playerのマップ
+val PLAYER_BY_ENTITY_ID: MutableMap<Int, Player> = mutableMapOf()
+// サーバーにPlugmanXが導入されているかどうか
+val isPlugmanLoaded: Boolean by lazy { Bukkit.getPluginManager().isPluginEnabled("PlugManX") }
+
+// 現在の時刻(朝/夜)
+var TIME_OF_DAY: Time = Time.MORNING
+    set(time) {
+        field = time
+        // 朝/夜の変更の処理を実行
+        time.invoke()
+    }
+
+// PROTOCOL_LIBのマネージャー
+val PROTOCOL_MANAGER: ProtocolManager by lazy { ProtocolLibrary.getProtocolManager() }
 
 class WereWolf3: JavaPlugin() {
     override fun onEnable() {
@@ -151,7 +185,7 @@ class WereWolf3: JavaPlugin() {
 
     override fun onDisable() {
         // ゲームが起動中の場合停止
-        if(running) {
+        if(isRunning) {
             GameTerminator.run(true)
         }
         // ボスバーを削除
@@ -164,48 +198,10 @@ class WereWolf3: JavaPlugin() {
     init { INSTANCE = this }
 
     companion object {
-        // 上に常時表示しているボスバー
-        val BOSSBAR: BossBar by lazy { Bukkit.createBossBar(languages("messages.please_wait_for_start"), BarColor.RED, BarStyle.SOLID) }
-        // 現在実行中のゲームID
-        var GAME_ID: String? = null
-        // 現在のゲームステータス
-        var STATUS: GameStatus = WAITING
-        // 現在のターン(昼/夜)の残り時間。/ゲーム全体残り時間ではありません。
-        var TIME_LEFT = 0
-        // 残り時間の長さ(カウントが減らされる前の長さ)
-        var PLAYERS_EST = 0
-            set(value) {
-                PLAYERS.forEach { player ->
-                    val sidebar = player.sidebar
-                    if(sidebar is RunningSidebar) { sidebar.playersEst(value) }
-                }
-                field = value
-            }
-        // このターンのゲームの長さ(時間を示しています。 TIME_LEFT とは違い時間経過ごとに減っていきません
-        var GAME_TIME = 0
-        // 現在の時刻が何日目かを表します。
-        var DAYS: Int = 0
-        // ゲームに参加中のプレイヤー
-        val PLAYERS = mutableListOf<Player>()
-        // EntityID to Playerのマップ
-        val PLAYER_BY_ENTITY_ID: MutableMap<Int, Player> = mutableMapOf()
-        // サーバーにPlugmanXが導入されているかどうか
-        val isPlugmanLoaded: Boolean by lazy { Bukkit.getPluginManager().isPluginEnabled("PlugManX") }
-
-        // 現在の時刻(朝/夜)
-        var TIME_OF_DAY: Time = Time.MORNING
-            set(time) {
-                field = time
-                // 朝/夜の変更の処理を実行
-                time()
-            }
-
-        // PROTOCOL_LIBのマネージャー
-        val PROTOCOL_MANAGER: ProtocolManager by lazy { ProtocolLibrary.getProtocolManager() }
-
         // ゲームが実行中かどうかを true/falseで
-        val running: Boolean
+        val isRunning: Boolean
             get() = STATUS != WAITING
+
         // WereWolf3のインスタンス
         lateinit var INSTANCE: WereWolf3
             private set

@@ -8,6 +8,7 @@ import com.comphenix.protocol.wrappers.EnumWrappers.NativeGameMode
 import com.comphenix.protocol.wrappers.EnumWrappers.PlayerInfoAction
 import com.comphenix.protocol.wrappers.PlayerInfoData
 import dev.moru3.minepie.events.EventRegister.Companion.registerEvent
+import dev.mr3n.werewolf3.PROTOCOL_MANAGER
 import dev.mr3n.werewolf3.WereWolf3
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
@@ -21,7 +22,7 @@ object SpectatorPacketUtil {
 
     fun init() {}
     init {
-        WereWolf3.PROTOCOL_MANAGER.addPacketListener(object: PacketAdapter(WereWolf3.INSTANCE,ListenerPriority.NORMAL, PacketType.Play.Server.PLAYER_INFO) {
+        PROTOCOL_MANAGER.addPacketListener(object: PacketAdapter(WereWolf3.INSTANCE,ListenerPriority.NORMAL, PacketType.Play.Server.PLAYER_INFO) {
             override fun onPacketSending(event: PacketEvent) {
                 val player = event.player
                 val packet = event.packet.deepClone()
@@ -37,7 +38,7 @@ object SpectatorPacketUtil {
                 }
             }
         })
-        WereWolf3.PROTOCOL_MANAGER.addPacketListener(object: PacketAdapter(WereWolf3.INSTANCE,ListenerPriority.NORMAL, PacketType.Play.Server.ENTITY_DESTROY) {
+        PROTOCOL_MANAGER.addPacketListener(object: PacketAdapter(WereWolf3.INSTANCE,ListenerPriority.NORMAL, PacketType.Play.Server.ENTITY_DESTROY) {
             override fun onPacketSending(event: PacketEvent) {
                 val player = event.player
                 if(player.gameMode!=GameMode.SPECTATOR) {
@@ -65,7 +66,7 @@ object SpectatorPacketUtil {
             when(event.newGameMode) {
                 GameMode.SPECTATOR -> {
                     spectators.add(player.entityId)
-                    val packet = WereWolf3.PROTOCOL_MANAGER.createPacket(PacketType.Play.Server.ENTITY_TELEPORT)
+                    val packet = PROTOCOL_MANAGER.createPacket(PacketType.Play.Server.ENTITY_TELEPORT)
                     packet.integers.writeSafely(0, player.entityId)
                     packet.booleans.writeSafely(0, false)
                     packet.bytes.writeSafely(0,0.toByte()).writeSafely(1,0.toByte())
@@ -77,12 +78,12 @@ object SpectatorPacketUtil {
                             .writeSafely(0, location.x)
                             .writeSafely(1, -1000.0)
                             .writeSafely(2, location.z)
-                        WereWolf3.PROTOCOL_MANAGER.sendServerPacket(player2, packet.deepClone())
+                        PROTOCOL_MANAGER.sendServerPacket(player2, packet.deepClone())
                     }
                 }
                 else -> {
                     spectators.remove(player.entityId)
-                    val packet = WereWolf3.PROTOCOL_MANAGER.createPacket(PacketType.Play.Server.ENTITY_TELEPORT)
+                    val packet = PROTOCOL_MANAGER.createPacket(PacketType.Play.Server.ENTITY_TELEPORT)
                     packet.booleans.writeSafely(0, false)
                     packet.bytes.writeSafely(0,0.toByte()).writeSafely(1,0.toByte())
                     val location = player.location
@@ -94,7 +95,7 @@ object SpectatorPacketUtil {
                     Bukkit.getOnlinePlayers().filter { it.gameMode == GameMode.SPECTATOR }.forEach { player2 ->
                         if(player2==player) { return@forEach }
                         packet.integers.writeSafely(0, player2.entityId)
-                        WereWolf3.PROTOCOL_MANAGER.sendServerPacket(player, packet.deepClone())
+                        PROTOCOL_MANAGER.sendServerPacket(player, packet.deepClone())
                     }
                 }
             }

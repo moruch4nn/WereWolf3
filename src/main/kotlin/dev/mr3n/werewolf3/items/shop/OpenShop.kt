@@ -10,6 +10,7 @@ import org.bukkit.entity.Player
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.player.PlayerInteractEvent
 
+@Suppress("unused")
 object OpenShop: IShopItem.ShopItem("open_shop", Material.AMETHYST_SHARD) {
     override val roles: List<Role> = listOf()
     init {

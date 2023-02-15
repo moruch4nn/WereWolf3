@@ -5,6 +5,7 @@ import com.comphenix.protocol.events.PacketAdapter
 import com.comphenix.protocol.events.PacketEvent
 import com.comphenix.protocol.wrappers.EnumWrappers.ItemSlot
 import com.comphenix.protocol.wrappers.Pair
+import dev.mr3n.werewolf3.PROTOCOL_MANAGER
 import dev.mr3n.werewolf3.WereWolf3
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
@@ -45,7 +46,7 @@ object InvisibleEquipmentPacketUtil {
     }
 
     fun sendResetPacket(sendTo: Player, player: Player) {
-        val packet = WereWolf3.PROTOCOL_MANAGER.createPacket(PacketType.Play.Server.ENTITY_EQUIPMENT)
+        val packet = PROTOCOL_MANAGER.createPacket(PacketType.Play.Server.ENTITY_EQUIPMENT)
         packet.integers.write(0, player.entityId)
         val players = INVISIBLE_PLAYERS[sendTo]?: mutableMapOf()
         val invisibleData = players[player.entityId]?: mutableMapOf()
@@ -55,21 +56,21 @@ object InvisibleEquipmentPacketUtil {
                 .map { Pair(it, ITEM_SLOT_MAPPING[it]?.let { it1 -> it1(player.inventory) }?:return@map null) }
                 .filterNotNull()
         )
-        WereWolf3.PROTOCOL_MANAGER.sendServerPacket(sendTo, packet)
+        PROTOCOL_MANAGER.sendServerPacket(sendTo, packet)
     }
 
     fun sendPacket(sendTo: Player, player: Player) {
-        val packet = WereWolf3.PROTOCOL_MANAGER.createPacket(PacketType.Play.Server.ENTITY_EQUIPMENT)
+        val packet = PROTOCOL_MANAGER.createPacket(PacketType.Play.Server.ENTITY_EQUIPMENT)
         packet.integers.write(0, player.entityId)
         val players = INVISIBLE_PLAYERS[sendTo]?:return
         val invisibleData = players[player.entityId]?:return
         val firstKey = invisibleData.keys.minOrNull() ?:return
         packet.slotStackPairLists.writeSafely(0, invisibleData[firstKey]?.map { Pair(it, null) })
-        WereWolf3.PROTOCOL_MANAGER.sendServerPacket(sendTo, packet)
+        PROTOCOL_MANAGER.sendServerPacket(sendTo, packet)
     }
 
     init {
-        WereWolf3.PROTOCOL_MANAGER.addPacketListener(object: PacketAdapter(WereWolf3.INSTANCE, PacketType.Play.Server.ENTITY_EQUIPMENT) {
+        PROTOCOL_MANAGER.addPacketListener(object: PacketAdapter(WereWolf3.INSTANCE, PacketType.Play.Server.ENTITY_EQUIPMENT) {
             override fun onPacketSending(event: PacketEvent) {
                 val packet = event.packet.deepClone()
                 val players = INVISIBLE_PLAYERS[event.player]?:return

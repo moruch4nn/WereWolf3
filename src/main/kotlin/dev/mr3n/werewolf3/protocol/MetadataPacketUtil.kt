@@ -7,6 +7,7 @@ import com.comphenix.protocol.events.PacketEvent
 import com.comphenix.protocol.wrappers.WrappedDataValue
 import com.comphenix.protocol.wrappers.WrappedDataWatcher
 import dev.moru3.minepie.Executor.Companion.runTaskLater
+import dev.mr3n.werewolf3.PROTOCOL_MANAGER
 import dev.mr3n.werewolf3.WereWolf3
 import org.bukkit.Bukkit
 import org.bukkit.entity.Entity
@@ -36,7 +37,7 @@ object MetadataPacketUtil {
         // entityを追加した一覧を保存
         GLOWING_PLAYERS[player.uniqueId] = entities
         // 発行するパケットを作成して送信
-        WereWolf3.PROTOCOL_MANAGER.sendServerPacket(player,createMetadataPacket(player, entity))
+        PROTOCOL_MANAGER.sendServerPacket(player,createMetadataPacket(player, entity))
     }
 
     /**
@@ -46,7 +47,7 @@ object MetadataPacketUtil {
         // 発光するエンティティ一覧からプレイヤーを削除
         GLOWING_PLAYERS[player.uniqueId]?.remove(entity.entityId)
         // 削除するパケットを送信
-        WereWolf3.PROTOCOL_MANAGER.sendServerPacket(player, createMetadataPacket(player, entity))
+        PROTOCOL_MANAGER.sendServerPacket(player, createMetadataPacket(player, entity))
     }
 
     fun removeAllGlowing(player: Player) {
@@ -66,7 +67,7 @@ object MetadataPacketUtil {
         // entityを追加した一覧を保存
         INVISIBLE_PLAYERS[player.uniqueId] = entities
         // 発行するパケットを作成して送信
-        WereWolf3.PROTOCOL_MANAGER.sendServerPacket(player,createMetadataPacket(player, entity))
+        PROTOCOL_MANAGER.sendServerPacket(player,createMetadataPacket(player, entity))
     }
 
     fun removeFromInvisible(player: Player, entity: Entity) {
@@ -78,7 +79,7 @@ object MetadataPacketUtil {
         INVISIBLE_PLAYERS[player.uniqueId] = entities
         // 削除するパケットを送信
         WereWolf3.INSTANCE.runTaskLater(1L) {
-            WereWolf3.PROTOCOL_MANAGER.sendServerPacket(player, createMetadataPacket(player, entity))
+            PROTOCOL_MANAGER.sendServerPacket(player, createMetadataPacket(player, entity))
         }
     }
 
@@ -93,7 +94,7 @@ object MetadataPacketUtil {
             // 発光するエンティティ一覧からプレイヤーを削除
             GLOWING_PLAYERS[player.uniqueId]?.remove(entity.entityId)
             // 削除するパケットを送信
-            WereWolf3.PROTOCOL_MANAGER.sendServerPacket(player, createMetadataPacket(player, entity))
+            PROTOCOL_MANAGER.sendServerPacket(player, createMetadataPacket(player, entity))
         }
     }
 
@@ -102,7 +103,7 @@ object MetadataPacketUtil {
      */
     private fun createMetadataPacket(player: Player, entity: Entity): PacketContainer {
         // メタデータのパケットを作成
-        val packet = WereWolf3.PROTOCOL_MANAGER.createPacket(PacketType.Play.Server.ENTITY_METADATA)
+        val packet = PROTOCOL_MANAGER.createPacket(PacketType.Play.Server.ENTITY_METADATA)
         // 編集対象のエンティティを指定
         packet.integers.write(0, entity.entityId)
         // 発光情報が保存されているdwを取得
@@ -131,7 +132,7 @@ object MetadataPacketUtil {
     }
 
     init {
-        WereWolf3.PROTOCOL_MANAGER.addPacketListener(object: PacketAdapter(WereWolf3.INSTANCE,PacketType.Play.Server.ENTITY_METADATA) {
+        PROTOCOL_MANAGER.addPacketListener(object: PacketAdapter(WereWolf3.INSTANCE,PacketType.Play.Server.ENTITY_METADATA) {
             override fun onPacketSending(event: PacketEvent) {
                 // パケットを送信する先
                 val player = event.player

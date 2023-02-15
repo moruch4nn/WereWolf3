@@ -2,6 +2,7 @@ package dev.mr3n.werewolf3.items.doctor
 
 import dev.moru3.minepie.events.EventRegister.Companion.registerEvent
 import dev.mr3n.werewolf3.Keys
+import dev.mr3n.werewolf3.PLAYERS
 import dev.mr3n.werewolf3.WereWolf3
 import dev.mr3n.werewolf3.items.IShopItem
 import dev.mr3n.werewolf3.utils.getContainerValue
@@ -15,6 +16,7 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.Damageable
 import org.bukkit.persistence.PersistentDataType
 
+@Suppress("unused")
 object DoctorSword: IShopItem.ShopItem("doctor_sword", Material.IRON_SWORD) {
     private val MAX_HEAL_AMOUNT: Double = itemConstant("health_amount")
 
@@ -33,8 +35,8 @@ object DoctorSword: IShopItem.ShopItem("doctor_sword", Material.IRON_SWORD) {
         val item = player.inventory.itemInMainHand
         // アイテムがヒールの剣じゃない場合はreturn
         if(!isSimilar(item)) { return }
-        if(!WereWolf3.PLAYERS.contains(player)) { return }
-        if(!WereWolf3.PLAYERS.contains(target)) { return }
+        if(!PLAYERS.contains(player)) { return }
+        if(!PLAYERS.contains(target)) { return }
         event?.isCancelled = true
         // ヒール量を推定
         val healAmount = minOf(target.healthScale-target.health, minOf(8.0, item.healthAmount))

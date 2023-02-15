@@ -1,12 +1,14 @@
 package dev.mr3n.werewolf3.items.medium
 
 import dev.moru3.minepie.events.EventRegister.Companion.registerEvent
+import dev.mr3n.werewolf3.PLAYERS
 import dev.mr3n.werewolf3.WereWolf3
 import dev.mr3n.werewolf3.events.WereWolf3DeadBodyClickEvent
 import dev.mr3n.werewolf3.items.IShopItem
 import org.bukkit.Material
 import org.bukkit.Sound
 
+@Suppress("unused")
 object MediumItem: IShopItem.ShopItem("medium", Material.MUSIC_DISC_WAIT) {
     private val MEDIUM_TITLE_TEXT = titleText("medium")
 
@@ -16,7 +18,7 @@ object MediumItem: IShopItem.ShopItem("medium", Material.MUSIC_DISC_WAIT) {
             val item = player.inventory.itemInMainHand
             // 占いアイテムを手に持っていない場合はreturn
             if(!isSimilar(item)) { return@registerEvent }
-            if(!WereWolf3.PLAYERS.contains(player)) { return@registerEvent }
+            if(!PLAYERS.contains(player)) { return@registerEvent }
             val target = event.deadBody
             event.isCancelled = true
             item.amount--

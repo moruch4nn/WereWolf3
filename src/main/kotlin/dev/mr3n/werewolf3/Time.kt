@@ -32,7 +32,7 @@ enum class Time(val barColor: BarColor) {
      * 時間帯の説明
      */
     val description: String
-        get() = languages("time.${lowercase()}.description", "%day%" to Constants.MAX_DAYS - WereWolf3.DAYS)
+        get() = languages("time.${lowercase()}.description", "%day%" to Constants.MAX_DAYS - DAYS)
 
 
     /**
@@ -46,7 +46,7 @@ enum class Time(val barColor: BarColor) {
     }
 
     val title: String
-        get() = languages("title.time.title", "%emoji%" to emoji, "%time%" to displayName, "%day%" to WereWolf3.DAYS)
+        get() = languages("title.time.title", "%emoji%" to emoji, "%time%" to displayName, "%day%" to DAYS)
 
     /**
      * 次の時間帯を変えします。
@@ -64,32 +64,32 @@ enum class Time(val barColor: BarColor) {
          */
         fun morning() {
             // ゲームが実行中ではない場合return
-            if(!WereWolf3.running) { return }
-            if(Constants.END_TIME==NIGHT&&WereWolf3.DAYS>=Constants.MAX_DAYS) {
+            if(!WereWolf3.isRunning) { return }
+            if(Constants.END_TIME==NIGHT&&DAYS>=Constants.MAX_DAYS) {
                 GameTerminator.end(Role.Team.VILLAGER, languages("title.win.reason.time_up"))
                 return
             }
             // 残り時間を朝の時間に設定(20はtick)
-            WereWolf3.TIME_LEFT = Constants.DAY_TIME
-            WereWolf3.GAME_TIME = WereWolf3.TIME_LEFT
+            TIME_LEFT = Constants.DAY_TIME
+            GAME_LENGTH = TIME_LEFT
             // 日付を1追加する
-            WereWolf3.DAYS++
+            DAYS++
 
-            WereWolf3.PLAYERS.forEach { player ->
+            PLAYERS.forEach { player ->
                 // プレイヤーに朝になった旨を伝える。
-                player.sendMessage("${WereWolf3.TIME_OF_DAY.title}:${ChatColor.WHITE} ${WereWolf3.TIME_OF_DAY.description}".asPrefixed())
+                player.sendMessage("${TIME_OF_DAY.title}:${ChatColor.WHITE} ${TIME_OF_DAY.description}".asPrefixed())
                 // プレイヤーに朝になった旨を伝える。
-                player.sendTitle(WereWolf3.TIME_OF_DAY.title, WereWolf3.TIME_OF_DAY.description, 0, 100, 20)
+                player.sendTitle(TIME_OF_DAY.title, TIME_OF_DAY.description, 0, 100, 20)
                 player.conversationalDistance(100, -1.0)
                 // ぷーぷっぷぷーの効果音
                 player.world.playSound(player, Sound.ITEM_GOAT_HORN_SOUND_0, 1f, 1f)
                 // ボスバーの色を朝の色に変更
-                WereWolf3.BOSSBAR.color = WereWolf3.TIME_OF_DAY.barColor
+                BOSSBAR.color = TIME_OF_DAY.barColor
                 // ワールドの時間帯を朝に変更
                 player.world.time = 8000
                 val sidebar = player.sidebar
                 if(sidebar is RunningSidebar) {
-                    sidebar.day(Constants.MAX_DAYS - WereWolf3.DAYS)
+                    sidebar.day(Constants.MAX_DAYS - DAYS)
                 }
             }
         }
@@ -99,23 +99,23 @@ enum class Time(val barColor: BarColor) {
          */
         fun night() {
             // ゲームが実行中ではない場合return
-            if(!WereWolf3.running) { return }
-            if(Constants.END_TIME==MORNING&&WereWolf3.DAYS>=Constants.MAX_DAYS) {
+            if(!WereWolf3.isRunning) { return }
+            if(Constants.END_TIME==MORNING&&DAYS>=Constants.MAX_DAYS) {
                 GameTerminator.end(Role.Team.VILLAGER, languages("title.win.reason.time_up"))
                 return
             }
             // 残り時間を夜の時間に設定(20はtick)
-            WereWolf3.TIME_LEFT = Constants.NIGHT_TIME
-            WereWolf3.GAME_TIME = WereWolf3.TIME_LEFT
+            TIME_LEFT = Constants.NIGHT_TIME
+            GAME_LENGTH = TIME_LEFT
 
-            WereWolf3.PLAYERS.forEach { player ->
-                player.sendMessage("${WereWolf3.TIME_OF_DAY.title}:${ChatColor.WHITE} ${WereWolf3.TIME_OF_DAY.description}".asPrefixed())
+            PLAYERS.forEach { player ->
+                player.sendMessage("${TIME_OF_DAY.title}:${ChatColor.WHITE} ${TIME_OF_DAY.description}".asPrefixed())
                 player.conversationalDistance(100, Constants.CONVERSATION_DISTANCE)
 
                 // プレイヤーに夜になった旨を伝える。
-                player.sendTitle(WereWolf3.TIME_OF_DAY.title, WereWolf3.TIME_OF_DAY.description, 0, 100, 20)
+                player.sendTitle(TIME_OF_DAY.title, TIME_OF_DAY.description, 0, 100, 20)
                 // ボスバーを夜の色に変更
-                WereWolf3.BOSSBAR.color = WereWolf3.TIME_OF_DAY.barColor
+                BOSSBAR.color = TIME_OF_DAY.barColor
                 // すべての効果音を停止(BGM停止用)
                 player.stopAllSounds()
                 // 狼の遠吠えを再生

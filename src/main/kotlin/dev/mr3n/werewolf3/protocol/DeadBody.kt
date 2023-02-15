@@ -7,8 +7,11 @@ import dev.moru3.minepie.Executor.Companion.runTaskTimerAsync
 import dev.moru3.minepie.events.EventRegister.Companion.registerEvent
 import dev.mr3n.werewolf3.Constants
 import dev.mr3n.werewolf3.GameStatus
+import dev.mr3n.werewolf3.*
 import dev.mr3n.werewolf3.WereWolf3
 import dev.mr3n.werewolf3.events.WereWolf3DeadBodyClickEvent
+import dev.mr3n.werewolf3.sidebar.ISideBar.Companion.sidebar
+import dev.mr3n.werewolf3.sidebar.RunningSidebar
 import dev.mr3n.werewolf3.utils.*
 import org.bukkit.*
 import org.bukkit.attribute.Attribute
@@ -23,6 +26,9 @@ import java.util.*
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.experimental.or
 
+/**
+ * 死体のスポーンや移動、削除、位置同期、イベント発火など死体に関する処理を書いているクラスです。
+ */
 class DeadBody(val player: Player) {
     var wasFound = false
         private set
@@ -40,56 +46,84 @@ class DeadBody(val player: Player) {
         if(wasFound) { return }
         wasFound = true
         // 死体が発見された際に推定プレイヤー数を一つ減らす。
-        WereWolf3.PLAYERS_EST--
+        PLAYERS_EST--
+        // サイドバーを更新(推定プレイヤー数)
+        PLAYERS.forEach {
+            val sidebar = it.sidebar
+            if(sidebar is RunningSidebar) { sidebar.playersEst(PLAYERS_EST) }
+        }
+        // 死体を発見したプレイヤーにボーナスを与える
         player.money += Constants.DEAD_BODY_PRIZE
-        WereWolf3.PLAYERS.forEach { player2 ->
+        // 死体が発見されたことを全プレイヤーに通知
+        PLAYERS.forEach { player2 ->
             player2.sendMessage(languages("messages.found_dead_body", "%player%" to name).asPrefixed())
         }
+        // 発見したプレイヤーに通知オンを鳴らす
         player.playSound(player, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f)
+
+        // 死亡したプレイヤーのリスト名に取り消し線を入れる(死亡したことをわかりやすくするため)
         if(co!=null) {
-            this.player.setPlayerListName("${co.color}${ChatColor.STRIKETHROUGH}[${co.displayName}Co]${this.player.name}")
+            this.player.setPlayerListName("${co.color}${ChatColor.STRIKETHROUGH}${ChatColor.ITALIC}[${co.displayName}Co]${this.player.name}")
         } else {
-            this.player.setPlayerListName("${ChatColor.STRIKETHROUGH}${this.player.name}")
+            this.player.setPlayerListName("${ChatColor.STRIKETHROUGH}${ChatColor.ITALIC}${this.player.name}")
         }
     }
 
+    // プレイヤー名
     val name = player.name
 
+    // プレイヤーの遺言
     val will = player.will?:languages("none")
 
-    // お願いだからかぶらないでね...いやまじで。
+    // (ランダムなエンティティIDを生成)お願いだからかぶらないでね...いやまじで
     private val entityId = (0..Int.MAX_VALUE).random()
 
-    // これはかぶらんやろ！
+    // (ランダムなUUIDを生成)これはかぶらんやろ！
     private val uniqueId = UUID.randomUUID()
 
+    // プレイヤーのUUID
     private val playerUniqueId = player.uniqueId
 
+    // 死体の位置
     var location = player.location.clone()
         private set
 
+    // 死体の向き
     private val yaw = location.yaw
 
-    private val pitch = location.pitch
+    // 死体の向き
+    private val pitch = 0F//location.pitch
 
+    // 死体の足元に生成する重力/当たり判定ようのカエル
     private val frog = player.world.spawn(location.clone(), Frog::class.java)
 
+    // プレイヤーのゲームプロフィール
     private val gameProfile = WrappedGameProfile(uniqueId, player.name)
 
+    // この死体を表示しているプレイヤー
     private val showedPlayers = mutableListOf<Player>()
 
+    // 身につけているヘルメット
     private val helmet = player.inventory.helmet?.clone()
 
+    // 身につけているチェストプレート
     private val chestPlate = player.inventory.chestplate?.clone()
 
+    // 身につけているレギンス
     private val leggings = player.inventory.leggings?.clone()
 
+    // 身につけているブーツ
     private val boots = player.inventory.boots?.clone()
 
+    // メインハンドに持っているアイテム
     private val mainHand = player.inventory.itemInMainHand.clone()
 
+    // オフハンドに持っているアイテム
     private val offHand = player.inventory.itemInOffHand.clone()
 
+    /**
+     * 死体をクリックした際にイベントを発火させる処理
+     */
     fun onClick(player: Player) {
         val event = WereWolf3DeadBodyClickEvent(player, this)
         Bukkit.getPluginManager().callEvent(event)
@@ -107,12 +141,15 @@ class DeadBody(val player: Player) {
         frog.isCollidable = false
         frog.isAware = false
         frog.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED)?.baseValue = 0.0
-        // 死体一覧にしたいを追加
+        // 死体一覧に死体を追加
         DEAD_BODIES.add(this)
         FROGS[frog.entityId] = this
         DEAD_BODY_BY_UUID[playerUniqueId] = this
     }
 
+    /**
+     * プレイヤーから死体を非表示にする
+     */
     fun hide(players1: List<Player>) {
         val players = players1.filter { showedPlayers.contains(it) }
         if(players.isEmpty()) { return }
@@ -120,6 +157,9 @@ class DeadBody(val player: Player) {
         showedPlayers.removeAll(players)
     }
 
+    /**
+     * プレイヤーに死体を表示する
+     */
     fun show(players1: List<Player>) {
         val players = players1.filterNot { showedPlayers.contains(it) }
         if(players.isEmpty()) { return }
@@ -127,20 +167,26 @@ class DeadBody(val player: Player) {
         showedPlayers.addAll(players)
     }
 
+    /**
+     * playerにメタデータのパケットを送信
+     */
     private fun sendMetadataPacket(byte: Byte, players: List<Player>) {
-        val entityMetadata = WereWolf3.PROTOCOL_MANAGER.createPacket(PacketType.Play.Server.ENTITY_METADATA)
+        val entityMetadata = PROTOCOL_MANAGER.createPacket(PacketType.Play.Server.ENTITY_METADATA)
         entityMetadata.integers.writeSafely(0, entityId)
         val dataWatcher = WrappedDataWatcher()
         dataWatcher.entity
         dataWatcher.setObject(0, BYTE_SERIALIZER, byte)
         entityMetadata.dataValueCollectionModifier.writeSafely(0, dataWatcher.watchableObjects.map { WrappedDataValue(it.watcherObject.index, it.watcherObject.serializer, it.rawValue) })
-        players.forEach { p -> WereWolf3.PROTOCOL_MANAGER.sendServerPacket(p,entityMetadata) }
+        players.forEach { p -> PROTOCOL_MANAGER.sendServerPacket(p,entityMetadata) }
         showedPlayers.addAll(players)
     }
 
+    /**
+     * プレイヤーに死体を送信
+     */
     fun spawn(players: List<Player>) {
         // エンティティをすぽーんさせるパケット。ここでエンティティーの情報を送信する。
-        val namedEntitySpawn = WereWolf3.PROTOCOL_MANAGER.createPacket(PacketType.Play.Server.NAMED_ENTITY_SPAWN)
+        val namedEntitySpawn = PROTOCOL_MANAGER.createPacket(PacketType.Play.Server.NAMED_ENTITY_SPAWN)
         namedEntitySpawn.integers
             .writeSafely(0, entityId)
         namedEntitySpawn.uuiDs
@@ -154,14 +200,14 @@ class DeadBody(val player: Player) {
             .writeSafely(1, ((location.pitch*256.0f)/360.0f).toInt().toByte())
 
         // プレイヤーの情報を送信するパケット。ここでプレイヤーのスキンや名前などを送信する
-        val playerInfo = WereWolf3.PROTOCOL_MANAGER.createPacket(PacketType.Play.Server.PLAYER_INFO)
+        val playerInfo = PROTOCOL_MANAGER.createPacket(PacketType.Play.Server.PLAYER_INFO)
         playerInfo.playerInfoActions.writeSafely(0,setOf(EnumWrappers.PlayerInfoAction.ADD_PLAYER))
         val playerSkin = WrappedGameProfile.fromPlayer(player).properties["textures"].first()
         gameProfile.properties.put("textures", WrappedSignedProperty(playerSkin.name, playerSkin.value, playerSkin.signature))
         playerInfo.playerInfoDataLists.writeSafely(1, listOf(PlayerInfoData(gameProfile,player.ping,EnumWrappers.NativeGameMode.ADVENTURE, WrappedChatComponent.fromText(player.displayName),null)))
 
         // メタデータを送信するパケット。ここでスキンのセカンドレイヤーの情報やプレイヤーのポーズなどを設定する
-        val entityMetadata = WereWolf3.PROTOCOL_MANAGER.createPacket(PacketType.Play.Server.ENTITY_METADATA)
+        val entityMetadata = PROTOCOL_MANAGER.createPacket(PacketType.Play.Server.ENTITY_METADATA)
         entityMetadata.integers.writeSafely(0, entityId)
         val dataWatcher = WrappedDataWatcher()
         // 参考: https://wiki.vg/Entity_metadata#Player
@@ -173,7 +219,7 @@ class DeadBody(val player: Player) {
         entityMetadata.dataValueCollectionModifier.writeSafely(0, dataWatcher.watchableObjects.map { WrappedDataValue(it.watcherObject.index, it.watcherObject.serializer, it.rawValue) })
 
         // 装備をつける
-        val setEquipment = WereWolf3.PROTOCOL_MANAGER.createPacket(PacketType.Play.Server.ENTITY_EQUIPMENT)
+        val setEquipment = PROTOCOL_MANAGER.createPacket(PacketType.Play.Server.ENTITY_EQUIPMENT)
         setEquipment.integers.writeSafely(0, entityId)
         val equipments = listOf(
             Pair(EnumWrappers.ItemSlot.HEAD, helmet),
@@ -186,17 +232,20 @@ class DeadBody(val player: Player) {
         setEquipment.slotStackPairLists.writeSafely(0, equipments)
 
         players.forEach { p ->
-            WereWolf3.PROTOCOL_MANAGER.sendServerPacket(p,playerInfo)
-            WereWolf3.PROTOCOL_MANAGER.sendServerPacket(p,namedEntitySpawn)
-            WereWolf3.PROTOCOL_MANAGER.sendServerPacket(p,entityMetadata)
-            WereWolf3.PROTOCOL_MANAGER.sendServerPacket(p,setEquipment)
+            PROTOCOL_MANAGER.sendServerPacket(p,playerInfo)
+            PROTOCOL_MANAGER.sendServerPacket(p,namedEntitySpawn)
+            PROTOCOL_MANAGER.sendServerPacket(p,entityMetadata)
+            PROTOCOL_MANAGER.sendServerPacket(p,setEquipment)
         }
         show(players)
     }
 
+    /**
+     * カエルの位置と死体の位置を同期する(カエルに死体をテレポート)
+     */
     fun sync() {
         if(this.location.x == frog.location.x && this.location.y == frog.location.y && this.location.z == frog.location.z) { return }
-        val packet = WereWolf3.PROTOCOL_MANAGER.createPacket(PacketType.Play.Server.ENTITY_TELEPORT)
+        val packet = PROTOCOL_MANAGER.createPacket(PacketType.Play.Server.ENTITY_TELEPORT)
         packet.integers
             .writeSafely(0, entityId)
         packet.bytes
@@ -206,10 +255,13 @@ class DeadBody(val player: Player) {
             .writeSafely(0, frog.location.x)
             .writeSafely(1, frog.location.y + 0.12)
             .writeSafely(2, frog.location.z)
-        Bukkit.getOnlinePlayers().forEach { player -> WereWolf3.PROTOCOL_MANAGER.sendServerPacket(player, packet) }
+        Bukkit.getOnlinePlayers().forEach { player -> PROTOCOL_MANAGER.sendServerPacket(player, packet) }
         this.location = frog.location
     }
 
+    /**
+     * 死体をテレポートする
+     */
     fun teleport(location: Location) {
         frog.teleport(location.clone())
     }
@@ -218,10 +270,10 @@ class DeadBody(val player: Player) {
      * 死体を消します。
      */
     fun destroy() {
-        val packet = WereWolf3.PROTOCOL_MANAGER.createPacket(PacketType.Play.Server.ENTITY_DESTROY)
+        val packet = PROTOCOL_MANAGER.createPacket(PacketType.Play.Server.ENTITY_DESTROY)
         packet.intLists.writeSafely(0, listOf(entityId))
         Bukkit.getOnlinePlayers().forEach { p ->
-            WereWolf3.PROTOCOL_MANAGER.sendServerPacket(p,packet)
+            PROTOCOL_MANAGER.sendServerPacket(p,packet)
         }
         FROGS.remove(frog.entityId)
         frog.remove()
@@ -237,10 +289,13 @@ class DeadBody(val player: Player) {
 
         private val BYTE_SERIALIZER = WrappedDataWatcher.Registry.get(Byte::class.javaObjectType)
 
+        // カエルのentity id to 死体 のマップ
         private val FROGS = mutableMapOf<Int, DeadBody>()
 
+        // uuid to 死体 のマップ
         val DEAD_BODY_BY_UUID = mutableMapOf<UUID, DeadBody>()
 
+        // 死体を運んでいるプレイヤーの一覧
         val CARRYING = mutableMapOf<Player, DeadBody>()
 
         init {
@@ -255,7 +310,7 @@ class DeadBody(val player: Player) {
             }
             WereWolf3.INSTANCE.registerEvent<PlayerInteractAtEntityEvent> { event ->
                 val player = event.player
-                if(!WereWolf3.PLAYERS.contains(player)) { return@registerEvent }
+                if(!PLAYERS.contains(player)) { return@registerEvent }
                 if(event.hand != EquipmentSlot.HAND) { return@registerEvent }
                 val entity = event.rightClicked
                 FROGS[entity.entityId]?.onClick(player)
@@ -321,11 +376,11 @@ class DeadBody(val player: Player) {
 
             // >>> プレイヤーと死体の間に障害物がある場合プレイヤーを透明にする処理 >>>
             WereWolf3.INSTANCE.runTaskTimerAsync(3, 3) {
-                when(WereWolf3.STATUS) {
+                when(STATUS) {
                     // if:ゲームが実行中の場合のみ実行
                     GameStatus.RUNNING, GameStatus.STARTING -> {
                         // for:ゲームに参加しているすべてのプレイヤーをfor
-                        WereWolf3.PLAYERS.forEach { player ->
+                        PLAYERS.forEach { player ->
                             val visibleDeadBodies = DEAD_BODIES
                                 .filterNot { deadBody ->
                                     // 死体とプレイヤーの間に障害物があるかどうか。ある場合はtrueなのでfilterNotでfalseのみ残す

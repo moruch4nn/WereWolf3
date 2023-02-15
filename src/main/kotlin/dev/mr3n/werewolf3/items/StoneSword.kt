@@ -5,6 +5,7 @@ import org.bukkit.enchantments.Enchantment
 import org.bukkit.inventory.meta.Damageable
 import org.bukkit.inventory.meta.ItemMeta
 
+@Suppress("unused")
 object StoneSword: IShopItem.ShopItem("stone_sword", Material.STONE_SWORD) {
     override fun onSetItemMeta(itemMeta: ItemMeta) {
         if(itemMeta !is Damageable) { return }

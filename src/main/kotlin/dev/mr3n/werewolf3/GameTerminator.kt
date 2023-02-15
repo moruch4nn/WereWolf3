@@ -24,11 +24,11 @@ object GameTerminator {
      * 結果発表とともにゲームを終了する際に使用します。
      */
     fun end(win: Role.Team, reason: String) {
-        if(WereWolf3.STATUS==GameStatus.ENDING||WereWolf3.STATUS==GameStatus.WAITING) { return }
-        WereWolf3.STATUS = GameStatus.ENDING
+        if(STATUS==GameStatus.ENDING||STATUS==GameStatus.WAITING) { return }
+        STATUS = GameStatus.ENDING
         // 役職 to プレイヤー一覧 のマップ
         val players = Role.ROLES.map { it.key to it.value.map { uniqueId -> Bukkit.getOfflinePlayer(uniqueId) } }
-        WereWolf3.PLAYERS.forEach { player ->
+        PLAYERS.forEach { player ->
             // どちらサイドが勝利したかをタイトルで表示
             player.sendTitle(languages("title.win.title", "%role%" to win.displayName, "%color%" to win.color), reason, 20, 100, 20)
             // ﾋﾟﾛﾘｰﾝ
@@ -42,7 +42,7 @@ object GameTerminator {
                 players.associateWith {p->if(p is Player) p.kills?: intArrayOf() else intArrayOf() }
                     .forEach { (player, kills) ->
                         // 身内を殺した回数
-                        val killTeams = kills.count { WereWolf3.PLAYER_BY_ENTITY_ID[it]?.role?.team == role.team }
+                        val killTeams = kills.count { PLAYER_BY_ENTITY_ID[it]?.role?.team == role.team }
                         // プレイヤー名にホバーした際に身内キル/敵キルのなどの内訳を表示
                         val hover = HoverEvent(HoverEvent.Action.SHOW_TEXT, Text(languages("messages.result.kills_info", "%kills%" to kills.size-killTeams, "%kill_teams%" to killTeams)))
                         // テキスト化
@@ -67,14 +67,14 @@ object GameTerminator {
      */
     fun run(shutdown: Boolean = false) {
         try {
-            WereWolf3.STATUS = GameStatus.WAITING
-            WereWolf3.GAME_ID = null
+            STATUS = GameStatus.WAITING
+            GAME_ID = null
         } catch(_: Exception) { }
 
         try { IShopItem.ShopItem.ITEMS.forEach { it.onEnd() } } catch(_: Exception) { }
 
         try {
-            WereWolf3.PLAYERS.forEach { player ->
+            PLAYERS.forEach { player ->
                 // 人狼ゲーム関係のデータを削除
                 player.kills = null
                 player.role = null
@@ -112,10 +112,10 @@ object GameTerminator {
         } catch(e: Exception) { e.printStackTrace() }
         // 死体を全削除
         try { DeadBody.DEAD_BODIES.forEach { it.destroy() } } catch(_: Exception) {}
-        try { WereWolf3.PLAYERS.clear() } catch(_: Exception) {}
+        try { PLAYERS.clear() } catch(_: Exception) {}
         // プラグインをreload
         if(!shutdown) {
-            if(WereWolf3.isPlugmanLoaded) { PluginUtil.reload(WereWolf3.INSTANCE) } else { Bukkit.getServer().reload() }
+            if(isPlugmanLoaded) { PluginUtil.reload(WereWolf3.INSTANCE) } else { Bukkit.getServer().reload() }
         }
     }
 

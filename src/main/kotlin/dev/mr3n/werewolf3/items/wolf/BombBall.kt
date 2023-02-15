@@ -3,6 +3,7 @@ package dev.mr3n.werewolf3.items.wolf
 import dev.moru3.minepie.Executor.Companion.runTaskLater
 import dev.moru3.minepie.events.EventRegister.Companion.registerEvent
 import dev.mr3n.werewolf3.Keys
+import dev.mr3n.werewolf3.PLAYERS
 import dev.mr3n.werewolf3.WereWolf3
 import dev.mr3n.werewolf3.items.IShopItem
 import dev.mr3n.werewolf3.utils.damageTo
@@ -17,6 +18,7 @@ import org.bukkit.event.entity.ProjectileLaunchEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 
+@Suppress("unused")
 object BombBall: IShopItem.ShopItem("bomb_ball", Material.SNOWBALL) {
     private val WARNING_TITLE_TEXT = titleText("warning")
 
@@ -53,7 +55,7 @@ object BombBall: IShopItem.ShopItem("bomb_ball", Material.SNOWBALL) {
             val projectile = event.entity
             val shooter = projectile.shooter?:return@registerEvent
             if(shooter !is Player) { return@registerEvent }
-            if(!WereWolf3.PLAYERS.contains(shooter)) { return@registerEvent }
+            if(!PLAYERS.contains(shooter)) { return@registerEvent }
             if(!isSimilar(shooter.inventory.itemInMainHand)) { return@registerEvent }
             // 爆発玉識別用のタグを付与
             projectile.persistentDataContainer.set(Keys.ENTITY_TYPE, PersistentDataType.STRING, ENTITY_TYPE)
@@ -64,7 +66,7 @@ object BombBall: IShopItem.ShopItem("bomb_ball", Material.SNOWBALL) {
             if(projectile.persistentDataContainer.get(Keys.ENTITY_TYPE, PersistentDataType.STRING) != ENTITY_TYPE) { return@registerEvent }
             val shooter = projectile.shooter?:return@registerEvent
             if(shooter !is Player) { return@registerEvent }
-            if(!WereWolf3.PLAYERS.contains(shooter)) { return@registerEvent }
+            if(!PLAYERS.contains(shooter)) { return@registerEvent }
             // 着弾点
             val location = projectile.location.clone()
             // worldがnullableなためnullではないことを保証する
@@ -84,7 +86,7 @@ object BombBall: IShopItem.ShopItem("bomb_ball", Material.SNOWBALL) {
             world.playSound(location, Sound.ENTITY_TNT_PRIMED, 1f, 1f)
             repeat(WARNING_COUNT) { count ->
                 WereWolf3.INSTANCE.runTaskLater((FUSE_TIME / (WARNING_COUNT)) * count) {
-                    WereWolf3.PLAYERS.filter { it.location.distance(location) < DAMAGE_DISTANCE }.forEach { player -> player.sendTitle(
+                    PLAYERS.filter { it.location.distance(location) < DAMAGE_DISTANCE }.forEach { player -> player.sendTitle(
                         WARNING_TITLE_TEXT, "", 0, 0, (FUSE_TIME / 4).toInt()) }
                     world.playSound(location, Sound.BLOCK_NOTE_BLOCK_BIT, 1f, 1.8f)
                 }
@@ -92,9 +94,9 @@ object BombBall: IShopItem.ShopItem("bomb_ball", Material.SNOWBALL) {
             WereWolf3.INSTANCE.runTaskLater(FUSE_TIME) {
                 tnt.remove()
                 world.spawnParticle(Particle.EXPLOSION_HUGE, location, 30, .0, .0, .0)
-                WereWolf3.PLAYERS.forEach { it.stopSound(SoundCategory.RECORDS) }
+                PLAYERS.forEach { it.stopSound(SoundCategory.RECORDS) }
                 world.playSound(location, Sound.ENTITY_GENERIC_EXPLODE, 1000f, 1f)
-                WereWolf3.PLAYERS.forEach { player ->
+                PLAYERS.forEach { player ->
                     // 着弾点とプレイヤーの距離
                     val distance = location.distance(player.location)
                     // shooterがプレイヤーにダメージを与えている判定にする

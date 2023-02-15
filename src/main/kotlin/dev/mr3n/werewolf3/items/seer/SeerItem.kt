@@ -2,6 +2,8 @@ package dev.mr3n.werewolf3.items.seer
 
 import dev.moru3.minepie.Executor.Companion.runTaskLater
 import dev.moru3.minepie.events.EventRegister.Companion.registerEvent
+import dev.mr3n.werewolf3.PLAYERS
+import dev.mr3n.werewolf3.TIME_OF_DAY
 import dev.mr3n.werewolf3.Time
 import dev.mr3n.werewolf3.WereWolf3
 import dev.mr3n.werewolf3.items.IShopItem
@@ -17,11 +19,12 @@ import org.bukkit.event.player.PlayerInteractAtEntityEvent
 import org.bukkit.scheduler.BukkitTask
 import java.util.*
 
+@Suppress("unused")
 object SeerItem: IShopItem.ShopItem("seer", Material.MUSIC_DISC_CHIRP) {
     private val SEER_TITLE_TEXT = titleText("seer")
 
     // map<占い師,triple<最後クリックした際のタイムスタンプ,対象者,クリックしたミリ秒>>
-    private val LAST_CLICKED = mutableMapOf<UUID, SeerInfo>()
+    private val lastClicked = mutableMapOf<UUID, SeerInfo>()
 
     private val SEER_TIME: Long = itemConstant("seer_time")
 
@@ -41,11 +44,11 @@ object SeerItem: IShopItem.ShopItem("seer", Material.MUSIC_DISC_CHIRP) {
             if(!isSimilar(item)) { return@registerEvent }
             val target = event.rightClicked
             if(target !is Player) { return@registerEvent }
-            if(!WereWolf3.PLAYERS.contains(player)) { return@registerEvent }
-            if(!WereWolf3.PLAYERS.contains(target)) { return@registerEvent }
-            if(WereWolf3.TIME_OF_DAY==Time.NIGHT) {
+            if(!PLAYERS.contains(player)) { return@registerEvent }
+            if(!PLAYERS.contains(target)) { return@registerEvent }
+            if(TIME_OF_DAY==Time.NIGHT) {
                 // 時間が夜だった場合
-                val seerInfo = LAST_CLICKED[player.uniqueId]
+                val seerInfo = lastClicked[player.uniqueId]
                 var isFirst = seerInfo == null
                 val currentMillis = System.currentTimeMillis()
                 val lastClicked = seerInfo?.clicked?:currentMillis
@@ -59,7 +62,7 @@ object SeerItem: IShopItem.ShopItem("seer", Material.MUSIC_DISC_CHIRP) {
                 }
                 if(length >= SEER_TIME * 50) {
                     // if:3秒以上押し続けている場合
-                    LAST_CLICKED.remove(player.uniqueId)
+                    this.lastClicked.remove(player.uniqueId)
                     item.amount--
                     seerInfo?.bukkitTask?.cancel()
                     val result = if(target.role==Role.WOLF) messages("result.wolf", "%player%" to target.name) else messages("result.villager", "%player%" to target.name)
@@ -78,11 +81,11 @@ object SeerItem: IShopItem.ShopItem("seer", Material.MUSIC_DISC_CHIRP) {
                         player.sendTitle(SEER_TITLE_TEXT, messages("canceled"), 0, 60, 20)
                         // キラリーンの音を鳴らす
                         player.playSound(player,Sound.ENTITY_EXPERIENCE_ORB_PICKUP,1f,1f)
-                        LAST_CLICKED[player.uniqueId]?.bukkitTask?.cancel()
-                        LAST_CLICKED.remove(player.uniqueId)
+                        this.lastClicked[player.uniqueId]?.bukkitTask?.cancel()
+                        this.lastClicked.remove(player.uniqueId)
                     }
                     // if:クリックしている時間が足りない場合
-                    LAST_CLICKED[player.uniqueId] = SeerInfo(currentMillis,target,length,bukkitTask)
+                    this.lastClicked[player.uniqueId] = SeerInfo(currentMillis,target,length,bukkitTask)
                 }
             } else {
                 // if:時間が朝だった場合

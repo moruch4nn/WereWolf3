@@ -38,15 +38,15 @@ object PlayerListener: Listener {
     fun onDead(event: PlayerDeathEvent) {
         val player = event.entity
         val killer = player.killer
-        if(!WereWolf3.PLAYERS.contains(player)) { return }
+        if(!PLAYERS.contains(player)) { return }
         if(killer!=null) {
-            if(WereWolf3.PLAYERS.contains(killer)) {
+            if(PLAYERS.contains(killer)) {
                 killer.playSound(killer, Sound.ENTITY_ARROW_HIT_PLAYER, 1f, 1f)
                 killer.addKill(player)
             }
             player.sendTitle(languages("title.you_are_dead.title"),languages("title.you_are_dead.subtitle_with_killer", "%killer%" to killer.name), 0, 100, 20)
             if(player.role?.team==Role.Team.VILLAGER&&killer.role?.team==Role.Team.VILLAGER) {
-                WereWolf3.PLAYERS.filter { it.role == Role.WOLF }.forEach { wolf ->
+                PLAYERS.filter { it.role == Role.WOLF }.forEach { wolf ->
                     wolf.money += Constants.TEAM_KILL_BONUS
                     wolf.sendMessage(languages("messages.team_kill_bonus", "%money%" to "${Constants.TEAM_KILL_BONUS}${Constants.MONEY_UNIT}").asPrefixed())
                     wolf.playSound(wolf, Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f)
@@ -78,7 +78,7 @@ object PlayerListener: Listener {
      */
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     fun onChat(event: AsyncPlayerChatEvent) {
-        if(!WereWolf3.PLAYERS.contains(event.player)) { return }
+        if(!PLAYERS.contains(event.player)) { return }
         if(event.player.gameMode==GameMode.SPECTATOR) {
             event.isCancelled = true
             val format = languages("chat_format", "%name%" to "%1\$s", "%message%" to "%2\$s")
@@ -91,7 +91,7 @@ object PlayerListener: Listener {
                 // if:人狼チャットを使用しようとしている場合
                 if(event.player.role==Role.WOLF) {
                     val format = languages("wolf_chat_format", "%name%" to event.player.displayName, "%message%" to event.message)
-                    WereWolf3.PLAYERS.filter { it.role == Role.WOLF || it.gameMode == GameMode.SPECTATOR }.forEach { player ->
+                    PLAYERS.filter { it.role == Role.WOLF || it.gameMode == GameMode.SPECTATOR }.forEach { player ->
                         // 人狼グルチャを全人狼に送信
                         player.sendMessage(format)
                         if(player.gameMode != GameMode.SPECTATOR) {
@@ -119,7 +119,7 @@ object PlayerListener: Listener {
     fun onRegainHealth(event: EntityRegainHealthEvent) {
         val player = event.entity
         if(player !is Player) { return }
-        if(!WereWolf3.PLAYERS.contains(player)) { return }
+        if(!PLAYERS.contains(player)) { return }
         when(event.regainReason) {
             EntityRegainHealthEvent.RegainReason.MAGIC, EntityRegainHealthEvent.RegainReason.MAGIC_REGEN -> {}
             else -> {
@@ -134,7 +134,7 @@ object PlayerListener: Listener {
      */
     @EventHandler
     fun onDrop(event: PlayerDropItemEvent) {
-        if(!WereWolf3.PLAYERS.contains(event.player)) { return }
+        if(!PLAYERS.contains(event.player)) { return }
         event.isCancelled = true
     }
 
@@ -143,14 +143,14 @@ object PlayerListener: Listener {
      */
     @EventHandler
     fun onQuit(event: PlayerQuitEvent) {
-        if(WereWolf3.PLAYERS.contains(event.player)&&event.player.gameMode!=GameMode.SPECTATOR) {
+        if(PLAYERS.contains(event.player)&&event.player.gameMode!=GameMode.SPECTATOR) {
             // 途中抜けしたプレイヤーの下を生成し、その上発見させる。
             DeadBody(event.player).found(event.player)
             // ゲームモードをスペクテイターに
             event.player.gameMode = GameMode.SPECTATOR
         }
-        WereWolf3.PLAYERS.remove(event.player)
-        WereWolf3.PLAYER_BY_ENTITY_ID.remove(event.player.entityId)
+        PLAYERS.remove(event.player)
+        PLAYER_BY_ENTITY_ID.remove(event.player.entityId)
         DeadBody.CARRYING.remove(event.player)
     }
 
@@ -160,12 +160,12 @@ object PlayerListener: Listener {
     @EventHandler
     fun onJoin(event: PlayerJoinEvent) {
         val player = event.player
-        WereWolf3.PLAYER_BY_ENTITY_ID[player.entityId] = player
+        PLAYER_BY_ENTITY_ID[player.entityId] = player
         // 参加メッセージを"人狼に参加しました"に変更
         event.joinMessage = languages("messages.player_joined", "%player%" to player.name).asPrefixed()
-        WereWolf3.BOSSBAR.addPlayer(player)
+        BOSSBAR.addPlayer(player)
         // ゲームが実行中かどうか
-        if(WereWolf3.running) {
+        if(WereWolf3.isRunning) {
             // if:実行中だった場合
             // ｷﾗﾘｰﾝを鳴らす
             player.playSound(player,Sound.ENTITY_EXPERIENCE_ORB_PICKUP,1f,1f)
@@ -194,7 +194,7 @@ object PlayerListener: Listener {
     fun onDamage(event: EntityDamageEvent) {
         val player = event.entity
         if(player !is Player) { return }
-        if(WereWolf3.STATUS == GameStatus.RUNNING) { return }
+        if(STATUS == GameStatus.RUNNING) { return }
         event.isCancelled = true
     }
 }

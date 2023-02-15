@@ -2,6 +2,7 @@ package dev.mr3n.werewolf3.items
 
 import dev.moru3.minepie.events.EventRegister.Companion.registerEvent
 import dev.mr3n.werewolf3.Keys
+import dev.mr3n.werewolf3.PLAYERS
 import dev.mr3n.werewolf3.WereWolf3
 import dev.mr3n.werewolf3.utils.damageTo
 import org.bukkit.Material
@@ -17,6 +18,7 @@ import org.bukkit.inventory.meta.Damageable
 import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.persistence.PersistentDataType
 
+@Suppress("unused")
 object OneShotCrossbow: IShopItem.ShopItem("one_shot_crossbow", Material.CROSSBOW) {
     override fun onSetItemMeta(itemMeta: ItemMeta) {
         if(itemMeta !is Damageable) { return }
@@ -38,7 +40,7 @@ object OneShotCrossbow: IShopItem.ShopItem("one_shot_crossbow", Material.CROSSBO
             val projectile = event.entity
             val shooter = projectile.shooter?:return@registerEvent
             if(shooter !is Player) { return@registerEvent }
-            if(!WereWolf3.PLAYERS.contains(shooter)) { return@registerEvent }
+            if(!PLAYERS.contains(shooter)) { return@registerEvent }
             if(!isSimilar(shooter.inventory.itemInMainHand)) { return@registerEvent }
             // 爆発玉識別用のタグを付与
             shooter.inventory.itemInMainHand.amount--
@@ -52,10 +54,10 @@ object OneShotCrossbow: IShopItem.ShopItem("one_shot_crossbow", Material.CROSSBO
             if(projectile.persistentDataContainer.get(Keys.ENTITY_TYPE, PersistentDataType.STRING) != ENTITY_TYPE) { return@registerEvent }
             val shooter = projectile.shooter?:return@registerEvent
             if(shooter !is Player) { return@registerEvent }
-            if(!WereWolf3.PLAYERS.contains(shooter)) { return@registerEvent }
+            if(!PLAYERS.contains(shooter)) { return@registerEvent }
             val hitEntity = event.hitEntity?:return@registerEvent
             if(hitEntity !is Player) { return@registerEvent }
-            if(!WereWolf3.PLAYERS.contains(hitEntity)) { return@registerEvent }
+            if(!PLAYERS.contains(hitEntity)) { return@registerEvent }
             event.isCancelled = true
             projectile.remove()
             shooter.world.playSound(shooter, Sound.ENTITY_ITEM_BREAK, 1f, 1f)

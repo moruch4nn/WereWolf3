@@ -1,6 +1,7 @@
 package dev.mr3n.werewolf3.roles
 
 import dev.moru3.minepie.Executor.Companion.runTaskTimerAsync
+import dev.mr3n.werewolf3.PLAYERS
 import dev.mr3n.werewolf3.WereWolf3
 import dev.mr3n.werewolf3.items.IShopItem
 import dev.mr3n.werewolf3.utils.*
@@ -116,7 +117,7 @@ enum class Role() {
                             player.co = null
                         } else {
                             // すべてのプレイヤーにCoした旨を伝える。
-                            WereWolf3.PLAYERS.forEach {
+                            PLAYERS.forEach {
                                 it.sendMessage(languages("messages.coming_out", "%color%" to coRole.color, "%player%" to player.name, "%role%" to coRole.displayName))
                             }
                             // プレイヤーのprefixにCoした役職を表示

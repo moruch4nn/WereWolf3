@@ -2,6 +2,7 @@ package dev.mr3n.werewolf3.items.seer
 
 import dev.moru3.minepie.Executor.Companion.runTaskLater
 import dev.moru3.minepie.events.EventRegister.Companion.registerEvent
+import dev.mr3n.werewolf3.PLAYERS
 import dev.mr3n.werewolf3.WereWolf3
 import dev.mr3n.werewolf3.items.IShopItem
 import dev.mr3n.werewolf3.roles.Role
@@ -12,6 +13,7 @@ import org.bukkit.event.player.PlayerInteractEvent
 import kotlin.math.cos
 import kotlin.math.sin
 
+@Suppress("unused")
 object MultipleSeerItem: IShopItem.ShopItem("multiple_seer", Material.ENDER_EYE) {
     private val SEER_TITLE_TEXT = titleText("seer")
 
@@ -41,7 +43,7 @@ object MultipleSeerItem: IShopItem.ShopItem("multiple_seer", Material.ENDER_EYE)
             val item = player.inventory.itemInMainHand
             // 占いアイテムを手に持っていない場合はreturn
             if(!isSimilar(item)) { return@registerEvent }
-            if(!WereWolf3.PLAYERS.contains(player)) { return@registerEvent }
+            if(!PLAYERS.contains(player)) { return@registerEvent }
             val base = player.location.clone()
             event.isCancelled = true
             // 半径 DISTANCE の円のパーティクルを描画する
@@ -50,7 +52,7 @@ object MultipleSeerItem: IShopItem.ShopItem("multiple_seer", Material.ENDER_EYE)
             item.amount--
             WereWolf3.INSTANCE.runTaskLater(SEER_TIME) {
                 renderCircle(base,3)
-                val wolfInRange = WereWolf3.PLAYERS.filter { base.distance(it.location) < DISTANCE }.any { it.role == Role.WOLF }
+                val wolfInRange = PLAYERS.filter { base.distance(it.location) < DISTANCE }.any { it.role == Role.WOLF }
                 base.world?.playSound(base, Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f)
                 if(wolfInRange) {
                     val result = messages("result.wolf")

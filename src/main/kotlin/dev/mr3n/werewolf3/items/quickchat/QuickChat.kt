@@ -1,6 +1,7 @@
 package dev.mr3n.werewolf3.items.quickchat
 
 import dev.moru3.minepie.events.EventRegister.Companion.registerEvent
+import dev.mr3n.werewolf3.PLAYERS
 import dev.mr3n.werewolf3.WereWolf3
 import dev.mr3n.werewolf3.items.IShopItem
 import dev.mr3n.werewolf3.roles.Role
@@ -31,8 +32,8 @@ abstract class QuickChat(id: String, material: Material, val coolDownMs: Long): 
             event.isCancelled = true
             val target = event.rightClicked
             if(target !is Player) { return@registerEvent }
-            if(!WereWolf3.PLAYERS.contains(player)) { return@registerEvent }
-            if(!WereWolf3.PLAYERS.contains(target)) { return@registerEvent }
+            if(!PLAYERS.contains(player)) { return@registerEvent }
+            if(!PLAYERS.contains(target)) { return@registerEvent }
             // クールダウンチェック
             if(System.currentTimeMillis() - (lastUse[player.uniqueId]?:0) <= coolDownMs) { return@registerEvent }
             player.chat(message(target.name))
@@ -46,8 +47,8 @@ abstract class QuickChat(id: String, material: Material, val coolDownMs: Long): 
             val item = player.inventory.itemInMainHand
             if(!isSimilar(item)) { return@registerEvent }
             event.isCancelled = true
-            if(!WereWolf3.PLAYERS.contains(player)) { return@registerEvent }
-            if(!WereWolf3.PLAYERS.contains(target)) { return@registerEvent }
+            if(!PLAYERS.contains(player)) { return@registerEvent }
+            if(!PLAYERS.contains(target)) { return@registerEvent }
             // クールダウンチェック
             if(System.currentTimeMillis() - (lastUse[player.uniqueId]?:0) <= coolDownMs) { return@registerEvent }
             player.chat(message(target.name))

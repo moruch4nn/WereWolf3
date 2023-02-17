@@ -46,7 +46,7 @@ object GameInitializer {
         // プレイヤーにゲームIDを設定。
         players.forEach { player -> player.gameId = GAME_ID }
         // プレイヤー人数から役職数を推定してリストに格納。 roleList.length == players.length
-        val roleList = Role.values().map { role -> MutableList(role.calc(players.size)) { role } }.flatten().shuffled(RANDOM)
+        val roleList = Role.values().map { role -> MutableList(role.calc(players.size)) { role } }.flatten().shuffled(RANDOM).shuffled().shuffled().shuffled()
         // 推定プレイヤー数を参加人数に設定(死亡確認時に減らしていく)
         PLAYERS_EST = players.size
         // 役職リストとプレイヤーのリストを合体してfor

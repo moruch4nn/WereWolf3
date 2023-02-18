@@ -81,7 +81,7 @@ object PlayerListener: Listener {
         if(!PLAYERS.contains(event.player)) { return }
         if(event.player.gameMode==GameMode.SPECTATOR) {
             event.isCancelled = true
-            val format = languages("chat_format", "%name%" to "%1\$s", "%message%" to "%2\$s")
+            val format = languages("death_chat_format", "%name%" to "%1\$s", "%message%" to "%2\$s")
             Bukkit.getOnlinePlayers().filter { it.gameMode == GameMode.SPECTATOR }.forEach { player ->
                 player.sendMessage(String.format(format, event.player.displayName, event.message))
             }

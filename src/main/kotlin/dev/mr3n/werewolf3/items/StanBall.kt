@@ -67,6 +67,7 @@ object StanBall: IShopItem.ShopItem("stan_ball", Material.SNOWBALL) {
             world.playSound(location, Sound.ENTITY_GENERIC_EXPLODE, 1f, 1f)
 
             PLAYERS.forEach { player ->
+                if(player.gameMode == GameMode.SPECTATOR) { return@forEach }
                 when(player.location.distance(location).toInt()) {
                     in 0..STAN_RADIUS -> {
                         player.flySpeed = -1f

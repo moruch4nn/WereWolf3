@@ -9,6 +9,7 @@ import dev.mr3n.werewolf3.items.IShopItem
 import dev.mr3n.werewolf3.remConversationalDistance
 import dev.mr3n.werewolf3.roles.Role
 import dev.mr3n.werewolf3.utils.role
+import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.event.block.Action
@@ -58,6 +59,7 @@ object LightningRod: IShopItem.ShopItem("lightning_rod", Material.LIGHTNING_ROD)
             if(blindness>0) {
                 blindness-=20
                 PLAYERS.forEach { player1 ->
+                    if(player1.gameMode == GameMode.SPECTATOR) { return@forEach }
                     if(player1.role==Role.WOLF) {
                         player1.sendTitle(BLINDNESS_TITLE_TEXT, messages("for_wolf", "%sec%" to blindness / 20), 0, 30, 10)
                     } else {

@@ -30,7 +30,7 @@ bedrock_edition:
 roles:
   seer:
     items:
-      - "multiple_seer"
+      - "seer"
     priority: 1
     name: 占い師
     team: VILLAGER

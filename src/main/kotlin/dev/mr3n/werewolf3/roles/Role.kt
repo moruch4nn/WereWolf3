@@ -6,10 +6,7 @@ import dev.mr3n.werewolf3.WereWolf3
 import dev.mr3n.werewolf3.items.IShopItem
 import dev.mr3n.werewolf3.utils.*
 import net.md_5.bungee.api.ChatColor
-import org.bukkit.Bukkit
-import org.bukkit.Color
-import org.bukkit.Material
-import org.bukkit.NamespacedKey
+import org.bukkit.*
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.LeatherArmorMeta
 import org.bukkit.persistence.PersistentDataAdapterContext
@@ -104,6 +101,7 @@ enum class Role() {
             // >>> カミングアウト帽子に関する処理 >>>
             WereWolf3.INSTANCE.runTaskTimerAsync(1L,1L) {
                 Bukkit.getOnlinePlayers().forEach { player ->
+                    if(player.gameMode == GameMode.SPECTATOR) { return@forEach }
                     // プレイヤーのヘルメットを取得
                     val helmet = player.inventory.helmet
                     // ヘルメットのCoの役職を取得。nullだった場合はreturn

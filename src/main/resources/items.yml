@@ -249,6 +249,7 @@ assassin_sword:
     messages:
       need_from_back: "背後から斬りかかる必要があります。"
       success: "暗殺に成功しました。"
+      cooldown_now: "%sec%秒間のクールダウン中です。"
 invisible_potion:
   class: dev.mr3n.werewolf3.items.InvisiblePotion
   price: 500

@@ -5,7 +5,6 @@ import dev.mr3n.werewolf3.Keys
 import dev.mr3n.werewolf3.events.WereWolf3DamageEvent
 import dev.mr3n.werewolf3.roles.Role
 import org.bukkit.Bukkit
-import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.persistence.PersistentDataType
 
@@ -83,10 +82,7 @@ var Player.will: String?
     }
 
 var Player.money: Int
-    get() {
-        return this.inventory.contents.filterNotNull().filter { it.type == Material.EMERALD }.sumOf { it.amount }
-    }
+    get() = this.persistentDataContainer.get(Keys.MONEY, PersistentDataType.INTEGER)?:0
     set(value) {
-
         this.persistentDataContainer.set(Keys.MONEY, PersistentDataType.INTEGER, value)
     }

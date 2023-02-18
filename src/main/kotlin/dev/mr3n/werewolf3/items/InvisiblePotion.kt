@@ -66,6 +66,7 @@ object InvisiblePotion: IShopItem.ShopItem("invisible_potion", Material.POTION) 
             if(!PLAYERS.contains(player)) { return@registerEvent }
             player.addPotionEffect(PotionEffect(PotionEffectType.INVISIBILITY, TIME, 200, false, false, true))
             player.removePotionEffect(PotionEffectType.GLOWING)
+            player.arrowsInBody = 0
             player.inventory.itemInMainHand.amount--
         }
     }

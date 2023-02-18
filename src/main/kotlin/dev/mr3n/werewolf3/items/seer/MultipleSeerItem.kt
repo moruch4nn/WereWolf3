@@ -52,7 +52,7 @@ object MultipleSeerItem: IShopItem.ShopItem("multiple_seer", Material.ENDER_EYE)
             item.amount--
             WereWolf3.INSTANCE.runTaskLater(SEER_TIME) {
                 renderCircle(base,3)
-                val wolfInRange = PLAYERS.filter { base.distance(it.location) < DISTANCE }.any { it.role == Role.WOLF }
+                val wolfInRange = PLAYERS.filter { it.gameMode != GameMode.SPECTATOR }.filter { base.distance(it.location) < DISTANCE }.any { it.role == Role.WOLF }
                 base.world?.playSound(base, Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f)
                 if(wolfInRange) {
                     val result = messages("result.wolf")

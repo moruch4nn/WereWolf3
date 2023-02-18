@@ -118,7 +118,7 @@ class WereWolf3: JavaPlugin() {
                         // プレイヤー同士が見えている場合
                         PLAYERS.forEach s@{ player2 ->
                                 if(player2 == player) { return@s }
-                                if(player2.gameMode == GameMode.SPECTATOR) { return@s }
+                                if(player.gameMode == GameMode.SPECTATOR) { return@s }
                                 // 人狼同士は離れてもお互いが見えるように
                                 if (player.role == Role.WOLF && player2.role == Role.WOLF) { return@s }
                                 // プレイヤー間に障害物があるかどうか。ある場合はtrueなのでfilterNotでfalseのみ残す

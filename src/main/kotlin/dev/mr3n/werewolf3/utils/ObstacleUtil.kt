@@ -51,9 +51,9 @@ fun Location.hasObstacleInPath(end: Location, max: Double = Bukkit.getServer().v
     if(distance > max) { return false }
     val direction = end.toVector().subtract(start.toVector()).normalize().multiply(0.1)
     val now = start.clone().add(direction)
-    while(start.distance(now).let { it < distance && it < max }) {
+    while(true) {
+        if(start.distance(now) > distance) { return false }
         if(now.block.type.isOccluding) { return true }
         now.add(direction)
     }
-    return false
 }

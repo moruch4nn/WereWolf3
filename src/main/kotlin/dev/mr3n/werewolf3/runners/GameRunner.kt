@@ -48,8 +48,7 @@ object GameRunner: LoopProcess(1L,1L, false, GameStatus.RUNNING) {
             }
             if(player.gameMode != GameMode.SPECTATOR) {
                 // 30秒おきにお金を追加する
-                if (ticks() % (20 * 30) == 0L) { player.money += Constants.ADD_MONEY
-                }
+                if (ticks() % Constants.MONEY_INTERVAL == 0L) { player.money += Constants.MONEY_AMOUNT }
             }
         }
     }

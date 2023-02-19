@@ -13,7 +13,6 @@ import org.bukkit.entity.Player
 object ShopCommand: CommandExecutor, TabCompleter {
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         if(sender !is Player) { return false }
-        if(!PLAYERS.contains(sender)) { return true }
         if(STATUS!=GameStatus.RUNNING) { return true }
         sender.playSound(sender, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f)
         sender.openShopMenu()

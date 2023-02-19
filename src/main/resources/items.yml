@@ -1,6 +1,6 @@
 doctor_sword:
   class: dev.mr3n.werewolf3.items.doctor.DoctorSword
-  price: 600
+  price: 3
   roles:
     - DOCTOR
   health_amount: 40.0
@@ -20,7 +20,7 @@ doctor_sword:
       healing: "%player%を回復しています。"
 seer:
   class: dev.mr3n.werewolf3.items.seer.SeerItem
-  price: 600
+  price: 1
   roles:
     - SEER
   seer_time: 80
@@ -42,7 +42,7 @@ seer:
         villager: "%player%は&c人狼では&nありません。"
 multiple_seer:
   class: dev.mr3n.werewolf3.items.seer.MultipleSeerItem
-  price: 1100
+  price: 2
   roles:
     - SEER
   distance: 5.0
@@ -61,7 +61,7 @@ multiple_seer:
         villager: "範囲内に&c人狼は&nいません。"
 medium:
   class: dev.mr3n.werewolf3.items.medium.MediumItem
-  price: 400
+  price: 1
   roles:
     - MEDIUM
   languages:
@@ -79,7 +79,7 @@ medium:
       time: "&5死亡時刻&7: &f%sec%秒前"
 bomb_ball:
   class: dev.mr3n.werewolf3.items.wolf.BombBall
-  price: 1000
+  price: 5
   roles:
     - WOLF
   damage_distance: 7
@@ -96,7 +96,7 @@ bomb_ball:
         title: "EXPLODE"
 wolf_axe:
   class: dev.mr3n.werewolf3.items.wolf.WolfAxe
-  price: 700
+  price: 3
   charge: 50
   roles:
     - WOLF
@@ -120,7 +120,7 @@ wolf_axe:
       used: "一撃の斧を使用した"
 fake_seer:
   class: dev.mr3n.werewolf3.items.madman.FakeSeerItem
-  price: 300
+  price: 3
   roles:
     - MADMAN
   languages:
@@ -128,7 +128,7 @@ fake_seer:
     description: "偽物の占いアイテム。プレイヤーを騙す以外に使用する手段はない。"
 fake_medium:
   class: dev.mr3n.werewolf3.items.madman.FakeMediumItem
-  price: 300
+  price: 3
   roles:
     - MADMAN
   languages:
@@ -136,7 +136,7 @@ fake_medium:
     description: "偽物の霊媒アイテム。"
 stan_ball:
   class: dev.mr3n.werewolf3.items.StanBall
-  price: 600
+  price: 2
   radius: 5.0
   stan_time: 140
   roles:
@@ -157,7 +157,7 @@ stan_ball:
         title: "STAN!"
 glow_ink:
   class: dev.mr3n.werewolf3.items.GlowInk
-  price: 560
+  price: 2
   glowing_time: 300
   roles:
     - VILLAGER
@@ -179,7 +179,7 @@ glow_ink:
       for_be: "BEエディションは仕様上発光が表示されません。対応をお待ち下さい。"
 lightning_rod:
   class: dev.mr3n.werewolf3.items.wolf.LightningRod
-  price: 800
+  price: 3
   blindness_time: 300
   roles:
     - WOLF
@@ -195,7 +195,7 @@ lightning_rod:
       for_wolf: "プレイヤーに盲目を付与中: %sec%"
 health_charger:
   class: dev.mr3n.werewolf3.items.doctor.HealthCharger
-  price: 1000
+  price: 4
   roles:
     - DOCTOR
   heal_amount: 1.0
@@ -212,7 +212,7 @@ health_charger:
       healing: "ヘルスチャージャーで体力を回復しています。"
 heal_potion:
   class: dev.mr3n.werewolf3.items.HealPotion
-  price: 800
+  price: 2
   roles:
     - VILLAGER
     - DOCTOR
@@ -232,7 +232,7 @@ heal_potion:
       healing: "&c❤%amount%&f回復しました。"
 assassin_sword:
   class: dev.mr3n.werewolf3.items.wolf.AssassinSword
-  price: 600
+  price: 5
   roles:
     - WOLF
   attack_angle: 70.0
@@ -253,7 +253,7 @@ assassin_sword:
       cooldown_now: "%sec%秒間のクールダウン中です。"
 invisible_potion:
   class: dev.mr3n.werewolf3.items.InvisiblePotion
-  price: 500
+  price: 3
   roles:
     - VILLAGER
     - DOCTOR
@@ -267,7 +267,7 @@ invisible_potion:
     description: "飲むことで&c%time%秒間透明になれる&7。\n装備は消えるが手に持っている\nアイテムは見えてしまう。\n透明化中は&c発光の効果を完全に無効化&7する。"
 wolf_guide:
   class: dev.mr3n.werewolf3.items.madman.WolfGuide
-  price: 800
+  price: 3
   roles:
     - MADMAN
   search_time: 60
@@ -284,7 +284,7 @@ wolf_guide:
       searched: "&c%player%&fが人狼の中の一匹です。"
 one_shot_crossbow:
   class: dev.mr3n.werewolf3.items.OneShowCrossbow
-  price: 1200
+  price: 5
   roles:
     - VILLAGER
     - DOCTOR
@@ -303,7 +303,7 @@ one_shot_crossbow:
       used: "一撃の弓が壊れてしまった。"
 totem_of_undying:
   class: dev.mr3n.werewolf3.items.Totem
-  price: 1000
+  price: 4
   roles:
     - VILLAGER
     - DOCTOR

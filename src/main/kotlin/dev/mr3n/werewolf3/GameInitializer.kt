@@ -64,7 +64,7 @@ object GameInitializer {
             player.walkSpeed = 0.2f
             player.health = player.healthScale
             player.world.difficulty = Difficulty.PEACEFUL
-            player.money = Constants.START_MONEY
+            player.money = Constants.INITIAL_FUNDS
             TeamPacketUtil.add(player,ChatColor.WHITE,players)
             player.setDisplayName(player.name)
             player.setPlayerListName(player.name)

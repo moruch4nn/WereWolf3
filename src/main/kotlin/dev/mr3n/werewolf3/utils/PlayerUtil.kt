@@ -6,7 +6,9 @@ import dev.mr3n.werewolf3.events.WereWolf3DamageEvent
 import dev.mr3n.werewolf3.roles.Role
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
+import org.bukkit.Material
 import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 
 fun Player.damageTo(target: Player, damage: Double) {
@@ -84,9 +86,15 @@ var Player.will: String?
     }
 
 var Player.money: Int
-    get() = this.persistentDataContainer.get(Keys.MONEY, PersistentDataType.INTEGER)?:0
+    get() = this.inventory.filter { it.type == Material.EMERALD }.sumOf { it.amount }
     set(value) {
-        this.persistentDataContainer.set(Keys.MONEY, PersistentDataType.INTEGER, value)
+        val field = this.money
+        val diff = value - field
+        if(diff > 0) {
+            this.inventory.addItem(ItemStack(Material.EMERALD))
+        } else {
+            this.inventory.removeItem(ItemStack(Material.EMERALD))
+        }
     }
 
 val Player.isAlive: Boolean

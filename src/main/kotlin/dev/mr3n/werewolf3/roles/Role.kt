@@ -1,7 +1,6 @@
 package dev.mr3n.werewolf3.roles
 
 import dev.moru3.minepie.Executor.Companion.runTaskTimerAsync
-import dev.mr3n.werewolf3.PLAYERS
 import dev.mr3n.werewolf3.WereWolf3
 import dev.mr3n.werewolf3.items.IShopItem
 import dev.mr3n.werewolf3.utils.*
@@ -100,8 +99,7 @@ enum class Role() {
         init {
             // >>> カミングアウト帽子に関する処理 >>>
             WereWolf3.INSTANCE.runTaskTimerAsync(1L,1L) {
-                Bukkit.getOnlinePlayers().forEach { player ->
-                    if(player.gameMode == GameMode.SPECTATOR) { return@forEach }
+                alivePlayers().forEach { player ->
                     // プレイヤーのヘルメットを取得
                     val helmet = player.inventory.helmet
                     // ヘルメットのCoの役職を取得。nullだった場合はreturn
@@ -115,9 +113,7 @@ enum class Role() {
                             player.co = null
                         } else {
                             // すべてのプレイヤーにCoした旨を伝える。
-                            PLAYERS.forEach {
-                                it.sendMessage(languages("messages.coming_out", "%color%" to coRole.color, "%player%" to player.name, "%role%" to coRole.displayName))
-                            }
+                            joinedPlayers().forEach { it.sendMessage(languages("messages.coming_out", "%color%" to coRole.color, "%player%" to player.name, "%role%" to coRole.displayName)) }
                             // プレイヤーのprefixにCoした役職を表示
                             player.setDisplayName("${coRole.color}[${coRole.displayName}Co]${player.name}")
                             player.setPlayerListName("${coRole.color}[${coRole.displayName}Co]${player.name}")

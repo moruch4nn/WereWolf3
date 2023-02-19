@@ -1,8 +1,7 @@
 package dev.mr3n.werewolf3.sidebar
 
-import dev.mr3n.werewolf3.PLAYERS
+import dev.mr3n.werewolf3.utils.alivePlayers
 import dev.mr3n.werewolf3.utils.languages
-import org.bukkit.GameMode
 import org.bukkit.entity.Player
 import org.bukkit.scoreboard.Criteria
 import org.bukkit.scoreboard.DisplaySlot
@@ -40,8 +39,6 @@ class DeathSidebar(player: Player): RunningSidebar(player) {
         // 待機プレイヤー数
         getScore(languages("sidebar.running.day.display")).apply { score = 8 }
         // 参加プレイヤー数を設定
-        players(PLAYERS.size)
-        // 待機時間を設定
-        players(PLAYERS.count { it.gameMode != GameMode.SPECTATOR })
+        players(alivePlayers().size)
     }
 }

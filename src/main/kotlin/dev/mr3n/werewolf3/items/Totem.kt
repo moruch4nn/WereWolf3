@@ -1,7 +1,6 @@
 package dev.mr3n.werewolf3.items
 
 import dev.moru3.minepie.events.EventRegister.Companion.registerEvent
-import dev.mr3n.werewolf3.PLAYERS
 import dev.mr3n.werewolf3.TIME_OF_DAY
 import dev.mr3n.werewolf3.Time
 import dev.mr3n.werewolf3.WereWolf3
@@ -26,7 +25,6 @@ object Totem: IShopItem.ShopItem("totem_of_undying", Material.TOTEM_OF_UNDYING) 
         WereWolf3.INSTANCE.registerEvent<EntityResurrectEvent> { event ->
             val player = event.entity
             if(player !is Player) { return@registerEvent }
-            if(!PLAYERS.contains(player)) { return@registerEvent }
             event.isCancelled = true
         }
         WereWolf3.INSTANCE.registerEvent<WereWolf3DamageEvent> { event ->
@@ -34,7 +32,6 @@ object Totem: IShopItem.ShopItem("totem_of_undying", Material.TOTEM_OF_UNDYING) 
             // 夜じゃない場合はreturn
             if(TIME_OF_DAY!=Time.NIGHT) { return@registerEvent }
             val player = event.player
-            if(!PLAYERS.contains(player)) { return@registerEvent }
             val totem = listOf(player.inventory.itemInMainHand,player.inventory.itemInOffHand).find { isSimilar(it) }
             if(totem!=null) {
                 // if:トーテムを手に持っていた場合

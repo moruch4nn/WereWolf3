@@ -28,7 +28,7 @@ object GameTerminator {
         STATUS = GameStatus.ENDING
         // 役職 to プレイヤー一覧 のマップ
         val players = Role.ROLES.map { it.key to it.value.map { uniqueId -> Bukkit.getOfflinePlayer(uniqueId) } }
-        PLAYERS.forEach { player ->
+        joinedPlayers().forEach { player ->
             // どちらサイドが勝利したかをタイトルで表示
             player.sendTitle(languages("title.win.title", "%role%" to win.displayName, "%color%" to win.color), reason, 20, 100, 20)
             // ﾋﾟﾛﾘｰﾝ
@@ -74,7 +74,7 @@ object GameTerminator {
         try { IShopItem.ShopItem.ITEMS.forEach { it.onEnd() } } catch(_: Exception) { }
 
         try {
-            PLAYERS.forEach { player ->
+            joinedPlayers().forEach { player ->
                 // 人狼ゲーム関係のデータを削除
                 player.kills = null
                 player.role = null
@@ -86,7 +86,7 @@ object GameTerminator {
             }
         } catch(e: Exception) { e.printStackTrace() }
         try {
-            Bukkit.getOnlinePlayers().forEach { player ->
+            joinedPlayers().forEach { player ->
                 // プレイヤーの会話可能範囲の制限をなくす
                 player.clearConversationalDistance()
                 // サイドバーを待機中のものに変更
@@ -112,7 +112,6 @@ object GameTerminator {
         } catch(e: Exception) { e.printStackTrace() }
         // 死体を全削除
         try { DeadBody.DEAD_BODIES.forEach { it.destroy() } } catch(_: Exception) {}
-        try { PLAYERS.clear() } catch(_: Exception) {}
         // プラグインをreload
         if(!shutdown) {
             if(isPlugmanLoaded) { PluginUtil.reload(WereWolf3.INSTANCE) } else { Bukkit.getServer().reload() }

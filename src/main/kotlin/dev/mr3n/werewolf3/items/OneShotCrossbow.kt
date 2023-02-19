@@ -2,7 +2,6 @@ package dev.mr3n.werewolf3.items
 
 import dev.moru3.minepie.events.EventRegister.Companion.registerEvent
 import dev.mr3n.werewolf3.Keys
-import dev.mr3n.werewolf3.PLAYERS
 import dev.mr3n.werewolf3.WereWolf3
 import dev.mr3n.werewolf3.utils.damageTo
 import org.bukkit.Material
@@ -40,7 +39,6 @@ object OneShotCrossbow: IShopItem.ShopItem("one_shot_crossbow", Material.CROSSBO
             val projectile = event.entity
             val shooter = projectile.shooter?:return@registerEvent
             if(shooter !is Player) { return@registerEvent }
-            if(!PLAYERS.contains(shooter)) { return@registerEvent }
             if(!isSimilar(shooter.inventory.itemInMainHand)) { return@registerEvent }
             // 爆発玉識別用のタグを付与
             shooter.inventory.itemInMainHand.amount--
@@ -50,17 +48,21 @@ object OneShotCrossbow: IShopItem.ShopItem("one_shot_crossbow", Material.CROSSBO
         }
         WereWolf3.INSTANCE.registerEvent<ProjectileHitEvent> { event ->
             val projectile = event.entity
-            // あたった一撃の弓じゃない場合はreturn
+            // 当たったやつが一撃の矢じゃなかったらreturn
             if(projectile.persistentDataContainer.get(Keys.ENTITY_TYPE, PersistentDataType.STRING) != ENTITY_TYPE) { return@registerEvent }
+
             val shooter = projectile.shooter?:return@registerEvent
             if(shooter !is Player) { return@registerEvent }
-            if(!PLAYERS.contains(shooter)) { return@registerEvent }
+
             val hitEntity = event.hitEntity?:return@registerEvent
             if(hitEntity !is Player) { return@registerEvent }
-            if(!PLAYERS.contains(hitEntity)) { return@registerEvent }
+
             event.isCancelled = true
+
             projectile.remove()
+
             shooter.world.playSound(shooter, Sound.ENTITY_ITEM_BREAK, 1f, 1f)
+
             shooter.damageTo(hitEntity, -1.0)
         }
     }

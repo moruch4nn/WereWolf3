@@ -7,7 +7,7 @@ import com.comphenix.protocol.wrappers.WrappedChatComponent
 import dev.moru3.minepie.events.EventRegister.Companion.registerEvent
 import dev.mr3n.werewolf3.PROTOCOL_MANAGER
 import dev.mr3n.werewolf3.WereWolf3
-import org.bukkit.Bukkit
+import dev.mr3n.werewolf3.utils.joinedPlayers
 import org.bukkit.ChatColor
 import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerJoinEvent
@@ -43,7 +43,7 @@ object TeamPacketUtil {
         return packet
     }
 
-    fun sendTeamJLPacket(player: Player, color: ChatColor, entities: List<String>, operation: Int) {
+    fun sendTeamJLPacket(player: Player, color: ChatColor, entities: Collection<String>, operation: Int) {
         // パケットを作成
         val packet = PROTOCOL_MANAGER.createPacket(PacketType.Play.Server.SCOREBOARD_TEAM)
         // チーム名を指定
@@ -59,7 +59,7 @@ object TeamPacketUtil {
     /**
      * チームのメンバーを設定できる関数です。
      */
-    fun add(player: Player,color: ChatColor,players: List<Player>) {
+    fun add(player: Player,color: ChatColor,players: Collection<Player>) {
         val members = TEAMS[player]?: mutableMapOf()
         TEAMS[player]?.forEach { (color, members1) ->
             val filteredMembers = players.filter { members1.contains(it.name) }
@@ -74,7 +74,7 @@ object TeamPacketUtil {
     /**
      * チームからプレイヤーを削除数パケットです。
      */
-    fun remove(player: Player, color: ChatColor, entities: List<String>) {
+    fun remove(player: Player, color: ChatColor, entities: Collection<String>) {
         val teams = TEAMS[player]?.get(color)?: return
         teams.removeAll(entities)
         TEAMS[player]?.put(color, teams)
@@ -129,7 +129,7 @@ object TeamPacketUtil {
                 PROTOCOL_MANAGER.sendServerPacket(event.player, createTeamColorPacket(color))
             }
         }
-        Bukkit.getOnlinePlayers().forEach { player -> colours.forEach { color ->
+        joinedPlayers().forEach { player -> colours.forEach { color ->
             removeTeam(player, color)
             PROTOCOL_MANAGER.sendServerPacket(player, createTeamColorPacket(color))
         } }

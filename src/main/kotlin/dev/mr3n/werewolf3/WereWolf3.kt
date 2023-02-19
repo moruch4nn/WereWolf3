@@ -15,9 +15,7 @@ import dev.mr3n.werewolf3.roles.Role
 import dev.mr3n.werewolf3.sidebar.ISideBar.Companion.sidebar
 import dev.mr3n.werewolf3.sidebar.StartingSidebar
 import dev.mr3n.werewolf3.sidebar.WaitingSidebar
-import dev.mr3n.werewolf3.utils.hasObstacleInSightPath
-import dev.mr3n.werewolf3.utils.languages
-import dev.mr3n.werewolf3.utils.role
+import dev.mr3n.werewolf3.utils.*
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
 import org.bukkit.GameRule
@@ -47,8 +45,6 @@ var DAYS: Int = 0
 // 推定の残りプレイヤー数
 var PLAYERS_EST = 0
 
-// ゲームに参加中のプレイヤー
-val PLAYERS = mutableListOf<Player>()
 // EntityID to Playerのマップ
 val PLAYER_BY_ENTITY_ID: MutableMap<Int, Player> = mutableMapOf()
 // サーバーにPlugmanXが導入されているかどうか
@@ -81,7 +77,7 @@ class WereWolf3: JavaPlugin() {
         // いつもの
         Bukkit.getPluginManager().registerEvents(PlayerListener,this)
         // すでにサーバーにいるプレイヤーのjoin eventを発生させる(初期化用)
-        Bukkit.getOnlinePlayers().forEach { PlayerListener.onJoin(PlayerJoinEvent(it,null)) }
+        joinedPlayers().forEach { PlayerListener.onJoin(PlayerJoinEvent(it,null)) }
         // /start コマンドの登録
         this.getCommand("start")?.also {
             it.setExecutor(StartCommand)
@@ -114,9 +110,9 @@ class WereWolf3: JavaPlugin() {
                 // if:ゲームが実行中の場合のみ実行
                 RUNNING, STARTING -> {
                     // for:ゲームに参加しているすべてのプレイヤー
-                    PLAYERS.forEach { player ->
+                    alivePlayers().forEach { player ->
                         // プレイヤー同士が見えている場合
-                        PLAYERS.forEach s@{ player2 ->
+                        alivePlayers().forEach s@{ player2 ->
                                 if(player2 == player) { return@s }
                                 if(player.gameMode == GameMode.SPECTATOR) { return@s }
                                 // 人狼同士は離れてもお互いが見えるように
@@ -150,7 +146,7 @@ class WereWolf3: JavaPlugin() {
                         val loadingDots = ".".repeat((loopCount%(Constants.POINT_FLUSH_SPEED*4))/ Constants.POINT_FLUSH_SPEED)
                         // bossbarに...のアニメーションを追加
                         BOSSBAR.setTitle(languages("messages.please_wait_for_start") +loadingDots)
-                        PLAYERS.forEach { player ->
+                        joinedPlayers().forEach { player ->
                             val sidebar = player.sidebar
                             // プレイヤーのサイドバーがWaitingSidebarの場合
                             if(sidebar is WaitingSidebar) {
@@ -163,12 +159,12 @@ class WereWolf3: JavaPlugin() {
                 STARTING -> {
                     // 残り時間を減らす
                     TIME_LEFT--
-                    PLAYERS.forEach { player ->
+                    joinedPlayers().forEach { player ->
                         val sidebar = player.sidebar
                         // プレイヤーのサイドバーがStartingSidebarではない場合はreturn
                         if(sidebar !is StartingSidebar) { return@forEach }
                         // サイドバーの推定プレイヤー数を更新
-                        sidebar.players(PLAYERS.size)
+                        sidebar.players(joinedPlayers().size)
                         // サイドバーの残り時間を更新
                         sidebar.time(TIME_LEFT/20)
                     }

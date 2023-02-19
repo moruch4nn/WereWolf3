@@ -48,14 +48,14 @@ class DeadBody(val player: Player) {
         // 死体が発見された際に推定プレイヤー数を一つ減らす。
         PLAYERS_EST--
         // サイドバーを更新(推定プレイヤー数)
-        PLAYERS.forEach {
+        joinedPlayers().forEach {
             val sidebar = it.sidebar
             if(sidebar is RunningSidebar) { sidebar.playersEst(PLAYERS_EST) }
         }
         // 死体を発見したプレイヤーにボーナスを与える
         player.money += Constants.DEAD_BODY_PRIZE
         // 死体が発見されたことを全プレイヤーに通知
-        PLAYERS.forEach { player2 ->
+        joinedPlayers().forEach { player2 ->
             player2.sendMessage(languages("messages.found_dead_body", "%player%" to name).asPrefixed())
         }
         // 発見したプレイヤーに通知オンを鳴らす
@@ -133,7 +133,8 @@ class DeadBody(val player: Player) {
 
     init {
         DEAD_BODY_BY_UUID[playerUniqueId]?.destroy()
-        spawn(Bukkit.getOnlinePlayers().toList())
+        // すべてのプレイヤーに死体を表示
+        this.spawn(joinedPlayers().toList())
         frog.isInvisible = true
         frog.isInvulnerable = true
         frog.isSilent = true
@@ -255,7 +256,8 @@ class DeadBody(val player: Player) {
             .writeSafely(0, frog.location.x)
             .writeSafely(1, frog.location.y + 0.12)
             .writeSafely(2, frog.location.z)
-        Bukkit.getOnlinePlayers().forEach { player -> PROTOCOL_MANAGER.sendServerPacket(player, packet) }
+        // すべてのプレイヤーにパケットを送信
+        joinedPlayers().forEach { player -> PROTOCOL_MANAGER.sendServerPacket(player, packet) }
         this.location = frog.location
     }
 
@@ -272,9 +274,7 @@ class DeadBody(val player: Player) {
     fun destroy() {
         val packet = PROTOCOL_MANAGER.createPacket(PacketType.Play.Server.ENTITY_DESTROY)
         packet.intLists.writeSafely(0, listOf(entityId))
-        Bukkit.getOnlinePlayers().forEach { p ->
-            PROTOCOL_MANAGER.sendServerPacket(p,packet)
-        }
+        joinedPlayers().forEach { p -> PROTOCOL_MANAGER.sendServerPacket(p,packet) }
         FROGS.remove(frog.entityId)
         frog.remove()
         // 一覧からも削除
@@ -310,7 +310,7 @@ class DeadBody(val player: Player) {
             }
             WereWolf3.INSTANCE.registerEvent<PlayerInteractAtEntityEvent> { event ->
                 val player = event.player
-                if(!PLAYERS.contains(player)) { return@registerEvent }
+                if(player.gameMode == GameMode.SPECTATOR) { return@registerEvent }
                 if(event.hand != EquipmentSlot.HAND) { return@registerEvent }
                 val entity = event.rightClicked
                 FROGS[entity.entityId]?.onClick(player)
@@ -380,7 +380,7 @@ class DeadBody(val player: Player) {
                     // if:ゲームが実行中の場合のみ実行
                     GameStatus.RUNNING, GameStatus.STARTING -> {
                         // for:ゲームに参加しているすべてのプレイヤーをfor
-                        PLAYERS.forEach { player ->
+                        alivePlayers().forEach { player ->
                             val visibleDeadBodies = DEAD_BODIES
                                 .filterNot { deadBody ->
                                     // 死体とプレイヤーの間に障害物があるかどうか。ある場合はtrueなのでfilterNotでfalseのみ残す

@@ -2,12 +2,11 @@ package dev.mr3n.werewolf3.items
 
 import dev.moru3.minepie.Executor.Companion.runTaskTimer
 import dev.moru3.minepie.events.EventRegister.Companion.registerEvent
-import dev.mr3n.werewolf3.PLAYERS
 import dev.mr3n.werewolf3.WereWolf3
+import dev.mr3n.werewolf3.utils.alivePlayers
 import dev.mr3n.werewolf3.utils.asPrefixed
 import dev.mr3n.werewolf3.utils.isBE
-import org.bukkit.Bukkit
-import org.bukkit.GameMode
+import dev.mr3n.werewolf3.utils.joinedPlayers
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.event.block.Action
@@ -27,7 +26,6 @@ object GlowInk: IShopItem.ShopItem("glow_ink", Material.GLOW_INK_SAC) {
     init {
         WereWolf3.INSTANCE.registerEvent<PlayerInteractEvent> { event ->
             val player = event.player
-            if(!PLAYERS.contains(player)) { return@registerEvent }
             // main handじゃない場合はreturn
             if(event.hand!=EquipmentSlot.HAND) { return@registerEvent }
             // 右クリックしていない場合はreturn
@@ -38,12 +36,12 @@ object GlowInk: IShopItem.ShopItem("glow_ink", Material.GLOW_INK_SAC) {
             item.amount--
             player.playSound(player, Sound.ENTITY_GLOW_SQUID_SQUIRT, 2f, 1f)
             glowing = GLOWING_TIME
-            Bukkit.getOnlinePlayers().filter { it.isBE }.forEach { it.sendMessage(messages("for_be").asPrefixed()) }
+            joinedPlayers().filter { it.isBE }.forEach { it.sendMessage(messages("for_be").asPrefixed()) }
         }
         WereWolf3.INSTANCE.runTaskTimer(0L,20L) {
             if(glowing > 0) {
                 glowing -= 20
-                PLAYERS.filter { it.gameMode != GameMode.SPECTATOR }.forEach { player ->
+                alivePlayers().forEach { player ->
                     player.playSound(player,Sound.ENTITY_BEE_STING,2F,0F)
                     if(player.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
                         player.sendTitle(GLOW_TITLE_TEXT, messages("invisible"), 0, 5, 30)

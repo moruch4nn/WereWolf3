@@ -2,7 +2,6 @@ package dev.mr3n.werewolf3.items.doctor
 
 import dev.moru3.minepie.events.EventRegister.Companion.registerEvent
 import dev.mr3n.werewolf3.Keys
-import dev.mr3n.werewolf3.PLAYERS
 import dev.mr3n.werewolf3.WereWolf3
 import dev.mr3n.werewolf3.items.IShopItem
 import dev.mr3n.werewolf3.utils.getContainerValue
@@ -27,16 +26,14 @@ object DoctorSword: IShopItem.ShopItem("doctor_sword", Material.IRON_SWORD) {
     override val displayName: String = super.displayName.replace("%amount%", "$MAX_HEAL_AMOUNT")
 
     private var ItemStack.healthAmount: Double
-        get() = this.getContainerValue(Keys.HEALTH_AMOUNT, PersistentDataType.DOUBLE)?: MAX_HEAL_AMOUNT
-        set(value) { this.setContainerValue(Keys.HEALTH_AMOUNT, PersistentDataType.DOUBLE, value) }
+        get() = this.getContainerValue(Keys.HEAL_AMOUNT, PersistentDataType.DOUBLE)?: MAX_HEAL_AMOUNT
+        set(value) { this.setContainerValue(Keys.HEAL_AMOUNT, PersistentDataType.DOUBLE, value) }
 
     fun Player.healTo(target: Player,event: Cancellable? = null) {
         val player = this
         val item = player.inventory.itemInMainHand
         // アイテムがヒールの剣じゃない場合はreturn
         if(!isSimilar(item)) { return }
-        if(!PLAYERS.contains(player)) { return }
-        if(!PLAYERS.contains(target)) { return }
         event?.isCancelled = true
         // ヒール量を推定
         val healAmount = minOf(target.healthScale-target.health, minOf(8.0, item.healthAmount))

@@ -5,6 +5,7 @@ import dev.mr3n.werewolf3.sidebar.ISideBar.Companion.sidebar
 import dev.mr3n.werewolf3.sidebar.RunningSidebar
 import dev.mr3n.werewolf3.utils.asPrefixed
 import dev.mr3n.werewolf3.utils.languages
+import dev.mr3n.werewolf3.utils.joinedPlayers
 import net.md_5.bungee.api.ChatColor
 import org.bukkit.Sound
 import org.bukkit.SoundCategory
@@ -75,7 +76,7 @@ enum class Time(val barColor: BarColor) {
             // 日付を1追加する
             DAYS++
 
-            PLAYERS.forEach { player ->
+            joinedPlayers().forEach { player ->
                 // プレイヤーに朝になった旨を伝える。
                 player.sendMessage("${TIME_OF_DAY.title}:${ChatColor.WHITE} ${TIME_OF_DAY.description}".asPrefixed())
                 // プレイヤーに朝になった旨を伝える。
@@ -108,7 +109,7 @@ enum class Time(val barColor: BarColor) {
             TIME_LEFT = Constants.NIGHT_TIME
             GAME_LENGTH = TIME_LEFT
 
-            PLAYERS.forEach { player ->
+            joinedPlayers().forEach { player ->
                 player.sendMessage("${TIME_OF_DAY.title}:${ChatColor.WHITE} ${TIME_OF_DAY.description}".asPrefixed())
                 player.conversationalDistance(100, Constants.CONVERSATION_DISTANCE)
 

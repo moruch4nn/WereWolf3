@@ -2,12 +2,12 @@ package dev.mr3n.werewolf3.items.madman
 
 import dev.moru3.minepie.Executor.Companion.runTaskLater
 import dev.moru3.minepie.events.EventRegister.Companion.registerEvent
-import dev.mr3n.werewolf3.PLAYERS
 import dev.mr3n.werewolf3.WereWolf3
 import dev.mr3n.werewolf3.items.IShopItem
 import dev.mr3n.werewolf3.protocol.MetadataPacketUtil
 import dev.mr3n.werewolf3.protocol.TeamPacketUtil
 import dev.mr3n.werewolf3.roles.Role
+import dev.mr3n.werewolf3.utils.alivePlayers
 import dev.mr3n.werewolf3.utils.role
 import org.bukkit.ChatColor
 import org.bukkit.Material
@@ -33,7 +33,6 @@ object WolfGuide: IShopItem.ShopItem("wolf_guide", Material.BOOK) {
     init {
         WereWolf3.INSTANCE.registerEvent<PlayerInteractEvent> { event ->
             val player = event.player
-            if(!PLAYERS.contains(player)) { return@registerEvent }
             // main handじゃない場合はreturn
             if(event.hand!=EquipmentSlot.HAND) { return@registerEvent }
             // 右クリックしていない場合はreturn
@@ -45,7 +44,7 @@ object WolfGuide: IShopItem.ShopItem("wolf_guide", Material.BOOK) {
             player.playSound(player, Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1f, 1f)
             item.amount--
             WereWolf3.INSTANCE.runTaskLater(SEARCH_TIME) {
-                val wolf = PLAYERS.filter { it.role == Role.WOLF }.randomOrNull()
+                val wolf = alivePlayers().filter { it.role == Role.WOLF }.randomOrNull()
                 if(wolf==null) {
                     player.sendTitle(GUIDE_TITLE_TEXT, messages("wolf_not_found"), 0, 100, 0)
                     player.playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f)

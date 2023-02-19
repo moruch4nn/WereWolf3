@@ -1,8 +1,8 @@
 package dev.mr3n.werewolf3.sidebar
 
-import dev.mr3n.werewolf3.PLAYERS
 import dev.mr3n.werewolf3.roles.Role
 import dev.mr3n.werewolf3.utils.languages
+import dev.mr3n.werewolf3.utils.joinedPlayers
 import dev.mr3n.werewolf3.utils.parseTime
 import dev.mr3n.werewolf3.utils.role
 import net.md_5.bungee.api.ChatColor
@@ -61,7 +61,7 @@ class StartingSidebar(val player: Player): ISideBar {
         // 待機時間
         getScore(languages("sidebar.starting.time.display")).apply { score = 8 }
         // 待機プレイヤー数を設定
-        players(PLAYERS.size)
+        players(joinedPlayers().size)
         // 待機時間を設定
         time(0)
 

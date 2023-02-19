@@ -236,6 +236,7 @@ assassin_sword:
   roles:
     - WOLF
   attack_angle: 70.0
+  cooldown_time: 100 #tickです
   languages:
     name: "&c暗殺の剣"
     description: "&c背後から&7プレイヤーに\n斬りかかることで&c一撃&7で\nプレイヤーを仕留めることができる剣。"
@@ -278,7 +279,7 @@ wolf_guide:
         title: "人狼ガイド"
         color: "&c"
     messages:
-      wolf_not_found: "人狼がいないようだ。"
+      wolf_not_found: "人狼はもう生きていないようだ..."
       searching: "検索中..."
       searched: "&c%player%&fが人狼の中の一匹です。"
 one_shot_crossbow:

@@ -2,7 +2,6 @@ package dev.mr3n.werewolf3.items.seer
 
 import dev.moru3.minepie.Executor.Companion.runTaskLater
 import dev.moru3.minepie.events.EventRegister.Companion.registerEvent
-import dev.mr3n.werewolf3.PLAYERS
 import dev.mr3n.werewolf3.TIME_OF_DAY
 import dev.mr3n.werewolf3.Time
 import dev.mr3n.werewolf3.WereWolf3
@@ -44,8 +43,6 @@ object SeerItem: IShopItem.ShopItem("seer", Material.MUSIC_DISC_CHIRP) {
             if(!isSimilar(item)) { return@registerEvent }
             val target = event.rightClicked
             if(target !is Player) { return@registerEvent }
-            if(!PLAYERS.contains(player)) { return@registerEvent }
-            if(!PLAYERS.contains(target)) { return@registerEvent }
             if(TIME_OF_DAY==Time.NIGHT) {
                 // 時間が夜だった場合
                 val seerInfo = lastClicked[player.uniqueId]

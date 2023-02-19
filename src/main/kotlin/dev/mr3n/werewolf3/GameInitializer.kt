@@ -42,9 +42,7 @@ object GameInitializer {
         // 日にちを0に設定
         DAYS = 0
         // 参加プレイヤー一覧。
-        val players = Bukkit.getOnlinePlayers().toList()
-        // プレイヤーにゲームIDを設定。
-        players.forEach { player -> player.gameId = GAME_ID }
+        val players = Bukkit.getOnlinePlayers()
         // プレイヤー人数から役職数を推定してリストに格納。 roleList.length == players.length
         val roleList = Role.values().map { role -> MutableList(role.calc(players.size)) { role } }.flatten().shuffled(RANDOM).shuffled().shuffled().shuffled()
         // 推定プレイヤー数を参加人数に設定(死亡確認時に減らしていく)
@@ -91,16 +89,14 @@ object GameInitializer {
             player.sendMessage(languages("messages.wolfs", "%wolfs%" to wolfs.joinToString(" ") { it.name }).asPrefixed())
             player.sendMessage(languages("messages.how_to_speak_in_wolf_group"))
         }
-
-        PLAYERS.addAll(players)
     }
 
     /**
      * 役職発表など準備完了後に行う処理
      */
     fun run() {
-        val wolfs = PLAYERS.filter { it.role?.team == Role.Team.WOLF }
-        PLAYERS.forEach {  player ->
+        val wolfs = alivePlayers().filter { it.role?.team == Role.Team.WOLF }
+        alivePlayers().forEach {  player ->
             // アイテム配布時に人狼アイテムとかを持たないようにスロットを0に設定
             player.inventory.heldItemSlot = 0
             // ショップを開くアイテム
@@ -119,7 +115,8 @@ object GameInitializer {
             } }) // 矢を渡す。
             player.inventory.addItem(EasyItem(Material.ARROW))
             Role.values().forEachIndexed { index, role -> player.inventory.setItem(9+index, role.helmet) }
-            player.sendMessage(languages("title.start.messages.info", "%wolf_teams%" to wolfs.size, "%villager_teams%" to PLAYERS.size - wolfs.size))
+            // 人狼チームと村人チームの数を公表
+            player.sendMessage(languages("title.start.messages.info", "%wolf_teams%" to wolfs.size, "%villager_teams%" to alivePlayers().size - wolfs.size))
             player.sidebar = RunningSidebar(player)
             player.role?.items?.map { it.itemStack }?.forEach { player.inventory.addItem(it) }
         }

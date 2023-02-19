@@ -2,10 +2,10 @@ package dev.mr3n.werewolf3.items.seer
 
 import dev.moru3.minepie.Executor.Companion.runTaskLater
 import dev.moru3.minepie.events.EventRegister.Companion.registerEvent
-import dev.mr3n.werewolf3.PLAYERS
 import dev.mr3n.werewolf3.WereWolf3
 import dev.mr3n.werewolf3.items.IShopItem
 import dev.mr3n.werewolf3.roles.Role
+import dev.mr3n.werewolf3.utils.alivePlayers
 import dev.mr3n.werewolf3.utils.asPrefixed
 import dev.mr3n.werewolf3.utils.role
 import org.bukkit.*
@@ -43,7 +43,6 @@ object MultipleSeerItem: IShopItem.ShopItem("multiple_seer", Material.ENDER_EYE)
             val item = player.inventory.itemInMainHand
             // 占いアイテムを手に持っていない場合はreturn
             if(!isSimilar(item)) { return@registerEvent }
-            if(!PLAYERS.contains(player)) { return@registerEvent }
             val base = player.location.clone()
             event.isCancelled = true
             // 半径 DISTANCE の円のパーティクルを描画する
@@ -52,13 +51,16 @@ object MultipleSeerItem: IShopItem.ShopItem("multiple_seer", Material.ENDER_EYE)
             item.amount--
             WereWolf3.INSTANCE.runTaskLater(SEER_TIME) {
                 renderCircle(base,3)
-                val wolfInRange = PLAYERS.filter { it.gameMode != GameMode.SPECTATOR }.filter { base.distance(it.location) < DISTANCE }.any { it.role == Role.WOLF }
+                // 人狼が範囲内にいるかどうか
+                val wolfInRange = alivePlayers().filter { base.distance(it.location) < DISTANCE }.any { it.role == Role.WOLF }
                 base.world?.playSound(base, Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f)
                 if(wolfInRange) {
+                    // if:人狼がいた場合
                     val result = messages("result.wolf")
                     player.sendTitle(SEER_TITLE_TEXT, result, 0, 100, 20)
                     player.sendMessage(result.asPrefixed())
                 } else {
+                    // if:人狼がいなかった場合
                     val result = messages("result.villager")
                     player.sendTitle(SEER_TITLE_TEXT, result, 0, 100, 20)
                     player.sendMessage(result.asPrefixed())

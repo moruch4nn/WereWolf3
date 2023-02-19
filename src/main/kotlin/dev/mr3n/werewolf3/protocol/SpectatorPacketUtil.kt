@@ -10,7 +10,7 @@ import com.comphenix.protocol.wrappers.PlayerInfoData
 import dev.moru3.minepie.events.EventRegister.Companion.registerEvent
 import dev.mr3n.werewolf3.PROTOCOL_MANAGER
 import dev.mr3n.werewolf3.WereWolf3
-import org.bukkit.Bukkit
+import dev.mr3n.werewolf3.utils.joinedPlayers
 import org.bukkit.GameMode
 import org.bukkit.event.player.PlayerGameModeChangeEvent
 import org.bukkit.event.player.PlayerJoinEvent
@@ -71,7 +71,7 @@ object SpectatorPacketUtil {
                     packet.booleans.writeSafely(0, false)
                     packet.bytes.writeSafely(0,0.toByte()).writeSafely(1,0.toByte())
                     // スペクテイターじゃない人たちにスペクテイターになったプレイヤーの座標を改ざんして送信する
-                    Bukkit.getOnlinePlayers().filter { it.gameMode != GameMode.SPECTATOR }.forEach { player2 ->
+                    joinedPlayers().filter { it.gameMode != GameMode.SPECTATOR }.forEach { player2 ->
                         if(player2==player) { return@forEach }
                         val location = player2.location
                         packet.doubles
@@ -92,7 +92,7 @@ object SpectatorPacketUtil {
                         .writeSafely(1, -1000.0)
                         .writeSafely(2, location.z)
                     // プレイヤーにスペクテイターの人たちの座標を改ざんして送信する
-                    Bukkit.getOnlinePlayers().filter { it.gameMode == GameMode.SPECTATOR }.forEach { player2 ->
+                    joinedPlayers().filter { it.gameMode == GameMode.SPECTATOR }.forEach { player2 ->
                         if(player2==player) { return@forEach }
                         packet.integers.writeSafely(0, player2.entityId)
                         PROTOCOL_MANAGER.sendServerPacket(player, packet.deepClone())

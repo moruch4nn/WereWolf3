@@ -1,6 +1,7 @@
 package dev.mr3n.werewolf3.sidebar
 
 import dev.mr3n.werewolf3.utils.languages
+import dev.mr3n.werewolf3.utils.joinedPlayers
 import org.bukkit.Bukkit
 import org.bukkit.scoreboard.Criteria
 import org.bukkit.scoreboard.DisplaySlot
@@ -46,7 +47,7 @@ class WaitingSidebar: ISideBar {
         // 待機時間
         getScore(languages("sidebar.waiting.time.display")).apply { score = 6 }
         // 待機プレイヤー数を設定
-        players(Bukkit.getOnlinePlayers().size)
+        players(joinedPlayers().size)
         // 待機時間を設定
         time(languages("sidebar.waiting.time.soon"))
         // ステータスを待機中に変更

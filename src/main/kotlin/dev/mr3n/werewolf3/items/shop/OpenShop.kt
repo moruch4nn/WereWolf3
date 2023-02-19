@@ -26,7 +26,7 @@ object OpenShop: IShopItem.ShopItem("open_shop", Material.AMETHYST_SHARD) {
             player.openShopMenu()
         }
         // アイテムをクリックした場合
-        WereWolf3.INSTANCE.registerEvent<PlayerInteractEvent>() { event ->
+        WereWolf3.INSTANCE.registerEvent<PlayerInteractEvent> { event ->
             val item = event.item?:return@registerEvent
             val player = event.player
             // アイテムがOpenShopではない場合return

@@ -2,9 +2,9 @@ package dev.mr3n.werewolf3.items.wolf
 
 import dev.moru3.minepie.Executor.Companion.runTaskTimer
 import dev.moru3.minepie.events.EventRegister.Companion.registerEvent
-import dev.mr3n.werewolf3.PLAYERS
 import dev.mr3n.werewolf3.WereWolf3
 import dev.mr3n.werewolf3.items.IShopItem
+import dev.mr3n.werewolf3.utils.alivePlayers
 import dev.mr3n.werewolf3.utils.damageTo
 import org.bukkit.Material
 import org.bukkit.Sound
@@ -34,8 +34,6 @@ object WolfAxe: IShopItem.ShopItem("wolf_axe",Material.IRON_AXE) {
             val target = event.entity
             if(player !is Player) { return@registerEvent }
             if(target !is Player) { return@registerEvent }
-            if(!PLAYERS.contains(player)) { return@registerEvent }
-            if(!PLAYERS.contains(target)) { return@registerEvent }
             val item = player.inventory.itemInMainHand
             if(!isSimilar(item)) { return@registerEvent }
             val world = player.world
@@ -57,7 +55,7 @@ object WolfAxe: IShopItem.ShopItem("wolf_axe",Material.IRON_AXE) {
             event.player.wolfAxeCharge = 0
         }
         WereWolf3.INSTANCE.runTaskTimer(20L,20L) {
-            PLAYERS.forEach { player ->
+            alivePlayers().forEach { player ->
                 val item = player.inventory.itemInMainHand
                 if(!isSimilar(item)) { return@forEach }
                 val world = player.world

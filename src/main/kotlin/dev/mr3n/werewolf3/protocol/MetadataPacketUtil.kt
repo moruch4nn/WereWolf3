@@ -9,7 +9,7 @@ import com.comphenix.protocol.wrappers.WrappedDataWatcher
 import dev.moru3.minepie.Executor.Companion.runTaskLater
 import dev.mr3n.werewolf3.PROTOCOL_MANAGER
 import dev.mr3n.werewolf3.WereWolf3
-import org.bukkit.Bukkit
+import dev.mr3n.werewolf3.utils.joinedPlayers
 import org.bukkit.entity.Entity
 import org.bukkit.entity.Player
 import java.util.*
@@ -90,7 +90,7 @@ object MetadataPacketUtil {
 
     fun resetAll(player: Player) {
         GLOWING_PLAYERS.remove(player.uniqueId)
-        Bukkit.getOnlinePlayers().forEach { entity ->
+        joinedPlayers().forEach { entity ->
             // 発光するエンティティ一覧からプレイヤーを削除
             GLOWING_PLAYERS[player.uniqueId]?.remove(entity.entityId)
             // 削除するパケットを送信

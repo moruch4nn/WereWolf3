@@ -2,14 +2,13 @@ package dev.mr3n.werewolf3.items.wolf
 
 import dev.moru3.minepie.Executor.Companion.runTaskTimer
 import dev.moru3.minepie.events.EventRegister.Companion.registerEvent
-import dev.mr3n.werewolf3.PLAYERS
 import dev.mr3n.werewolf3.WereWolf3
 import dev.mr3n.werewolf3.conversationalDistance
 import dev.mr3n.werewolf3.items.IShopItem
 import dev.mr3n.werewolf3.remConversationalDistance
 import dev.mr3n.werewolf3.roles.Role
+import dev.mr3n.werewolf3.utils.joinedPlayers
 import dev.mr3n.werewolf3.utils.role
-import org.bukkit.GameMode
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.event.block.Action
@@ -29,7 +28,6 @@ object LightningRod: IShopItem.ShopItem("lightning_rod", Material.LIGHTNING_ROD)
     init {
         WereWolf3.INSTANCE.registerEvent<PlayerInteractEvent> { event ->
             val player = event.player
-            if(!PLAYERS.contains(player)) { return@registerEvent }
             // main handじゃない場合はreturn
             if(event.hand!=EquipmentSlot.HAND) { return@registerEvent }
             // 右クリックしていない場合はreturn
@@ -41,7 +39,7 @@ object LightningRod: IShopItem.ShopItem("lightning_rod", Material.LIGHTNING_ROD)
             player.playSound(player, Sound.ENTITY_GLOW_SQUID_SQUIRT, 2f, 1f)
             // 盲目時間を設定
             blindness = BLINDNESS_TIME
-            PLAYERS.forEach { player1 ->
+            joinedPlayers().forEach { player1 ->
                 // 雷が落ちた音
                 player1.playSound(player1, Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 1f, 1f)
                 if(player1.role==Role.WOLF) {
@@ -58,8 +56,7 @@ object LightningRod: IShopItem.ShopItem("lightning_rod", Material.LIGHTNING_ROD)
         WereWolf3.INSTANCE.runTaskTimer(0L,20L) {
             if(blindness>0) {
                 blindness-=20
-                PLAYERS.forEach { player1 ->
-                    if(player1.gameMode == GameMode.SPECTATOR) { return@forEach }
+                joinedPlayers().forEach { player1 ->
                     if(player1.role==Role.WOLF) {
                         player1.sendTitle(BLINDNESS_TITLE_TEXT, messages("for_wolf", "%sec%" to blindness / 20), 0, 30, 10)
                     } else {

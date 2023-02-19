@@ -5,17 +5,25 @@ import dev.mr3n.werewolf3.Keys
 import dev.mr3n.werewolf3.events.WereWolf3DamageEvent
 import dev.mr3n.werewolf3.roles.Role
 import org.bukkit.Bukkit
+import org.bukkit.GameMode
 import org.bukkit.entity.Player
 import org.bukkit.persistence.PersistentDataType
 
 fun Player.damageTo(target: Player, damage: Double) {
+    // ダメージが0だったらreturn
     if(damage == 0.0) { return }
+    // WereWolf3ダメージイベントを発火
     val event = WereWolf3DamageEvent(target, damage)
     Bukkit.getPluginManager().callEvent(event)
+    // イベントがキャンセルされている場合はreturn
     if(event.isCancelled) { return }
+    // プレイヤーの体力
     val health = target.health
+    // プレイヤーの体力に+1する
     target.health = minOf(target.healthScale, health + 1)
+    // playerからtargetに1ダメージを与えて上の+1をなかったことにする
     target.damage(1.0,this)
+    // ダメージが0未満だった場合体力を0に(殺す)
     if(event.damage < 0) {
         target.health = 0.0
     } else {
@@ -25,12 +33,6 @@ fun Player.damageTo(target: Player, damage: Double) {
 
 val Player.isBE: Boolean
     get() = this.name.startsWith(Constants.BE_PREFIX)
-
-var Player.gameId: String?
-    get() = this.persistentDataContainer.get(Keys.GAME_ID, PersistentDataType.STRING)
-    set(value) {
-        if(value==null) { this.persistentDataContainer.remove(Keys.GAME_ID) } else { this.persistentDataContainer.set(Keys.GAME_ID, PersistentDataType.STRING, value) }
-    }
 
 var Player.kills: IntArray?
     get() = this.persistentDataContainer.get(Keys.KILLS, PersistentDataType.INTEGER_ARRAY)
@@ -86,3 +88,21 @@ var Player.money: Int
     set(value) {
         this.persistentDataContainer.set(Keys.MONEY, PersistentDataType.INTEGER, value)
     }
+
+val Player.isAlive: Boolean
+    get() = this.gameMode != GameMode.SPECTATOR
+
+/**
+ * 観戦中のプレイヤー一覧
+ */
+fun spectatePlayers(): Collection<Player> = joinedPlayers().filter { it.gameMode == GameMode.SPECTATOR }
+
+/**
+ * 生きているプレイヤー一覧
+ */
+fun alivePlayers(): Collection<Player> = joinedPlayers().filter { it.gameMode != GameMode.SPECTATOR }
+
+/**
+ * ゲームに参加しているプレイヤー一覧
+ */
+fun joinedPlayers(): Collection<Player> = Bukkit.getOnlinePlayers()

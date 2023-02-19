@@ -23,7 +23,7 @@ object GameRunner {
         BOSSBAR.setTitle(languages("bossbar.title","%time%" to TIME_OF_DAY.displayName, "%emoji%" to TIME_OF_DAY.emoji, "%time_left%" to (TIME_LEFT / 20).parseTime()))
 
         // 生きているプレイヤー一覧(スペクテイターじゃないプレイヤー)
-        val alivePlayers = PLAYERS.filter { p->p.gameMode!=GameMode.SPECTATOR }
+        val alivePlayers = alivePlayers()
         if(alivePlayers.count { p->p.role?.team==Role.Team.WOLF }<=0) {
             // 人狼陣営の数が0になった場合ゲームを終了
             GameTerminator.end(Role.Team.VILLAGER, languages("title.win.reason.anni", "%role%" to Role.Team.WOLF.displayName))
@@ -32,7 +32,7 @@ object GameRunner {
             GameTerminator.end(Role.Team.WOLF, languages("title.win.reason.anni", "%role%" to Role.Team.VILLAGER.displayName))
         }
 
-        PLAYERS.forEach { player ->
+        joinedPlayers().forEach { player ->
             // サイドバーの情報を更新する
             val sidebar = player.sidebar
             if(sidebar is RunningSidebar) {
@@ -40,7 +40,7 @@ object GameRunner {
                 sidebar.money(player.money)
             }
             if(sidebar is DeathSidebar) {
-                sidebar.players(PLAYERS.count { it.gameMode != GameMode.SPECTATOR })
+                sidebar.players(alivePlayers().size)
             }
             if(player.gameMode != GameMode.SPECTATOR) {
                 // 30秒おきにお金を追加する

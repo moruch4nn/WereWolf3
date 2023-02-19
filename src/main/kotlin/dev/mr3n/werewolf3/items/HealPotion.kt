@@ -1,7 +1,6 @@
 package dev.mr3n.werewolf3.items
 
 import dev.moru3.minepie.events.EventRegister.Companion.registerEvent
-import dev.mr3n.werewolf3.PLAYERS
 import dev.mr3n.werewolf3.WereWolf3
 import org.bukkit.Color
 import org.bukkit.Material
@@ -27,7 +26,6 @@ object HealPotion: IShopItem.ShopItem("heal_potion", Material.POTION) {
             val player = event.player
             val item = event.item
             if(!isSimilar(item)) { return@registerEvent }
-            if(!PLAYERS.contains(player)) { return@registerEvent }
             player.health = minOf(player.healthScale, player.health + HEAL_AMOUNT)
             player.sendTitle(CHARGER_TITLE_TEXT, messages("healing", "%amount%" to HEAL_AMOUNT), 0, 60, 20)
             player.inventory.itemInMainHand.amount--

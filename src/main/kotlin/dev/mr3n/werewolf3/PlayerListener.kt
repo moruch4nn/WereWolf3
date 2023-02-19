@@ -1,6 +1,7 @@
 package dev.mr3n.werewolf3
 
 import dev.mr3n.werewolf3.protocol.DeadBody
+import dev.mr3n.werewolf3.protocol.InvisibleEquipmentPacketUtil
 import dev.mr3n.werewolf3.protocol.MetadataPacketUtil
 import dev.mr3n.werewolf3.roles.Role
 import dev.mr3n.werewolf3.sidebar.DeathSidebar
@@ -13,6 +14,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.EventPriority
 import org.bukkit.event.Listener
 import org.bukkit.event.entity.EntityDamageEvent
+import org.bukkit.event.entity.EntityPotionEffectEvent
 import org.bukkit.event.entity.EntityRegainHealthEvent
 import org.bukkit.event.entity.PlayerDeathEvent
 import org.bukkit.event.player.*
@@ -31,6 +33,14 @@ object PlayerListener: Listener {
         }
     }
 
+    @EventHandler
+    fun onEffect(event: EntityPotionEffectEvent) {
+        val player = event.entity
+        if(player !is Player) { return }
+        if(player.isAlive) { return }
+        if(event.newEffect!=null) { event.isCancelled = true }
+    }
+
     /**
      * 死んだ際にそのプレイヤーを死体にしてその他死亡時の処理を行う
      */
@@ -38,15 +48,12 @@ object PlayerListener: Listener {
     fun onDead(event: PlayerDeathEvent) {
         val player = event.entity
         val killer = player.killer
-        if(!PLAYERS.contains(player)) { return }
         if(killer!=null) {
-            if(PLAYERS.contains(killer)) {
-                killer.playSound(killer, Sound.ENTITY_ARROW_HIT_PLAYER, 1f, 1f)
-                killer.addKill(player)
-            }
+            killer.playSound(killer, Sound.ENTITY_ARROW_HIT_PLAYER, 1f, 1f)
+            killer.addKill(player)
             player.sendTitle(languages("title.you_are_dead.title"),languages("title.you_are_dead.subtitle_with_killer", "%killer%" to killer.name), 0, 100, 20)
             if(player.role?.team==Role.Team.VILLAGER&&killer.role?.team==Role.Team.VILLAGER) {
-                PLAYERS.filter { it.role == Role.WOLF }.forEach { wolf ->
+                alivePlayers().filter { it.role == Role.WOLF }.forEach { wolf ->
                     wolf.money += Constants.TEAM_KILL_BONUS
                     wolf.sendMessage(languages("messages.team_kill_bonus", "%money%" to "${Constants.TEAM_KILL_BONUS}${Constants.MONEY_UNIT}").asPrefixed())
                     wolf.playSound(wolf, Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f)
@@ -64,7 +71,15 @@ object PlayerListener: Listener {
         // 体力を満タンに設定
         player.health = player.healthScale
         player.sidebar = DeathSidebar(player)
+        // すべてのプレイヤーを表示する
+        joinedPlayers().forEach {
+            InvisibleEquipmentPacketUtil.remove(player, it, 0)
+            MetadataPacketUtil.removeFromInvisible(player, it)
+        }
         MetadataPacketUtil.removeAllInvisible(player)
+
+        DeadBody.DEAD_BODIES.forEach { it.show(listOf(player)) }
+
         // 死んだ人にタイトルを表示
         player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS,20,1,false,false,false))
         // 死亡メッセージを削除
@@ -78,11 +93,10 @@ object PlayerListener: Listener {
      */
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     fun onChat(event: AsyncPlayerChatEvent) {
-        if(!PLAYERS.contains(event.player)) { return }
         if(event.player.gameMode==GameMode.SPECTATOR) {
             event.isCancelled = true
             val format = languages("death_chat_format", "%name%" to "%1\$s", "%message%" to "%2\$s")
-            Bukkit.getOnlinePlayers().filter { it.gameMode == GameMode.SPECTATOR }.forEach { player ->
+            spectatePlayers().forEach { player ->
                 player.sendMessage(String.format(format, event.player.displayName, event.message))
             }
         } else {
@@ -91,14 +105,14 @@ object PlayerListener: Listener {
                 // if:人狼チャットを使用しようとしている場合
                 if(event.player.role==Role.WOLF) {
                     val format = languages("wolf_chat_format", "%name%" to event.player.displayName, "%message%" to event.message)
-                    PLAYERS.filter { it.role == Role.WOLF || it.gameMode == GameMode.SPECTATOR }.forEach { player ->
+                    alivePlayers().filter { it.role == Role.WOLF }.forEach { player ->
                         // 人狼グルチャを全人狼に送信
                         player.sendMessage(format)
-                        if(player.gameMode != GameMode.SPECTATOR) {
-                            // 通知音を鳴らす
-                            player.playSound(player, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f)
-                        }
+                        // 通知音を鳴らす
+                        player.playSound(player, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f)
                     }
+                    // スペクテイターにも送信
+                    spectatePlayers().forEach { player -> player.sendMessage(format) }
                 } else {
                     // if:人狼じゃない場合は!から始まるチャットを使用できない旨を知らせる。
                     event.player.sendMessage(languages("messages.cant_start_with_ex").asPrefixed())
@@ -119,7 +133,6 @@ object PlayerListener: Listener {
     fun onRegainHealth(event: EntityRegainHealthEvent) {
         val player = event.entity
         if(player !is Player) { return }
-        if(!PLAYERS.contains(player)) { return }
         when(event.regainReason) {
             EntityRegainHealthEvent.RegainReason.MAGIC, EntityRegainHealthEvent.RegainReason.MAGIC_REGEN -> {}
             else -> {
@@ -134,7 +147,6 @@ object PlayerListener: Listener {
      */
     @EventHandler
     fun onDrop(event: PlayerDropItemEvent) {
-        if(!PLAYERS.contains(event.player)) { return }
         event.isCancelled = true
     }
 
@@ -143,13 +155,13 @@ object PlayerListener: Listener {
      */
     @EventHandler
     fun onQuit(event: PlayerQuitEvent) {
-        if(PLAYERS.contains(event.player)&&event.player.gameMode!=GameMode.SPECTATOR) {
+        if(event.player.isAlive) {
+            //if: プレイヤーが生きている場合
             // 途中抜けしたプレイヤーの下を生成し、その上発見させる。
             DeadBody(event.player).found(event.player)
             // ゲームモードをスペクテイターに
             event.player.gameMode = GameMode.SPECTATOR
         }
-        PLAYERS.remove(event.player)
         PLAYER_BY_ENTITY_ID.remove(event.player.entityId)
         DeadBody.CARRYING.remove(event.player)
     }
@@ -182,10 +194,10 @@ object PlayerListener: Listener {
             // if:実行中ではない場合
             // プレイヤーにサイドバーを表示
             player.sidebar = WaitingSidebar()
-            Bukkit.getOnlinePlayers().forEach { p ->
+            joinedPlayers().forEach { p ->
                 val sidebar = p.sidebar
                 if(sidebar !is WaitingSidebar) { return@forEach }
-                sidebar.players(Bukkit.getOnlinePlayers().size)
+                sidebar.players(joinedPlayers().size)
             }
         }
     }

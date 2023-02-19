@@ -1,5 +1,6 @@
-package dev.mr3n.werewolf3
+package dev.mr3n.werewolf3.runners
 
+import dev.mr3n.werewolf3.*
 import dev.mr3n.werewolf3.roles.Role
 import dev.mr3n.werewolf3.sidebar.DeathSidebar
 import dev.mr3n.werewolf3.sidebar.ISideBar.Companion.sidebar
@@ -8,11 +9,8 @@ import dev.mr3n.werewolf3.utils.*
 import org.bukkit.GameMode
 
 
-object GameRunner {
-    /**
-     * ゲーム実行中(STATUS == RUNNING)に毎チック実行される関数。
-     */
-    fun running(loopCount: Int) {
+object GameRunner: LoopProcess(1L,1L, false, GameStatus.RUNNING) {
+    override fun run() {
         // 残り時間を減らす
         TIME_LEFT--
         // 時間が来たら朝/夜反転
@@ -26,10 +24,16 @@ object GameRunner {
         val alivePlayers = alivePlayers()
         if(alivePlayers.count { p->p.role?.team==Role.Team.WOLF }<=0) {
             // 人狼陣営の数が0になった場合ゲームを終了
-            GameTerminator.end(Role.Team.VILLAGER, languages("title.win.reason.anni", "%role%" to Role.Team.WOLF.displayName))
+            GameTerminator.end(
+                Role.Team.VILLAGER,
+                languages("title.win.reason.anni", "%role%" to Role.Team.WOLF.displayName)
+            )
         } else if(alivePlayers.count { p->p.role?.team==Role.Team.VILLAGER && p.role != Role.MADMAN }<=0) {
             // 村人陣営(狂人は除く)の数が0になった場合ゲームを終了
-            GameTerminator.end(Role.Team.WOLF, languages("title.win.reason.anni", "%role%" to Role.Team.VILLAGER.displayName))
+            GameTerminator.end(
+                Role.Team.WOLF,
+                languages("title.win.reason.anni", "%role%" to Role.Team.VILLAGER.displayName)
+            )
         }
 
         joinedPlayers().forEach { player ->
@@ -44,9 +48,9 @@ object GameRunner {
             }
             if(player.gameMode != GameMode.SPECTATOR) {
                 // 30秒おきにお金を追加する
-                if (loopCount % (20 * 30) == 0) { player.money += Constants.ADD_MONEY }
+                if (ticks() % (20 * 30) == 0L) { player.money += Constants.ADD_MONEY
+                }
             }
         }
-
     }
 }

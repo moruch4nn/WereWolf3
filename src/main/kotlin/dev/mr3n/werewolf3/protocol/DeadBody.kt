@@ -23,6 +23,7 @@ import org.bukkit.event.player.PlayerMoveEvent
 import org.bukkit.event.player.PlayerToggleSneakEvent
 import org.bukkit.inventory.EquipmentSlot
 import java.util.*
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.CopyOnWriteArrayList
 import kotlin.experimental.or
 
@@ -290,13 +291,13 @@ class DeadBody(val player: Player) {
         private val BYTE_SERIALIZER = WrappedDataWatcher.Registry.get(Byte::class.javaObjectType)
 
         // カエルのentity id to 死体 のマップ
-        private val FROGS = mutableMapOf<Int, DeadBody>()
+        private val FROGS = ConcurrentHashMap<Int, DeadBody>()
 
         // uuid to 死体 のマップ
-        val DEAD_BODY_BY_UUID = mutableMapOf<UUID, DeadBody>()
+        val DEAD_BODY_BY_UUID = ConcurrentHashMap<UUID, DeadBody>()
 
         // 死体を運んでいるプレイヤーの一覧
-        val CARRYING = mutableMapOf<Player, DeadBody>()
+        val CARRYING = ConcurrentHashMap<Player, DeadBody>()
 
         init {
             /**

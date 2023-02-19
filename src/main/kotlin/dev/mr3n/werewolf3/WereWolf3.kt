@@ -2,22 +2,23 @@ package dev.mr3n.werewolf3
 
 import com.comphenix.protocol.ProtocolLibrary
 import com.comphenix.protocol.ProtocolManager
-import com.comphenix.protocol.wrappers.EnumWrappers
-import dev.moru3.minepie.Executor.Companion.runTaskTimerAsync
 import dev.moru3.minepie.config.Config
-import dev.mr3n.werewolf3.GameStatus.*
+import dev.mr3n.werewolf3.GameStatus.WAITING
 import dev.mr3n.werewolf3.commands.EndCommand
 import dev.mr3n.werewolf3.commands.ShopCommand
 import dev.mr3n.werewolf3.commands.StartCommand
 import dev.mr3n.werewolf3.items.IShopItem
-import dev.mr3n.werewolf3.protocol.*
+import dev.mr3n.werewolf3.protocol.DeadBody
+import dev.mr3n.werewolf3.protocol.SpectatorPacketUtil
+import dev.mr3n.werewolf3.protocol.TeamPacketUtil
 import dev.mr3n.werewolf3.roles.Role
-import dev.mr3n.werewolf3.sidebar.ISideBar.Companion.sidebar
-import dev.mr3n.werewolf3.sidebar.StartingSidebar
-import dev.mr3n.werewolf3.sidebar.WaitingSidebar
-import dev.mr3n.werewolf3.utils.*
+import dev.mr3n.werewolf3.runners.GameRunner
+import dev.mr3n.werewolf3.runners.HidePlayersRunner
+import dev.mr3n.werewolf3.runners.StartingRunner
+import dev.mr3n.werewolf3.runners.WaitingRunner
+import dev.mr3n.werewolf3.utils.joinedPlayers
+import dev.mr3n.werewolf3.utils.languages
 import org.bukkit.Bukkit
-import org.bukkit.GameMode
 import org.bukkit.GameRule
 import org.bukkit.Location
 import org.bukkit.boss.BarColor
@@ -102,81 +103,11 @@ class WereWolf3: JavaPlugin() {
         TeamPacketUtil
         Time.MORNING.title
         Time.NIGHT.title
+        GameRunner
+        HidePlayersRunner
+        StartingRunner
+        WaitingRunner
         // <<< クラスの初期化 <<<
-
-        // >>> プレイヤー間に障害物がある場合プレイヤーを透明にする処理:非同期 >>>
-        this.runTaskTimerAsync(3, 3) {
-            when(STATUS) {
-                // if:ゲームが実行中の場合のみ実行
-                RUNNING, STARTING -> {
-                    // for:ゲームに参加しているすべてのプレイヤー
-                    alivePlayers().forEach { player ->
-                        // プレイヤー同士が見えている場合
-                        alivePlayers().forEach s@{ player2 ->
-                                if(player2 == player) { return@s }
-                                if(player.gameMode == GameMode.SPECTATOR) { return@s }
-                                // 人狼同士は離れてもお互いが見えるように
-                                if (player.role == Role.WOLF && player2.role == Role.WOLF) { return@s }
-                                // プレイヤー間に障害物があるかどうか。ある場合はtrueなのでfilterNotでfalseのみ残す
-                                if(player.hasObstacleInSightPath(player2)) {
-                                    // if:プレイヤーとの間に障害物がある場合
-                                    InvisibleEquipmentPacketUtil.add(player, player2, 0, *EnumWrappers.ItemSlot.values())
-                                    MetadataPacketUtil.addToInvisible(player, player2)
-                                } else {
-                                    // if:プレイヤーとの間に障害物がない場合
-                                    InvisibleEquipmentPacketUtil.remove(player, player2, 0)
-                                    MetadataPacketUtil.removeFromInvisible(player, player2)
-                                }
-                            }
-                    }
-                }
-                else -> {}
-            }
-        }
-        // <<< プレイヤー間に障害物がある場合プレイヤーを透明にする処理:非同期 <<<
-
-        // 毎tickループ
-        TickTask.task { loopCount ->
-            when(STATUS) {
-                // 待機中にループする処理
-                WAITING -> {
-                    // 点滅速度
-                    if(loopCount % Constants.POINT_FLUSH_SPEED!=0) {
-                        // ...の.の数を計算
-                        val loadingDots = ".".repeat((loopCount%(Constants.POINT_FLUSH_SPEED*4))/ Constants.POINT_FLUSH_SPEED)
-                        // bossbarに...のアニメーションを追加
-                        BOSSBAR.setTitle(languages("messages.please_wait_for_start") +loadingDots)
-                        joinedPlayers().forEach { player ->
-                            val sidebar = player.sidebar
-                            // プレイヤーのサイドバーがWaitingSidebarの場合
-                            if(sidebar is WaitingSidebar) {
-                                // 待機中l...の..にアニメーションを付与
-                                sidebar.status(languages("sidebar.global.status.waiting") +loadingDots)
-                            }
-                        }
-                    }
-                }
-                STARTING -> {
-                    // 残り時間を減らす
-                    TIME_LEFT--
-                    joinedPlayers().forEach { player ->
-                        val sidebar = player.sidebar
-                        // プレイヤーのサイドバーがStartingSidebarではない場合はreturn
-                        if(sidebar !is StartingSidebar) { return@forEach }
-                        // サイドバーの推定プレイヤー数を更新
-                        sidebar.players(joinedPlayers().size)
-                        // サイドバーの残り時間を更新
-                        sidebar.time(TIME_LEFT/20)
-                    }
-                    // 準備時間が終わったらゲーム開始
-                    if(TIME_LEFT<=0) { GameInitializer.run() }
-                }
-                RUNNING -> {
-                    GameRunner.running(loopCount = loopCount)
-                }
-                ENDING -> {}
-            }
-        }
     }
 
     override fun onDisable() {

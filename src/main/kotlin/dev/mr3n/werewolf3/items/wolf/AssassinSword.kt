@@ -32,6 +32,7 @@ object AssassinSword: IShopItem.ShopItem("assassin_sword", Material.IRON_SWORD) 
             if(target !is Player) { return@registerEvent }
             val item = player.inventory.itemInMainHand
             if(!isSimilar(item)) { return@registerEvent }
+            event.isCancelled = true
             val lastUsedTime = item.getContainerValue(Keys.LAST_USED_TIME, PersistentDataType.LONG)?:0L
             val coolDown = COOLDOWN_TIME - ((System.currentTimeMillis()-lastUsedTime) / 50)
             if(coolDown > 0) {
@@ -75,7 +76,6 @@ object AssassinSword: IShopItem.ShopItem("assassin_sword", Material.IRON_SWORD) 
                 player.world.playSound(player,Sound.ENTITY_ITEM_BREAK,1f,1f)
                 item.setContainerValue(Keys.LAST_USED_TIME, PersistentDataType.LONG, System.currentTimeMillis())
             }
-            event.isCancelled = true
         }
     }
 }

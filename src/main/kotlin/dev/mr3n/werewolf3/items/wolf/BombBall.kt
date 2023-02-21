@@ -1,6 +1,7 @@
 package dev.mr3n.werewolf3.items.wolf
 
 import dev.moru3.minepie.Executor.Companion.runTaskLater
+import dev.moru3.minepie.Executor.Companion.runTaskTimer
 import dev.moru3.minepie.events.EventRegister.Companion.registerEvent
 import dev.mr3n.werewolf3.Keys
 import dev.mr3n.werewolf3.WereWolf3
@@ -8,12 +9,10 @@ import dev.mr3n.werewolf3.items.IShopItem
 import dev.mr3n.werewolf3.utils.alivePlayers
 import dev.mr3n.werewolf3.utils.damageTo
 import dev.mr3n.werewolf3.utils.joinedPlayers
-import org.bukkit.Material
-import org.bukkit.Particle
-import org.bukkit.Sound
-import org.bukkit.SoundCategory
+import org.bukkit.*
 import org.bukkit.entity.Item
 import org.bukkit.entity.Player
+import org.bukkit.entity.Projectile
 import org.bukkit.event.entity.ProjectileHitEvent
 import org.bukkit.event.entity.ProjectileLaunchEvent
 import org.bukkit.inventory.ItemStack
@@ -30,6 +29,8 @@ object BombBall: IShopItem.ShopItem("bomb_ball", Material.SNOWBALL) {
     private val FUSE_TIME: Long = itemConstant("fuse_time")
     private val MAX_DAMAGE: Int = itemConstant("max_damage")
     private val WARNING_COUNT: Int = itemConstant("warning_count")
+
+    private val balls = mutableSetOf<Projectile>()
 
     /**
      * 距離から爆発玉の爆発ダメージを計算します。
@@ -58,7 +59,14 @@ object BombBall: IShopItem.ShopItem("bomb_ball", Material.SNOWBALL) {
             if(shooter !is Player) { return@registerEvent }
             if(!isSimilar(shooter.inventory.itemInMainHand)) { return@registerEvent }
             // 爆発玉識別用のタグを付与
+            this.balls.add(projectile)
             projectile.persistentDataContainer.set(Keys.ENTITY_TYPE, PersistentDataType.STRING, ENTITY_TYPE)
+        }
+
+        WereWolf3.INSTANCE.runTaskTimer(3L,3L) {
+            balls.forEach {
+                it.world.spawnParticle(Particle.REDSTONE,it.location,1,.0,.0,.0,Particle.DustOptions(Color.RED,1f))
+            }
         }
 
         WereWolf3.INSTANCE.registerEvent<ProjectileHitEvent> { event ->
@@ -66,6 +74,7 @@ object BombBall: IShopItem.ShopItem("bomb_ball", Material.SNOWBALL) {
             // あたった発射物が爆発玉じゃない場合はreturn
             if(projectile.persistentDataContainer.get(Keys.ENTITY_TYPE, PersistentDataType.STRING) != ENTITY_TYPE) { return@registerEvent }
             val shooter = projectile.shooter?:return@registerEvent
+            this.balls.remove(projectile)
             if(shooter !is Player) { return@registerEvent }
             // 着弾点
             val location = projectile.location.clone()

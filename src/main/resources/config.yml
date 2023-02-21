@@ -18,7 +18,6 @@ game:
   starting_time: 400
   day_time: 2400 # 2 minute
   night_time: 3600 # 3 minute
-
   max_days: 3 # 最大日数。最大この日数+1日になる(人狼の"苦肉の策"アイテム)
   end_time: DAY # DAY or NIGHT
   conversation_distance: 20.0 # 夜に会話可能な半径
@@ -69,7 +68,7 @@ roles:
     description: 霊媒師はプレイヤーを霊媒し、そのプレイヤーが死亡しているかどうかを知ることができます。また、死体からそのプレイヤーの役職を知ることもできます。霊媒師は、人狼ゲームで重要な役割を果たしますが、人狼たちがその能力を把握している場合は危険が伴います。
   wolf:
     items:
-      - "assassin_sword"
+      - "wolf_axe"
     priority: 3
     name: 人狼
     team: WOLF

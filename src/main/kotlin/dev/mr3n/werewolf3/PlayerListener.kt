@@ -27,6 +27,7 @@ object PlayerListener: Listener {
     /**
      * tellコマンドなどその他のメッセージコマンドを無効化
      */
+    @Suppress("unused")
     @EventHandler
     fun onCommand(event: PlayerCommandPreprocessEvent) {
         if(event.player.gameMode == GameMode.SPECTATOR && Constants.MESSAGE_COMMANDS.contains(event.message.split(" ").firstOrNull())) {
@@ -34,6 +35,7 @@ object PlayerListener: Listener {
         }
     }
 
+    @Suppress("unused")
     @EventHandler
     fun onEffect(event: EntityPotionEffectEvent) {
         val player = event.entity
@@ -45,6 +47,7 @@ object PlayerListener: Listener {
     /**
      * 死んだ際にそのプレイヤーを死体にしてその他死亡時の処理を行う
      */
+    @Suppress("unused")
     @EventHandler
     fun onDead(event: PlayerDeathEvent) {
         val player = event.entity
@@ -92,6 +95,7 @@ object PlayerListener: Listener {
     /**
      * 夜は近くの人としか喋れない、また死亡者同士の死亡者チャットなどのの処理
      */
+    @Suppress("unused")
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     fun onChat(event: AsyncPlayerChatEvent) {
         if(event.player.gameMode==GameMode.SPECTATOR) {
@@ -130,6 +134,7 @@ object PlayerListener: Listener {
     /**
      * 体力の自然回復を無効化。
      */
+    @Suppress("unused")
     @EventHandler
     fun onRegainHealth(event: EntityRegainHealthEvent) {
         val player = event.entity
@@ -146,6 +151,7 @@ object PlayerListener: Listener {
      * アイテムをドロップできないようにする
      * TODO 特定のアイテムのみドロップできないようにする
      */
+    @Suppress("unused")
     @EventHandler
     fun onDrop(event: PlayerDropItemEvent) {
         val droppable = event.itemDrop.itemStack.getContainerValue(Keys.ITEM_DROPPABLE,BooleanDataType)?:true
@@ -157,6 +163,7 @@ object PlayerListener: Listener {
     /**
      * プレイヤーが途中抜けした際にそのプレイヤーを死体にする
      */
+    @Suppress("unused")
     @EventHandler
     fun onQuit(event: PlayerQuitEvent) {
         if(event.player.isAlive) {
@@ -173,6 +180,7 @@ object PlayerListener: Listener {
     /**
      * プレイヤーが参加した際に実行中だった場合スペクテイターにし、大気中だった場合はボスバーやサイドバーを表示する
      */
+    @Suppress("unused")
     @EventHandler
     fun onJoin(event: PlayerJoinEvent) {
         val player = event.player
@@ -206,10 +214,12 @@ object PlayerListener: Listener {
         }
     }
 
+    @Suppress("unused")
     @EventHandler
     fun onDamage(event: EntityDamageEvent) {
         val player = event.entity
         if(player !is Player) { return }
+        player.removePotionEffect(PotionEffectType.INVISIBILITY)
         if(STATUS == GameStatus.RUNNING) { return }
         event.isCancelled = true
     }

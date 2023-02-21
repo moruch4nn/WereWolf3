@@ -294,7 +294,7 @@ invisible_potion:
   time: 600
   languages:
     name: "&b透明化ポーション"
-    description: "飲むことで&c%time%秒間透明になれる&7。\n装備は消えるが手に持っている\nアイテムは見えてしまう。\n透明化中は&c発光の効果を完全に無効化&7する。"
+    description: "飲むことで&c%time%秒間透明になれる&7。\n装備は消えるが手に持っている\nアイテムは見えてしまう。\n透明化中は&c発光の効果を完全に無効化&7する。\nまたダメージを受けると状態が解除される。"
 wolf_guide:
   class: dev.mr3n.werewolf3.items.madman.WolfGuide
   droppable: false

@@ -39,6 +39,7 @@ object LightningRod: IShopItem.ShopItem("lightning_rod", Material.LIGHTNING_ROD)
             player.playSound(player, Sound.ENTITY_GLOW_SQUID_SQUIRT, 2f, 1f)
             // 盲目時間を設定
             blindness = BLINDNESS_TIME
+            player.world.strikeLightningEffect(player.location)
             joinedPlayers().forEach { player1 ->
                 // 雷が落ちた音
                 player1.playSound(player1, Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 1f, 1f)

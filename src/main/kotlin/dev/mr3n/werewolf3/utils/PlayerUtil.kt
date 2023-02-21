@@ -8,9 +8,7 @@ import dev.mr3n.werewolf3.items.Currency
 import dev.mr3n.werewolf3.roles.Role
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
-import org.bukkit.Material
 import org.bukkit.entity.Player
-import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 
 fun Player.damageTo(target: Player, damage: Double) {

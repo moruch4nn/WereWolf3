@@ -16,7 +16,7 @@ general:
     prefix:
 game:
   starting_time: 400
-  day_time: 2400 # 2 minute
+  day_time: 3600 # 3 minute
   night_time: 3600 # 3 minute
   max_days: 3 # 最大日数。最大この日数+1日になる(人狼の"苦肉の策"アイテム)
   end_time: DAY # DAY or NIGHT

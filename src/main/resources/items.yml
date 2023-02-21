@@ -109,7 +109,7 @@ wolf_axe:
   droppable: false
   role_lock: true
   price: 3
-  charge: 50
+  charge: 60
   roles:
     - WOLF
   languages:
@@ -384,6 +384,22 @@ stone_sword:
   languages:
     name: "&eちょっと強い石の剣"
     description: "敵を大抵3-4発で倒せる程度の\n攻撃力はあるちょっと強い剣"
+fake_dead_body:
+  class: dev.mr3n.werewolf3.items.wolf.FakeDeadBody
+  droppable: false
+  role_lock: true
+  price: 4
+  roles:
+    - WOLF
+  languages:
+    name: "&eダミー死体"
+    description: "使用することでその場にダミーの死体を生成する\n停電やテレポートと併用すると強い。"
+    title:
+      fake_dead_body:
+        title: "ダミー死体"
+        color: "&c"
+    messages:
+      success: "死体を作成した"
 enchanted_bow:
   class: dev.mr3n.werewolf3.items.EnchantedBow
   droppable: false

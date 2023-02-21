@@ -54,7 +54,7 @@ object PlayerListener: Listener {
         val killer = player.killer
         if(killer!=null) {
             killer.playSound(killer, Sound.ENTITY_ARROW_HIT_PLAYER, 1f, 1f)
-            killer.addKill(player)
+            killer.kills.add(player.playerData)
             player.sendTitle(languages("title.you_are_dead.title"),languages("title.you_are_dead.subtitle_with_killer", "%killer%" to killer.name), 0, 100, 20)
             if(player.role?.team==Role.Team.VILLAGER&&killer.role?.team==Role.Team.VILLAGER) {
                 alivePlayers().filter { it.role == Role.WOLF }.forEach { wolf ->
@@ -88,8 +88,6 @@ object PlayerListener: Listener {
         player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS,20,1,false,false,false))
         // 死亡メッセージを削除
         event.deathMessage = null
-        // 血を流す
-        player.world.spawnParticle(Particle.BLOCK_CRACK,player.location.clone().add(0.0,1.5,0.0),100,0.5,.5,0.5, Material.REDSTONE_BLOCK.createBlockData())
     }
 
     /**

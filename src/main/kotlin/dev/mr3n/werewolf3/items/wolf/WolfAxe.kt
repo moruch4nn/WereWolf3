@@ -64,7 +64,7 @@ object WolfAxe: IShopItem.ShopItem("wolf_axe",Material.IRON_AXE) {
                 } else {
                     player.wolfAxeCharge += 20
                     player.sendTitle(WOLF_AXE_TITLE_TEXT,messages("charging"),0,1,20)
-                    if(player.wolfAxeCharge + 20 >= CHARGE) {
+                    if(player.wolfAxeCharge >= CHARGE) {
                         world.playSound(player, Sound.BLOCK_BEACON_POWER_SELECT, 1f, 0f)
                         player.sendTitle(WOLF_AXE_TITLE_TEXT,messages("charged"),0,30,0)
                     } else {

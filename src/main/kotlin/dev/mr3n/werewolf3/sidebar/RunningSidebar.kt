@@ -2,7 +2,8 @@ package dev.mr3n.werewolf3.sidebar
 
 import dev.mr3n.werewolf3.Constants
 import dev.mr3n.werewolf3.DAYS
-import dev.mr3n.werewolf3.PLAYERS_EST
+import dev.mr3n.werewolf3.FOUNDED_PLAYERS
+import dev.mr3n.werewolf3.PLAYERS
 import dev.mr3n.werewolf3.utils.languages
 import dev.mr3n.werewolf3.utils.role
 import net.md_5.bungee.api.ChatColor
@@ -52,7 +53,7 @@ open class RunningSidebar(val player: Player): ISideBar {
         // 待機プレイヤー数
         getScore(languages("sidebar.running.day.display")).apply { score = 6 }
         // 参加プレイヤー数を設定
-        playersEst(PLAYERS_EST)
+        playersEst(PLAYERS.size - FOUNDED_PLAYERS.size)
         // 待機時間を設定
         // ステータスを待機中に変更
         role(player.role?.let { "${it.color}${ChatColor.BOLD}${it.displayName}" }?: languages("none"))

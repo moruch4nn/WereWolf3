@@ -28,6 +28,7 @@ import org.bukkit.configuration.file.FileConfiguration
 import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.plugin.java.JavaPlugin
+import java.util.UUID
 
 // 上に常時表示しているボスバー
 val BOSSBAR: BossBar by lazy { Bukkit.createBossBar(languages("messages.please_wait_for_start"), BarColor.RED, BarStyle.SOLID) }
@@ -43,8 +44,10 @@ var GAME_LENGTH = 0
 // 現在の時刻が何日目かを表します。 (一日経つたびに減っていきます)
 var DAYS: Int = 0
 
-// 推定の残りプレイヤー数
-var PLAYERS_EST = 0
+val PLAYERS = mutableSetOf<PlayerData>()
+
+// 死体が見つかったプレイヤー一覧
+var FOUNDED_PLAYERS = mutableSetOf<UUID>()
 
 // EntityID to Playerのマップ
 val PLAYER_BY_ENTITY_ID: MutableMap<Int, Player> = mutableMapOf()

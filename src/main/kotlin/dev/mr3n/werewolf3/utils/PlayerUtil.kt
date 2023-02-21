@@ -1,15 +1,16 @@
 package dev.mr3n.werewolf3.utils
 
 import dev.mr3n.werewolf3.Constants
-import dev.mr3n.werewolf3.Keys
-import dev.mr3n.werewolf3.datatypes.RoleDataType
+import dev.mr3n.werewolf3.PlayerData
 import dev.mr3n.werewolf3.events.WereWolf3DamageEvent
 import dev.mr3n.werewolf3.items.Currency
 import dev.mr3n.werewolf3.roles.Role
 import org.bukkit.Bukkit
-import org.bukkit.GameMode
+import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
-import org.bukkit.persistence.PersistentDataType
+import java.util.*
+
+private val playerDataList = mutableMapOf<UUID,PlayerData>()
 
 fun Player.damageTo(target: Player, damage: Double) {
     // ダメージが0だったらreturn
@@ -33,23 +34,17 @@ fun Player.damageTo(target: Player, damage: Double) {
     }
 }
 
-val Player.isBE: Boolean
-    get() = this.name.startsWith(Constants.BE_PREFIX)
+val OfflinePlayer.isBE: Boolean
+    get() = this.playerData.name.startsWith(Constants.BE_PREFIX)
 
-var Player.kills: IntArray?
-    get() = this.persistentDataContainer.get(Keys.KILLS, PersistentDataType.INTEGER_ARRAY)
-    set(value) {
-        if(value==null) { this.persistentDataContainer.remove(Keys.KILLS) } else { this.persistentDataContainer.set(Keys.KILLS, PersistentDataType.INTEGER_ARRAY, value) }
-    }
+val OfflinePlayer.kills: MutableSet<PlayerData>
+    get() = this.playerData.kills
 
-fun Player.addKill(target: Player) {
-    val kills = this.kills?.toMutableSet()?:mutableSetOf()
-    kills.add(target.entityId)
-    this.kills = kills.toIntArray()
-}
+val OfflinePlayer.playerData: PlayerData
+    get() = playerDataList.getOrPut(this.uniqueId) { PlayerData(this) }
 
-var Player.role: Role?
-    get() = this.persistentDataContainer.get(Keys.ROLE, RoleDataType)
+var OfflinePlayer.role: Role?
+    get() = this.playerData.role
     set(value) {
         if(value==null) {
             val role = this.role
@@ -58,7 +53,7 @@ var Player.role: Role?
                 list.remove(this.uniqueId)
                 Role.ROLES[role] = list
             }
-            this.persistentDataContainer.remove(Keys.ROLE)
+            this.playerData.role = null
         } else {
             val role = this.role
             if(role!=null) {
@@ -69,20 +64,20 @@ var Player.role: Role?
             val new = Role.ROLES[value]?.toMutableList()?: mutableListOf()
             new.add(this.uniqueId)
             Role.ROLES[value] = new
-            this.persistentDataContainer.set(Keys.ROLE, RoleDataType, value)
+            this.playerData.role = value
         }
     }
 
-var Player.co: Role?
-    get() = this.persistentDataContainer.get(Keys.CO, RoleDataType)
+var OfflinePlayer.co: Role?
+    get() = this.playerData.co
     set(value) {
-        if(value==null) { this.persistentDataContainer.remove(Keys.CO) } else { this.persistentDataContainer.set(Keys.CO, RoleDataType, value) }
+        this.playerData.co = value
     }
 
-var Player.will: String?
-    get() = this.persistentDataContainer.get(Keys.PLAYER_WILL, PersistentDataType.STRING)
+var OfflinePlayer.will: String?
+    get() = this.playerData.will
     set(value) {
-        if(value==null) { this.persistentDataContainer.remove(Keys.PLAYER_WILL) } else { this.persistentDataContainer.set(Keys.PLAYER_WILL, PersistentDataType.STRING, value) }
+        this.playerData.will = value
     }
 
 var Player.money: Int
@@ -101,17 +96,17 @@ var Player.money: Int
     }
 
 val Player.isAlive: Boolean
-    get() = this.gameMode != GameMode.SPECTATOR
+    get() = this.playerData.isAlive
 
 /**
  * 観戦中のプレイヤー一覧
  */
-fun spectatePlayers(): Collection<Player> = joinedPlayers().filter { it.gameMode == GameMode.SPECTATOR }
+fun spectatePlayers(): Collection<Player> = joinedPlayers().filterNot { it.isAlive }
 
 /**
  * 生きているプレイヤー一覧
  */
-fun alivePlayers(): Collection<Player> = joinedPlayers().filter { it.gameMode != GameMode.SPECTATOR }
+fun alivePlayers(): Collection<Player> = joinedPlayers().filter { it.isAlive }
 
 /**
  * ゲームに参加しているプレイヤー一覧

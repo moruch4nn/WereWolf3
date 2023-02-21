@@ -44,11 +44,11 @@ class DeadBody(val player: Player) {
         if(wasFound) { return }
         wasFound = true
         // 死体が発見された際に推定プレイヤー数を一つ減らす。
-        if(DEAD_BODY_BY_UUID.contains(player.uniqueId)) { PLAYERS_EST-- }
+        FOUNDED_PLAYERS.add(this.playerUniqueId)
         // サイドバーを更新(推定プレイヤー数)
         joinedPlayers().forEach {
             val sidebar = it.sidebar
-            if(sidebar is RunningSidebar) { sidebar.playersEst(PLAYERS_EST) }
+            if(sidebar is RunningSidebar) { sidebar.playersEst(PLAYERS.size - FOUNDED_PLAYERS.size) }
         }
         // 死体を発見したプレイヤーにボーナスを与える
         player.money += Constants.DEAD_BODY_PRIZE
@@ -144,6 +144,8 @@ class DeadBody(val player: Player) {
         DEAD_BODIES.add(this)
         FROGS[frog.entityId] = this
         DEAD_BODY_BY_UUID[playerUniqueId] = this
+        // 血を流す
+        player.world.spawnParticle(Particle.BLOCK_CRACK,player.location.clone().add(0.0,1.5,0.0),100,0.5,.5,0.5, Material.REDSTONE_BLOCK.createBlockData())
     }
 
     /**

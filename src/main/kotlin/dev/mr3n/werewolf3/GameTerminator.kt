@@ -16,7 +16,6 @@ import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.GameMode
 import org.bukkit.Sound
-import org.bukkit.entity.Player
 
 object GameTerminator {
 
@@ -39,14 +38,13 @@ object GameTerminator {
                 // 役職にプレイヤーが一人も属していない場合は内訳の表示をスキップ
                 if(players.isEmpty()) { return@s }
                 val textComponents = TextComponent("${role.color}${role.displayName}:")
-                players.associateWith {p->if(p is Player) p.kills?: intArrayOf() else intArrayOf() }
-                    .forEach { (player, kills) ->
+                players.forEach { player ->
                         // 身内を殺した回数
-                        val killTeams = kills.count { PLAYER_BY_ENTITY_ID[it]?.role?.team == role.team }
+                        val killTeams = player.kills.count { it.role?.team == role.team }
                         // プレイヤー名にホバーした際に身内キル/敵キルのなどの内訳を表示
-                        val hover = HoverEvent(HoverEvent.Action.SHOW_TEXT, Text(languages("messages.result.kills_info", "%kills%" to kills.size-killTeams, "%kill_teams%" to killTeams)))
+                        val hover = HoverEvent(HoverEvent.Action.SHOW_TEXT, Text(languages("messages.result.kills_info", "%kills%" to player.kills.size-killTeams, "%kill_teams%" to killTeams)))
                         // テキスト化
-                        val component = TextComponent("${role.color}${player.name}(${if(kills.isEmpty()) "0" else "${ChatColor.UNDERLINE}${kills.size}${role.color}"})")
+                        val component = TextComponent("${role.color}${player.name}(${if(player.kills.isEmpty()) "0" else "${ChatColor.UNDERLINE}${player.kills.size}${role.color}"})")
                         // ホバーした歳のイベントを設定
                         component.hoverEvent = hover
                         // プレイヤー名の間に空白を挿入
@@ -76,7 +74,7 @@ object GameTerminator {
         try {
             joinedPlayers().forEach { player ->
                 // 人狼ゲーム関係のデータを削除
-                player.kills = null
+                player.kills.clear()
                 player.role = null
                 player.co = null
                 player.will = null

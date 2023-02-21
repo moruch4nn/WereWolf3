@@ -40,7 +40,7 @@ object GameRunner: LoopProcess(1L,1L, false, GameStatus.RUNNING) {
             // サイドバーの情報を更新する
             val sidebar = player.sidebar
             if(sidebar is RunningSidebar) {
-                sidebar.playersEst(PLAYERS_EST)
+                sidebar.playersEst(PLAYERS.size - FOUNDED_PLAYERS.size)
             }
             if(sidebar is DeathSidebar) {
                 sidebar.players(alivePlayers().size)

@@ -48,7 +48,6 @@ object GameInitializer {
         // プレイヤー人数から役職数を推定してリストに格納。 roleList.length == players.length
         val roleList = Role.values().map { role -> MutableList(role.calc(players.size)) { role } }.flatten().shuffled(RANDOM).shuffled().shuffled().shuffled()
         // 推定プレイヤー数を参加人数に設定(死亡確認時に減らしていく)
-        PLAYERS_EST = players.size
         // 役職リストとプレイヤーのリストを合体してfor
         players.zip(roleList).toMap().forEach { (player, role) ->
             // プレイヤーの役職を設定。
@@ -70,11 +69,13 @@ object GameInitializer {
             player.setDisplayName(player.name)
             player.setPlayerListName(player.name)
             player.gameMode = GameMode.ADVENTURE
-            player.kills = intArrayOf()
+            player.kills.clear()
             player.inventory.contents.filterNotNull().forEach { it.amount = 0 }
             MetadataPacketUtil.resetAll(player)
             player.conversationalDistance(100,-1.0)
         }
+        PLAYERS.clear()
+        FOUNDED_PLAYERS.clear()
         // 時間を設定
         TIME_LEFT = Constants.STARTING_TIME
 

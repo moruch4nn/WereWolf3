@@ -6,7 +6,7 @@ none: "なし"
 everyone: "全員"
 force_end: "GMがゲームを終了しました。"
 send_message_at_night: "&e&l[半径%distance%m以内のプレイヤーにメッセージを送信しました！]"
-money_unit: "円"
+money_unit: "エメラルド"
 wolf_chat_format: "&c[人狼グルチャ]%name%&c: %message%"
 messages:
   please_wait_for_start: "開始までしばらくお待ちください"
@@ -99,8 +99,6 @@ sidebar:
   running:
     players:
       display: "&c残り人数(推定): &f"
-    money:
-      display: "&e所持金: "
     day:
       display: "&c残り日数: "
   waiting:

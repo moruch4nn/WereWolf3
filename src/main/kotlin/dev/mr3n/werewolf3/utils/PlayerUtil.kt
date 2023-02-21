@@ -87,14 +87,14 @@ var Player.will: String?
     }
 
 var Player.money: Int
-    get() = this.inventory.filter { it.type == Material.EMERALD }.sumOf { it.amount }
+    get() = this.inventory.filterNotNull().filter { it.type == Material.EMERALD }.sumOf { it.amount }
     set(value) {
         val field = this.money
         val diff = value - field
         if(diff > 0) {
-            this.inventory.addItem(ItemStack(Material.EMERALD))
+            this.inventory.addItem(ItemStack(Material.EMERALD, diff))
         } else {
-            this.inventory.removeItem(ItemStack(Material.EMERALD))
+            this.inventory.removeItem(ItemStack(Material.EMERALD, -diff))
         }
     }
 

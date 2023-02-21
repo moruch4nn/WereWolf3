@@ -30,11 +30,6 @@ open class RunningSidebar(val player: Player): ISideBar {
     fun role(value: String) { if(roleTeam.suffix != value) { roleTeam.suffix = value } }
 
     // 現在のステータつ情報を表示するためのチーム
-    private val moneyTeam = scoreboard.registerNewTeam("money").apply { addEntry(languages("sidebar.running.money.display")) }
-    // ステータス情報を設定
-    open fun money(value: Int) { if(moneyTeam.suffix != "${value}${Constants.MONEY_UNIT}") { moneyTeam.suffix = "${value}${Constants.MONEY_UNIT}" } }
-
-    // 現在のステータつ情報を表示するためのチーム
     private val dayTeam = scoreboard.registerNewTeam("day").apply { addEntry(languages("sidebar.running.day.display")) }
     // ステータス情報を設定
     fun day(value: Int) { if(dayTeam.suffix != "${value}日") { dayTeam.suffix = "${value}日" } }
@@ -46,26 +41,21 @@ open class RunningSidebar(val player: Player): ISideBar {
         // サイドバーの一覧に下に表示するかっこいいやつ(//////<-これ)
         getScore(languages("sidebar.bottom")).apply { score = 0 }
         getScore("").apply { score = 1 }
-        // 待機プレイヤー数
-        getScore(languages("sidebar.running.money.display")).apply { score = 2 }
-        // マージン
-        getScore(" ").apply { score = 3 }
         // 役職
-        getScore(languages("sidebar.global.role.display")).apply { score = 4 }
+        getScore(languages("sidebar.global.role.display")).apply { score = 2 }
         // マージン
-        getScore("  ").apply { score = 5 }
+        getScore("  ").apply { score = 3 }
         // 待機プレイヤー数
-        getScore(languages("sidebar.running.players.display")).apply { score = 6 }
+        getScore(languages("sidebar.running.players.display")).apply { score = 4 }
         // マージン
-        getScore("   ").apply { score = 7 }
+        getScore("   ").apply { score = 5 }
         // 待機プレイヤー数
-        getScore(languages("sidebar.running.day.display")).apply { score = 8 }
+        getScore(languages("sidebar.running.day.display")).apply { score = 6 }
         // 参加プレイヤー数を設定
         playersEst(PLAYERS_EST)
         // 待機時間を設定
         // ステータスを待機中に変更
         role(player.role?.let { "${it.color}${ChatColor.BOLD}${it.displayName}" }?: languages("none"))
-        money(300)
         day(Constants.MAX_DAYS - DAYS)
     }
 }

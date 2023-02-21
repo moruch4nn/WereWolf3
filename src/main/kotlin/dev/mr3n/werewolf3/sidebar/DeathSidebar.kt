@@ -10,8 +10,6 @@ import org.bukkit.scoreboard.DisplaySlot
  * 待機中に表示するサイドバー
  */
 class DeathSidebar(player: Player): RunningSidebar(player) {
-    override fun money(value: Int) { }
-
     // 待機中のプレイヤー数を表示するためのチーム
     private val playersTeam = scoreboard.registerNewTeam("players").apply { addEntry(languages("sidebar.dead.players.display")) }
     fun players(value: Int)  { if(playersTeam.suffix!="${value}人"){ playersTeam.suffix = "${value}人" } }

@@ -41,7 +41,6 @@ object GameRunner: LoopProcess(1L,1L, false, GameStatus.RUNNING) {
             val sidebar = player.sidebar
             if(sidebar is RunningSidebar) {
                 sidebar.playersEst(PLAYERS_EST)
-                sidebar.money(player.money)
             }
             if(sidebar is DeathSidebar) {
                 sidebar.players(alivePlayers().size)

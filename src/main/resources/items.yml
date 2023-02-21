@@ -384,6 +384,21 @@ stone_sword:
   languages:
     name: "&eちょっと強い石の剣"
     description: "敵を大抵3-4発で倒せる程度の\n攻撃力はあるちょっと強い剣"
+enchanted_bow:
+  class: dev.mr3n.werewolf3.items.EnchantedBow
+  droppable: false
+  role_lock: true
+  price: 4
+  roles:
+    - VILLAGER
+    - DOCTOR
+    - WOLF
+    - MADMAN
+    - SEER
+    - MEDIUM
+  languages:
+    name: "&eちょっとエンチャントの弓"
+    description: "プレイヤーを2発程度で殺れる強い弓"
 last_resort:
   class: dev.mr3n.werewolf3.items.wolf.LastResort
   droppable: false

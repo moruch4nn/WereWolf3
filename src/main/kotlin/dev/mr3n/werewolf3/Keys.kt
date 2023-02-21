@@ -13,12 +13,20 @@ object Keys {
      */
     val CO = NamespacedKey(WereWolf3.INSTANCE,"co")
 
-    val MONEY = NamespacedKey(WereWolf3.INSTANCE,"money")
-
     /**
      * アイテムID
      */
     val ITEM_ID = NamespacedKey(WereWolf3.INSTANCE, "item_id")
+
+    /**
+     * アイテムがドロップ可能かどうか
+     */
+    val ITEM_DROPPABLE = NamespacedKey(WereWolf3.INSTANCE, "droppable")
+
+    /**
+     *
+     */
+    val ITEM_ROLE_LOCK = NamespacedKey(WereWolf3.INSTANCE, "role_lock")
 
     /**
      * ヒールの残り残量

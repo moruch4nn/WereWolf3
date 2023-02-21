@@ -1,15 +1,18 @@
 package dev.mr3n.werewolf3.roles
 
 import dev.moru3.minepie.Executor.Companion.runTaskTimerAsync
+import dev.mr3n.werewolf3.Keys
 import dev.mr3n.werewolf3.WereWolf3
+import dev.mr3n.werewolf3.datatypes.BooleanDataType
+import dev.mr3n.werewolf3.datatypes.RoleDataType
 import dev.mr3n.werewolf3.items.IShopItem
 import dev.mr3n.werewolf3.utils.*
 import net.md_5.bungee.api.ChatColor
-import org.bukkit.*
+import org.bukkit.Color
+import org.bukkit.Material
+import org.bukkit.NamespacedKey
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.LeatherArmorMeta
-import org.bukkit.persistence.PersistentDataAdapterContext
-import org.bukkit.persistence.PersistentDataType
 import java.util.*
 import kotlin.math.ceil
 
@@ -85,7 +88,8 @@ enum class Role() {
         get() = ItemStack(Material.LEATHER_HELMET).also { item ->
             item.itemMeta = (item.itemMeta as LeatherArmorMeta?)?.also { meta ->
                 val color = this.color.color
-                meta.container.set(HELMET_ROLE_TAG_KEY,RoleTagType,this)
+                meta.container.set(HELMET_ROLE_TAG_KEY,RoleDataType,this)
+                meta.container.set(Keys.ITEM_DROPPABLE,BooleanDataType,false)
                 meta.setColor(Color.fromRGB(color.red,color.green,color.blue))
                 meta.isUnbreakable = true
                 meta.setDisplayName(languages("items.co_helmet.name", "%color%" to this.color, "%role%" to this.displayName))
@@ -103,7 +107,7 @@ enum class Role() {
                     // プレイヤーのヘルメットを取得
                     val helmet = player.inventory.helmet
                     // ヘルメットのCoの役職を取得。nullだった場合はreturn
-                    val coRole = helmet?.getContainerValue(Role.HELMET_ROLE_TAG_KEY, RoleTagType)
+                    val coRole = helmet?.getContainerValue(Role.HELMET_ROLE_TAG_KEY, RoleDataType)
                     // まだCoしていない役職だった場合
                     if (player.co != coRole) {
                         if (coRole == null) {
@@ -131,14 +135,6 @@ enum class Role() {
     enum class Unit {
         PLAYER,
         PERCENT
-    }
-
-    // NBTタグの単位。
-    object RoleTagType: PersistentDataType<String, Role> {
-        override fun getPrimitiveType(): Class<String> = String::class.java
-        override fun getComplexType(): Class<Role> = Role::class.java
-        override fun toPrimitive(complex: Role, context: PersistentDataAdapterContext): String = complex.toString()
-        override fun fromPrimitive(primitive: String, context: PersistentDataAdapterContext): Role = Role.valueOf(primitive)
     }
 
     // 陣営一覧。白陣営、黒陣営。

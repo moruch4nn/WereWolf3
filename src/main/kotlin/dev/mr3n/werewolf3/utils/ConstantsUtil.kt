@@ -17,6 +17,9 @@ inline fun <reified T> FileConfiguration.constant(key: String): T {
         String::class.java, String::class.javaObjectType -> {
             config.getString(key) as T
         }
+        Boolean::class.java, Boolean::class.javaObjectType -> {
+            config.getBoolean(key) as T
+        }
         else -> {
             config.get(key) as T
         }

@@ -1,5 +1,6 @@
 package dev.mr3n.werewolf3
 
+import dev.mr3n.werewolf3.datatypes.BooleanDataType
 import dev.mr3n.werewolf3.protocol.DeadBody
 import dev.mr3n.werewolf3.protocol.InvisibleEquipmentPacketUtil
 import dev.mr3n.werewolf3.protocol.MetadataPacketUtil
@@ -147,7 +148,10 @@ object PlayerListener: Listener {
      */
     @EventHandler
     fun onDrop(event: PlayerDropItemEvent) {
-        event.isCancelled = true
+        val droppable = event.itemDrop.itemStack.getContainerValue(Keys.ITEM_DROPPABLE,BooleanDataType)?:true
+        if(!droppable) {
+            event.isCancelled = true
+        }
     }
 
     /**

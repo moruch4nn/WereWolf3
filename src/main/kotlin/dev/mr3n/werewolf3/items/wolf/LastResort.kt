@@ -1,9 +1,8 @@
 package dev.mr3n.werewolf3.items.wolf
 
 import dev.moru3.minepie.events.EventRegister.Companion.registerEvent
-import dev.mr3n.werewolf3.Constants
 import dev.mr3n.werewolf3.*
-import dev.mr3n.werewolf3.WereWolf3
+import dev.mr3n.werewolf3.datatypes.RoleDataType
 import dev.mr3n.werewolf3.items.IShopItem
 import dev.mr3n.werewolf3.protocol.TeamPacketUtil
 import dev.mr3n.werewolf3.roles.Role
@@ -57,7 +56,7 @@ object LastResort: IShopItem.ShopItem("last_resort",Material.END_CRYSTAL) {
             item.amount--
             val wolfs = joinedPlayers().filter { p -> p.role == Role.WOLF }
             wolfs.forEach { player ->
-                player.inventory.contents.filterNotNull().filter { item -> item.getContainerValue(Role.HELMET_ROLE_TAG_KEY, Role.RoleTagType) != null }.forEach { item -> item.amount = 0 }
+                player.inventory.contents.filterNotNull().filter { item -> item.getContainerValue(Role.HELMET_ROLE_TAG_KEY, RoleDataType) != null }.forEach { item -> item.amount = 0 }
             }
             joinedPlayers().forEach { player ->
                 player.playSound(player, Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 1f, 1f)

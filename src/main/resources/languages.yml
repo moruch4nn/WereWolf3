@@ -65,6 +65,11 @@ items:
       roles: "役職: %roles%"
   co_helmet:
     name: "%color%%role%をCoする"
+  droppable:
+    true: "ドロップ可能"
+    false: "ドロップ不可"
+  role_lock:
+    cant_use_it: "このアイテムの使い方がわからない..."
 time:
   morning:
     name: "&6朝"

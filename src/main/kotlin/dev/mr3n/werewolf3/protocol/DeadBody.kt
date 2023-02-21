@@ -5,10 +5,7 @@ import com.comphenix.protocol.wrappers.*
 import dev.moru3.minepie.Executor.Companion.runTaskTimer
 import dev.moru3.minepie.Executor.Companion.runTaskTimerAsync
 import dev.moru3.minepie.events.EventRegister.Companion.registerEvent
-import dev.mr3n.werewolf3.Constants
-import dev.mr3n.werewolf3.GameStatus
 import dev.mr3n.werewolf3.*
-import dev.mr3n.werewolf3.WereWolf3
 import dev.mr3n.werewolf3.events.WereWolf3DeadBodyClickEvent
 import dev.mr3n.werewolf3.sidebar.ISideBar.Companion.sidebar
 import dev.mr3n.werewolf3.sidebar.RunningSidebar

@@ -1,8 +1,8 @@
 package dev.mr3n.werewolf3
 
 import dev.moru3.minepie.events.EventRegister.Companion.registerEvent
-import dev.mr3n.werewolf3.utils.languages
 import dev.mr3n.werewolf3.utils.joinedPlayers
+import dev.mr3n.werewolf3.utils.languages
 import net.md_5.bungee.api.ChatColor
 import net.md_5.bungee.api.ChatMessageType
 import net.md_5.bungee.api.chat.TextComponent

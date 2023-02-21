@@ -2,6 +2,7 @@ package dev.mr3n.werewolf3.utils
 
 import dev.mr3n.werewolf3.Constants
 import dev.mr3n.werewolf3.Keys
+import dev.mr3n.werewolf3.datatypes.RoleDataType
 import dev.mr3n.werewolf3.events.WereWolf3DamageEvent
 import dev.mr3n.werewolf3.roles.Role
 import org.bukkit.Bukkit
@@ -49,7 +50,7 @@ fun Player.addKill(target: Player) {
 }
 
 var Player.role: Role?
-    get() = this.persistentDataContainer.get(Keys.ROLE, Role.RoleTagType)
+    get() = this.persistentDataContainer.get(Keys.ROLE, RoleDataType)
     set(value) {
         if(value==null) {
             val role = this.role
@@ -69,14 +70,14 @@ var Player.role: Role?
             val new = Role.ROLES[value]?.toMutableList()?: mutableListOf()
             new.add(this.uniqueId)
             Role.ROLES[value] = new
-            this.persistentDataContainer.set(Keys.ROLE, Role.RoleTagType, value)
+            this.persistentDataContainer.set(Keys.ROLE, RoleDataType, value)
         }
     }
 
 var Player.co: Role?
-    get() = this.persistentDataContainer.get(Keys.CO, Role.RoleTagType)
+    get() = this.persistentDataContainer.get(Keys.CO, RoleDataType)
     set(value) {
-        if(value==null) { this.persistentDataContainer.remove(Keys.CO) } else { this.persistentDataContainer.set(Keys.CO, Role.RoleTagType, value) }
+        if(value==null) { this.persistentDataContainer.remove(Keys.CO) } else { this.persistentDataContainer.set(Keys.CO, RoleDataType, value) }
     }
 
 var Player.will: String?

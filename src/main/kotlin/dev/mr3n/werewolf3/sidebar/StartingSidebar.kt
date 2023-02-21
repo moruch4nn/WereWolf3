@@ -1,8 +1,8 @@
 package dev.mr3n.werewolf3.sidebar
 
 import dev.mr3n.werewolf3.roles.Role
-import dev.mr3n.werewolf3.utils.languages
 import dev.mr3n.werewolf3.utils.joinedPlayers
+import dev.mr3n.werewolf3.utils.languages
 import dev.mr3n.werewolf3.utils.parseTime
 import dev.mr3n.werewolf3.utils.role
 import net.md_5.bungee.api.ChatColor

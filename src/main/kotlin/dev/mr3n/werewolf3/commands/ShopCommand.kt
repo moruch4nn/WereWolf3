@@ -2,7 +2,7 @@ package dev.mr3n.werewolf3.commands
 
 import dev.mr3n.werewolf3.GameStatus
 import dev.mr3n.werewolf3.ItemShop.openShopMenu
-import dev.mr3n.werewolf3.*
+import dev.mr3n.werewolf3.STATUS
 import org.bukkit.Sound
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor

@@ -4,6 +4,7 @@ import dev.moru3.minepie.item.EasyItem
 import dev.mr3n.werewolf3.Constants
 import dev.mr3n.werewolf3.Keys
 import dev.mr3n.werewolf3.WereWolf3
+import dev.mr3n.werewolf3.datatypes.BooleanDataType
 import dev.mr3n.werewolf3.roles.Role
 import dev.mr3n.werewolf3.utils.*
 import net.md_5.bungee.api.ChatColor
@@ -54,6 +55,17 @@ interface IShopItem {
     val price: Int
 
     /**
+     * アイテムがドロップ可能かどうか
+     */
+    val droppable: Boolean
+
+    /**
+     * 役職によって使用可否が決まっているかどうかをtrue/falseで表します。
+     * falseの場合rolesに記載されている以外のプレイヤーはアイテムを使用できません。
+     */
+    val roleLock: Boolean
+
+    /**
      * アイテムがこのアイテムかどうかを確認
      */
     fun isSimilar(itemStack: ItemStack): Boolean
@@ -66,6 +78,8 @@ interface IShopItem {
 
     abstract class ShopItem(final override val id: String, val material: Material): IShopItem {
         override val price: Int = itemConstant("price")
+        override val droppable: Boolean = itemConstant("droppable")
+        override val roleLock: Boolean = itemConstant("role_lock")
         override val roles: List<Role> = itemConstants<String>("roles").map{Role.valueOf(it)}
         override val displayName: String = WereWolf3.ITEMS_CONFIG.languages("${id}.languages.name")
         override val comment: String = WereWolf3.ITEMS_CONFIG.languages("${id}.languages.comment")
@@ -84,6 +98,8 @@ interface IShopItem {
             get() = EasyItem(material, displayName, lore).also { item ->
                 item.itemMeta = item.itemMeta?.also { meta ->
                     meta.container.set(Keys.ITEM_ID, PersistentDataType.STRING, id)
+                    meta.container.set(Keys.ITEM_DROPPABLE, BooleanDataType, droppable)
+                    meta.container.set(Keys.ITEM_ROLE_LOCK, BooleanDataType, roleLock)
                     ItemFlag.values().forEach { meta.addItemFlags(it) }
                     this.onSetItemMeta(meta)
                 }

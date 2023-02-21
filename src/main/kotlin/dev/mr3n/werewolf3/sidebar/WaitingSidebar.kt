@@ -1,7 +1,7 @@
 package dev.mr3n.werewolf3.sidebar
 
-import dev.mr3n.werewolf3.utils.languages
 import dev.mr3n.werewolf3.utils.joinedPlayers
+import dev.mr3n.werewolf3.utils.languages
 import org.bukkit.Bukkit
 import org.bukkit.scoreboard.Criteria
 import org.bukkit.scoreboard.DisplaySlot

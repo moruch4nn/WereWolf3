@@ -4,6 +4,7 @@ import dev.mr3n.werewolf3.Constants
 import dev.mr3n.werewolf3.Keys
 import dev.mr3n.werewolf3.datatypes.RoleDataType
 import dev.mr3n.werewolf3.events.WereWolf3DamageEvent
+import dev.mr3n.werewolf3.items.Currency
 import dev.mr3n.werewolf3.roles.Role
 import org.bukkit.Bukkit
 import org.bukkit.GameMode
@@ -87,14 +88,17 @@ var Player.will: String?
     }
 
 var Player.money: Int
-    get() = this.inventory.filterNotNull().filter { it.type == Material.EMERALD }.sumOf { it.amount }
+    get() = this.inventory.filterNotNull().filter { Currency.isSimilar(it) }.sumOf { it.amount }
     set(value) {
         val field = this.money
         val diff = value - field
+        val currencies = Currency.itemStack
         if(diff > 0) {
-            this.inventory.addItem(ItemStack(Material.EMERALD, diff))
+            currencies.amount = diff
+            this.inventory.addItem(currencies)
         } else {
-            this.inventory.removeItem(ItemStack(Material.EMERALD, -diff))
+            currencies.amount = -diff
+            this.inventory.removeItem(currencies)
         }
     }
 

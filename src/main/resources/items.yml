@@ -465,3 +465,10 @@ you_are_wolf:
     description: "これでプレイヤーをクリックをすることで\nクイックチャットを使用できます。"
     messages:
       - "%player%人狼！！！！"
+currency:
+  class: dev.mr3n.werewolf3.items.Currency
+  droppable: true
+  role_lock: false
+  languages:
+    name: "&aエメラルド"
+    description: "アイテムの購入や取引に使える通貨"

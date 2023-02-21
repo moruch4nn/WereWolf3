@@ -373,7 +373,7 @@ stone_sword:
   class: dev.mr3n.werewolf3.items.StoneSword
   droppable: false
   role_lock: true
-  price: 4
+  price: 5
   roles:
     - VILLAGER
     - DOCTOR
@@ -388,7 +388,7 @@ enchanted_bow:
   class: dev.mr3n.werewolf3.items.EnchantedBow
   droppable: false
   role_lock: true
-  price: 4
+  price: 5
   roles:
     - VILLAGER
     - DOCTOR

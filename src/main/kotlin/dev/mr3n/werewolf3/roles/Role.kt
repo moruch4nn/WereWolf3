@@ -11,6 +11,7 @@ import net.md_5.bungee.api.ChatColor
 import org.bukkit.Color
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
+import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.LeatherArmorMeta
 import java.util.*
@@ -93,6 +94,7 @@ enum class Role() {
                 meta.setColor(Color.fromRGB(color.red,color.green,color.blue))
                 meta.isUnbreakable = true
                 meta.setDisplayName(languages("items.co_helmet.name", "%color%" to this.color, "%role%" to this.displayName))
+                ItemFlag.values().forEach { meta.addItemFlags(it) }
             }
         }
 

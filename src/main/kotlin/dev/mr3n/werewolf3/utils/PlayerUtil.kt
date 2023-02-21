@@ -1,6 +1,7 @@
 package dev.mr3n.werewolf3.utils
 
 import dev.mr3n.werewolf3.Constants
+import dev.mr3n.werewolf3.PLAYERS
 import dev.mr3n.werewolf3.PlayerData
 import dev.mr3n.werewolf3.events.WereWolf3DamageEvent
 import dev.mr3n.werewolf3.items.Currency
@@ -111,4 +112,4 @@ fun alivePlayers(): Collection<Player> = joinedPlayers().filter { it.isAlive }
 /**
  * ゲームに参加しているプレイヤー一覧
  */
-fun joinedPlayers(): Collection<Player> = Bukkit.getOnlinePlayers()
+fun joinedPlayers(): Collection<Player> = PLAYERS.mapNotNull { it.offlinePlayer.player }

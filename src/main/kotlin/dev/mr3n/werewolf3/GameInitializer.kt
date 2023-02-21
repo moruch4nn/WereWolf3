@@ -74,8 +74,7 @@ object GameInitializer {
             MetadataPacketUtil.resetAll(player)
             player.conversationalDistance(100,-1.0)
         }
-        PLAYERS.clear()
-        FOUNDED_PLAYERS.clear()
+        PLAYERS.addAll(players.map { it.playerData })
         // 時間を設定
         TIME_LEFT = Constants.STARTING_TIME
 

@@ -108,6 +108,10 @@ object GameTerminator {
                 // <<< バグって動かないようにちょっとずらしてスポーン地点にてレポート <<<
             }
         } catch(e: Exception) { e.printStackTrace() }
+        try {
+            PLAYERS.clear()
+            FOUNDED_PLAYERS.clear()
+        } catch(_: Exception) {}
         // 死体を全削除
         try { DeadBody.DEAD_BODIES.forEach { it.destroy() } } catch(_: Exception) {}
         // プラグインをreload

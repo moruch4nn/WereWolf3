@@ -44,7 +44,7 @@ class DeadBody(val player: Player) {
         if(wasFound) { return }
         wasFound = true
         // 死体が発見された際に推定プレイヤー数を一つ減らす。
-        PLAYERS_EST--
+        if(DEAD_BODY_BY_UUID.contains(player.uniqueId)) { PLAYERS_EST-- }
         // サイドバーを更新(推定プレイヤー数)
         joinedPlayers().forEach {
             val sidebar = it.sidebar

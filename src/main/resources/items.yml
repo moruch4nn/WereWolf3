@@ -1,5 +1,7 @@
 doctor_sword:
   class: dev.mr3n.werewolf3.items.doctor.DoctorSword
+  droppable: false
+  role_lock: true
   price: 3
   roles:
     - DOCTOR
@@ -20,6 +22,8 @@ doctor_sword:
       healing: "%player%を回復しています。"
 seer:
   class: dev.mr3n.werewolf3.items.seer.SeerItem
+  droppable: false
+  role_lock: true
   price: 1
   roles:
     - SEER
@@ -42,6 +46,8 @@ seer:
         villager: "%player%は&c人狼では&nありません。"
 multiple_seer:
   class: dev.mr3n.werewolf3.items.seer.MultipleSeerItem
+  droppable: false
+  role_lock: true
   price: 2
   roles:
     - SEER
@@ -61,6 +67,8 @@ multiple_seer:
         villager: "範囲内に&c人狼は&nいません。"
 medium:
   class: dev.mr3n.werewolf3.items.medium.MediumItem
+  droppable: false
+  role_lock: true
   price: 1
   roles:
     - MEDIUM
@@ -79,6 +87,8 @@ medium:
       time: "&5死亡時刻&7: &f%sec%秒前"
 bomb_ball:
   class: dev.mr3n.werewolf3.items.wolf.BombBall
+  droppable: false
+  role_lock: true
   price: 5
   roles:
     - WOLF
@@ -96,6 +106,8 @@ bomb_ball:
         title: "EXPLODE"
 wolf_axe:
   class: dev.mr3n.werewolf3.items.wolf.WolfAxe
+  droppable: false
+  role_lock: true
   price: 3
   charge: 50
   roles:
@@ -120,6 +132,8 @@ wolf_axe:
       used: "一撃の斧を使用した"
 fake_seer:
   class: dev.mr3n.werewolf3.items.madman.FakeSeerItem
+  droppable: false
+  role_lock: true
   price: 3
   roles:
     - MADMAN
@@ -128,6 +142,8 @@ fake_seer:
     description: "偽物の占いアイテム。プレイヤーを騙す以外に使用する手段はない。"
 fake_medium:
   class: dev.mr3n.werewolf3.items.madman.FakeMediumItem
+  droppable: false
+  role_lock: true
   price: 3
   roles:
     - MADMAN
@@ -136,8 +152,10 @@ fake_medium:
     description: "偽物の霊媒アイテム。"
 stan_ball:
   class: dev.mr3n.werewolf3.items.StanBall
+  droppable: true
+  role_lock: false
   price: 2
-  radius: 5.0
+  radius: 4.0
   stan_time: 140
   roles:
     - VILLAGER
@@ -157,6 +175,8 @@ stan_ball:
         title: "STAN!"
 glow_ink:
   class: dev.mr3n.werewolf3.items.GlowInk
+  droppable: true
+  role_lock: false
   price: 2
   glowing_time: 300
   roles:
@@ -179,13 +199,15 @@ glow_ink:
       for_be: "BEエディションは仕様上発光が表示されません。対応をお待ち下さい。"
 lightning_rod:
   class: dev.mr3n.werewolf3.items.wolf.LightningRod
-  price: 3
+  droppable: false
+  role_lock: true
+  price: 4
   blindness_time: 300
   roles:
     - WOLF
   languages:
     name: "&a停電"
-    description: "人狼以外のすべてのプレイヤーに\n盲目の効果を付与する。"
+    description: "人狼以外のすべてのプレイヤーに\n盲目の効果を付与する。\n使用した際に近くに雷が落ちる"
     title:
       blindness:
         color: "&e"
@@ -195,6 +217,8 @@ lightning_rod:
       for_wolf: "プレイヤーに盲目を付与中: %sec%"
 health_charger:
   class: dev.mr3n.werewolf3.items.doctor.HealthCharger
+  droppable: false
+  role_lock: true
   price: 4
   roles:
     - DOCTOR
@@ -212,6 +236,8 @@ health_charger:
       healing: "ヘルスチャージャーで体力を回復しています。"
 heal_potion:
   class: dev.mr3n.werewolf3.items.HealPotion
+  droppable: true
+  role_lock: false
   price: 2
   roles:
     - VILLAGER
@@ -232,7 +258,9 @@ heal_potion:
       healing: "&c❤%amount%&f回復しました。"
 assassin_sword:
   class: dev.mr3n.werewolf3.items.wolf.AssassinSword
-  price: 5
+  droppable: false
+  role_lock: true
+  price: 4
   roles:
     - WOLF
   attack_angle: 70.0
@@ -253,7 +281,9 @@ assassin_sword:
       cooldown_now: "%sec%秒間のクールダウン中です。"
 invisible_potion:
   class: dev.mr3n.werewolf3.items.InvisiblePotion
-  price: 3
+  droppable: true
+  role_lock: false
+  price: 4
   roles:
     - VILLAGER
     - DOCTOR
@@ -267,6 +297,8 @@ invisible_potion:
     description: "飲むことで&c%time%秒間透明になれる&7。\n装備は消えるが手に持っている\nアイテムは見えてしまう。\n透明化中は&c発光の効果を完全に無効化&7する。"
 wolf_guide:
   class: dev.mr3n.werewolf3.items.madman.WolfGuide
+  droppable: false
+  role_lock: true
   price: 3
   roles:
     - MADMAN
@@ -283,7 +315,9 @@ wolf_guide:
       searching: "検索中..."
       searched: "&c%player%&fが人狼の中の一匹です。"
 one_shot_crossbow:
-  class: dev.mr3n.werewolf3.items.OneShowCrossbow
+  class: dev.mr3n.werewolf3.items.OneShotCrossbow
+  droppable: true
+  role_lock: false
   price: 5
   roles:
     - VILLAGER
@@ -303,6 +337,8 @@ one_shot_crossbow:
       used: "一撃の弓が壊れてしまった。"
 totem_of_undying:
   class: dev.mr3n.werewolf3.items.Totem
+  droppable: true
+  role_lock: false
   price: 4
   roles:
     - VILLAGER
@@ -318,7 +354,9 @@ totem_of_undying:
     description: "手に持つことで&c夜に即死攻撃を一度のみ防ぐ&7ことができる。"
 speed_potion:
   class: dev.mr3n.werewolf3.items.SpeedPotion
-  price: 600
+  droppable: true
+  role_lock: false
+  price: 2
   roles:
     - VILLAGER
     - DOCTOR
@@ -333,7 +371,9 @@ speed_potion:
     description: "飲むことで&c%time%&7秒間足がとても早くなる。"
 stone_sword:
   class: dev.mr3n.werewolf3.items.StoneSword
-  price: 600
+  droppable: false
+  role_lock: true
+  price: 4
   roles:
     - VILLAGER
     - DOCTOR
@@ -346,7 +386,9 @@ stone_sword:
     description: "敵を大抵3-4発で倒せる程度の\n攻撃力はあるちょっと強い剣"
 last_resort:
   class: dev.mr3n.werewolf3.items.wolf.LastResort
-  price: 400
+  droppable: false
+  role_lock: true
+  price: 2
   roles:
     - WOLF
   languages:
@@ -365,7 +407,9 @@ last_resort:
       already_bought: "すでにこのアイテムは人狼に購入されています。このアイテムは試合中に一度しか購入できません。"
 dead_body_remover:
   class: dev.mr3n.werewolf3.items.DeadBodyRemover
-  price: 300
+  droppable: true
+  role_lock: false
+  price: 1
   roles:
     - VILLAGER
     - DOCTOR
@@ -387,12 +431,16 @@ dead_body_remover:
 # ここから先に変更を加えるとショップやクイックチャットに不具合が発生する可能性があります。
 #
 open_shop:
-  class: dev.mr3n.werewolf3.items.doctor.shop.OpenShop
+  class: dev.mr3n.werewolf3.items.shop.OpenShop
+  droppable: false
+  role_lock: false
   languages:
     name: "&dショップを開く"
     description: "右クリックすることでショップを利用できます。"
 with_you:
   class: dev.mr3n.werewolf3.items.quickchat.WithYou
+  droppable: false
+  role_lock: false
   languages:
     name: "&7一緒にいるよ"
     description: "これでプレイヤーをクリックをすることで\nクイックチャットを使用できます。"
@@ -400,6 +448,8 @@ with_you:
       - "%player% と一緒にいます"
 trust_you:
   class: dev.mr3n.werewolf3.items.quickchat.TrustYou
+  droppable: false
+  role_lock: false
   languages:
     name: "&e村人陣営だと思う"
     description: "これでプレイヤーをクリックをすることで\nクイックチャットを使用できます。"
@@ -408,6 +458,8 @@ trust_you:
       - "%player% は村人陣営だと思う"
 you_are_wolf:
   class: dev.mr3n.werewolf3.items.quickchat.YouAreWolf
+  droppable: false
+  role_lock: false
   languages:
     name: "&4こいつやばい！人狼や！"
     description: "これでプレイヤーをクリックをすることで\nクイックチャットを使用できます。"

@@ -399,6 +399,22 @@ enchanted_bow:
   languages:
     name: "&eちょっとエンチャントの弓"
     description: "プレイヤーを2発程度で殺れる強い弓"
+shield:
+  class: dev.mr3n.werewolf3.items.Shield
+  droppable: false
+  role_lock: true
+  price: 4
+  durability: 0
+  roles:
+    - VILLAGER
+    - DOCTOR
+    - WOLF
+    - MADMAN
+    - SEER
+    - MEDIUM
+  languages:
+    name: "&eすごい盾"
+    description: "一撃の弓などの攻撃を弾くが一回で壊れてしまう。"
 last_resort:
   class: dev.mr3n.werewolf3.items.wolf.LastResort
   droppable: false

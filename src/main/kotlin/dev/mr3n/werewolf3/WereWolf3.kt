@@ -75,8 +75,6 @@ class WereWolf3: JavaPlugin() {
             setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false)
             setGameRule(GameRule.DO_MOB_SPAWNING, false)
         }
-        // いつもの
-        Bukkit.getPluginManager().registerEvents(PlayerListener,this)
         // すでにサーバーにいるプレイヤーのjoin eventを発生させる(初期化用)
         joinedPlayers().forEach { PlayerListener.onJoin(PlayerJoinEvent(it,null)) }
         // /start コマンドの登録

@@ -31,6 +31,8 @@ object GameInitializer {
      */
     fun start(location: Location) {
         if(WereWolf3.isRunning) { return }
+        // いつもの
+        Bukkit.getPluginManager().registerEvents(PlayerListener,WereWolf3.INSTANCE)
         // 死体を全削除
         DeadBody.DEAD_BODIES.forEach { it.destroy() }
         // ゲームIDを設定。
@@ -64,7 +66,6 @@ object GameInitializer {
             player.walkSpeed = 0.2f
             player.health = player.healthScale
             player.world.difficulty = Difficulty.PEACEFUL
-            player.money = Constants.INITIAL_FUNDS
             TeamPacketUtil.add(player,ChatColor.WHITE,players)
             player.setDisplayName(player.name)
             player.setPlayerListName(player.name)
@@ -119,6 +120,7 @@ object GameInitializer {
             player.sendMessage(languages("title.start.messages.info", "%wolf_teams%" to wolfs.size, "%villager_teams%" to alivePlayers().size - wolfs.size))
             player.sidebar = RunningSidebar(player)
             player.role?.items?.map { it.itemStack }?.forEach { player.inventory.addItem(it) }
+            player.money = Constants.INITIAL_FUNDS
         }
         STATUS = GameStatus.RUNNING
         TIME_OF_DAY = Time.MORNING

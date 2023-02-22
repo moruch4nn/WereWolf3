@@ -40,7 +40,7 @@ object WolfGuide: IShopItem.ShopItem("wolf_guide", Material.BOOK) {
             // 人狼ガイドを持っていない場合はreturn
             if(!isSimilar(item)) { return@registerEvent }
             player.sendTitle(GUIDE_TITLE_TEXT, messages("searching"), 10, SEARCH_TIME.toInt() + 10, 0)
-            player.playSound(player, Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1f, 1f)
+            player.playSound(event.player, Sound.BLOCK_PORTAL_TRIGGER, 0.3F, 2F)
             item.amount--
             WereWolf3.INSTANCE.runTaskLater(SEARCH_TIME) {
                 val wolf = PLAYERS.filter { it.role == Role.WOLF }.randomOrNull()

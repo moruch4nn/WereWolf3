@@ -92,8 +92,8 @@ bomb_ball:
   price: 5
   roles:
     - WOLF
-  damage_distance: 7
-  death_distance: 3
+  damage_distance: 9
+  death_distance: 4
   fuse_time: 20
   max_damage: 18
   warning_count: 6
@@ -302,7 +302,7 @@ wolf_guide:
   price: 3
   roles:
     - MADMAN
-  search_time: 60
+  search_time: 30
   languages:
     name: "&c人狼ガイド"
     description: "でランダムで一匹の人狼の名前を知ることができる。\nまた知った人狼をマーキングすることができる。"

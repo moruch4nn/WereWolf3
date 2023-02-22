@@ -8,6 +8,7 @@ import dev.mr3n.werewolf3.items.IShopItem
 import dev.mr3n.werewolf3.protocol.MetadataPacketUtil
 import dev.mr3n.werewolf3.protocol.TeamPacketUtil
 import dev.mr3n.werewolf3.roles.Role
+import dev.mr3n.werewolf3.utils.asPrefixed
 import org.bukkit.ChatColor
 import org.bukkit.Material
 import org.bukkit.Sound
@@ -27,8 +28,6 @@ object WolfGuide: IShopItem.ShopItem("wolf_guide", Material.BOOK) {
 
     private val GUIDE_TITLE_TEXT = titleText("guide")
 
-    private val SEARCH_TIME = itemConstant<Long>("search_time")
-
     init {
         WereWolf3.INSTANCE.registerEvent<PlayerInteractEvent> { event ->
             val player = event.player
@@ -39,17 +38,19 @@ object WolfGuide: IShopItem.ShopItem("wolf_guide", Material.BOOK) {
             val item = player.inventory.itemInMainHand
             // 人狼ガイドを持っていない場合はreturn
             if(!isSimilar(item)) { return@registerEvent }
-            player.sendTitle(GUIDE_TITLE_TEXT, messages("searching"), 10, SEARCH_TIME.toInt() + 10, 0)
+            player.sendTitle(GUIDE_TITLE_TEXT, messages("searching"), 10, 35 + 10, 0)
             player.playSound(event.player, Sound.BLOCK_PORTAL_TRIGGER, 0.3F, 2F)
             item.amount--
-            WereWolf3.INSTANCE.runTaskLater(SEARCH_TIME) {
+            WereWolf3.INSTANCE.runTaskLater(35) {
                 val wolf = PLAYERS.filter { it.role == Role.WOLF }.randomOrNull()
                 if(wolf==null) {
-                    player.sendTitle(GUIDE_TITLE_TEXT, messages("wolf_not_found"), 0, 100, 0)
-                    player.playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f)
+                    val message = messages("wolf_not_found")
+                    player.sendTitle(GUIDE_TITLE_TEXT, message, 20, 100, 20)
+                    player.sendMessage(message.asPrefixed())
                 } else {
-                    player.sendTitle(GUIDE_TITLE_TEXT, messages("searched", "%player%" to wolf.name), 0, 100, 0)
-                    player.playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f)
+                    val message = messages("searched", "%player%" to wolf.name)
+                    player.sendTitle(GUIDE_TITLE_TEXT, message, 20, 100, 0)
+                    player.sendMessage(message.asPrefixed())
                     wolf.offlinePlayer.player?.let {
                         TeamPacketUtil.add(player, ChatColor.DARK_RED, listOf(it))
                         MetadataPacketUtil.addToGlowing(player, it)

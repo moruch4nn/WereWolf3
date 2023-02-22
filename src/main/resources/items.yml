@@ -302,14 +302,13 @@ wolf_guide:
   price: 3
   roles:
     - MADMAN
-  search_time: 30
   languages:
-    name: "&c人狼ガイド"
+    name: "&4人狼ガイド"
     description: "でランダムで一匹の人狼の名前を知ることができる。\nまた知った人狼をマーキングすることができる。"
     title:
       guide:
         title: "人狼ガイド"
-        color: "&c"
+        color: "&4"
     messages:
       wolf_not_found: "人狼はもう生きていないようだ..."
       searching: "検索中..."

@@ -21,7 +21,7 @@ game:
   max_days: 3 # 最大日数。最大この日数+1日になる(人狼の"苦肉の策"アイテム)
   end_time: DAY # DAY or NIGHT
   conversation_distance: 20.0 # 夜に会話可能な半径
-  team_kill_bonus: 1 # 村人が同士討ちした際に人狼に入るボーナス
+  team_kill_bonus: 2 # 村人が同士討ちした際に人狼に入るボーナス
   money:
     dead_body_prize: 2 # 死体発見時の賞金
     initial_funds: 3

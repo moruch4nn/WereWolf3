@@ -143,8 +143,8 @@ class WereWolf3: JavaPlugin() {
          * 人狼を開始する関数です。
          * locationはスポーン地点。
          */
-        fun start(location: Location) {
-            GameInitializer.start(location)
+        fun start(location: Location, vararg ignores: Player) {
+            GameInitializer.start(location, *ignores)
         }
     }
 }

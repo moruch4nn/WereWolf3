@@ -2,6 +2,7 @@ package dev.mr3n.werewolf3.commands
 
 import dev.mr3n.werewolf3.GameTerminator
 import dev.mr3n.werewolf3.WereWolf3
+import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.command.Command
 import org.bukkit.command.CommandExecutor
@@ -13,7 +14,8 @@ object StartCommand: CommandExecutor, TabCompleter {
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
         if(sender !is Player) { return false }
         try {
-            WereWolf3.start(sender.location.clone())
+            val ignores = args.mapNotNull { Bukkit.getPlayer(it) }
+            WereWolf3.start(sender.location.clone(),*ignores.toTypedArray())
         } catch(e: Exception) {
             e.printStackTrace()
             sender.sendTitle("${ChatColor.RED}${ChatColor.BOLD}ERROR HAS OCCURRED", "Please resend command that /start", 0, 100, 20)

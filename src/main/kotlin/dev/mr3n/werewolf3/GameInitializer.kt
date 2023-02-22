@@ -15,6 +15,7 @@ import dev.mr3n.werewolf3.sidebar.StartingSidebar
 import dev.mr3n.werewolf3.utils.*
 import org.bukkit.*
 import org.bukkit.enchantments.Enchantment
+import org.bukkit.entity.Player
 import java.util.*
 
 object GameInitializer {
@@ -29,7 +30,7 @@ object GameInitializer {
     /**
      * ゲームを初期化し、試合を開始します。
      */
-    fun start(location: Location) {
+    fun start(location: Location, vararg ignores: Player) {
         if(WereWolf3.isRunning) { return }
         // いつもの
         Bukkit.getPluginManager().registerEvents(PlayerListener,WereWolf3.INSTANCE)
@@ -44,7 +45,8 @@ object GameInitializer {
         // 日にちを0に設定
         DAYS = 0
         // 参加プレイヤー一覧。
-        val players = Bukkit.getOnlinePlayers()
+        val players = Bukkit.getOnlinePlayers().toMutableList()
+        players.removeAll(ignores.toSet())
         // プレイヤー人数から役職数を推定してリストに格納。 roleList.length == players.length
         val roleList = Role.values().map { role -> MutableList(role.calc(players.size)) { role } }.flatten().shuffled(RANDOM).shuffled().shuffled().shuffled()
         // 推定プレイヤー数を参加人数に設定(死亡確認時に減らしていく)

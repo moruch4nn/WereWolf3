@@ -1,7 +1,9 @@
 package dev.mr3n.werewolf3.utils
 
 import org.bukkit.Bukkit
+import org.bukkit.Color
 import org.bukkit.Location
+import org.bukkit.Particle
 import org.bukkit.entity.Player
 
 fun getPlayerSightHeight(player: Player): Location {
@@ -49,7 +51,7 @@ fun Location.hasObstacleInPath(end: Location, max: Double = Bukkit.getServer().v
     val distance = start.distance(end)
     // 二点間の距離がmaxを超過していた場合はfalseを返す
     if(distance > max) { return false }
-    val direction = end.toVector().subtract(start.toVector()).normalize().multiply(0.1)
+    val direction = end.toVector().subtract(start.toVector()).normalize().multiply(1)
     val now = start.clone().add(direction)
     while(true) {
         if(start.distance(now) > distance) { return false }

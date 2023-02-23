@@ -24,6 +24,7 @@ object SpectatorPacketUtil {
     init {
         PROTOCOL_MANAGER.addPacketListener(object: PacketAdapter(WereWolf3.INSTANCE,ListenerPriority.NORMAL, PacketType.Play.Server.PLAYER_INFO) {
             override fun onPacketSending(event: PacketEvent) {
+                if(!WereWolf3.isRunning) { return }
                 val player = event.player
                 val packet = event.packet.deepClone()
                 val actions = packet.playerInfoActions.read(0)
@@ -40,6 +41,7 @@ object SpectatorPacketUtil {
         })
         PROTOCOL_MANAGER.addPacketListener(object: PacketAdapter(WereWolf3.INSTANCE,ListenerPriority.NORMAL, PacketType.Play.Server.ENTITY_DESTROY) {
             override fun onPacketSending(event: PacketEvent) {
+                if(!WereWolf3.isRunning) { return }
                 val player = event.player
                 if(player.gameMode!=GameMode.SPECTATOR) {
                     val packet = event.packet.deepClone()
@@ -54,14 +56,17 @@ object SpectatorPacketUtil {
             }
         })
         WereWolf3.INSTANCE.registerEvent<PlayerJoinEvent> { event ->
+            if(!WereWolf3.isRunning) { return@registerEvent }
             val player = event.player
             if(player.gameMode == GameMode.SPECTATOR) { spectators.add(player.entityId) }
         }
-        WereWolf3.INSTANCE.registerEvent<PlayerQuitEvent>() { event ->
+        WereWolf3.INSTANCE.registerEvent<PlayerQuitEvent> { event ->
+            if(!WereWolf3.isRunning) { return@registerEvent }
             val player = event.player
             spectators.remove(player.entityId)
         }
-        WereWolf3.INSTANCE.registerEvent<PlayerGameModeChangeEvent>() { event ->
+        WereWolf3.INSTANCE.registerEvent<PlayerGameModeChangeEvent> { event ->
+            if(!WereWolf3.isRunning) { return@registerEvent }
             val player = event.player
             when(event.newGameMode) {
                 GameMode.SPECTATOR -> {

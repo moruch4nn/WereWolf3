@@ -20,6 +20,8 @@ object FakeDeadBody: IShopItem.ShopItem("fake_dead_body", Material.LEAD) {
             DeadBody(event.player)
             event.player.sendTitle(SUCCESS_TITLE_TEXT,messages("success"),0,100,20)
             event.player.playSound(event.player, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f)
+            item.amount--
+            event.isCancelled = true
         }
     }
 }

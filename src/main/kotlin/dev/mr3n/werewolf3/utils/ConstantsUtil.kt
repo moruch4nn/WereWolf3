@@ -20,6 +20,9 @@ inline fun <reified T> FileConfiguration.constant(key: String): T {
         Boolean::class.java, Boolean::class.javaObjectType -> {
             config.getBoolean(key) as T
         }
+        Double::class.java, Double::class.javaObjectType -> {
+            config.getDouble(key) as T
+        }
         else -> {
             config.get(key) as T
         }
@@ -44,8 +47,4 @@ inline fun <reified T> FileConfiguration.constants(key: String): List<T> {
             config.getList(key)!!.filterIsInstance(T::class.java)
         }
     }
-}
-
-fun main() {
-    println(Int::class.javaObjectType)
 }

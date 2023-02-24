@@ -4,13 +4,9 @@ import com.comphenix.protocol.PacketType
 import com.comphenix.protocol.events.PacketContainer
 import com.comphenix.protocol.utility.MinecraftReflection
 import com.comphenix.protocol.wrappers.WrappedChatComponent
-import dev.moru3.minepie.events.EventRegister.Companion.registerEvent
 import dev.mr3n.werewolf3.PROTOCOL_MANAGER
-import dev.mr3n.werewolf3.WereWolf3
-import dev.mr3n.werewolf3.utils.joinedPlayers
 import org.bukkit.ChatColor
 import org.bukkit.entity.Player
-import org.bukkit.event.player.PlayerJoinEvent
 import java.util.*
 
 object TeamPacketUtil {
@@ -119,19 +115,5 @@ object TeamPacketUtil {
         packet.integers.write(0,1)
         // パケットを送信
         PROTOCOL_MANAGER.sendServerPacket(player, packet)
-    }
-
-    init {
-        // プレイヤー参加時にチームを作成するパケットを送信するt
-        WereWolf3.INSTANCE.registerEvent<PlayerJoinEvent> { event ->
-            TEAMS[event.player]?.forEach { (color, _) ->
-                removeTeam(event.player, color)
-                PROTOCOL_MANAGER.sendServerPacket(event.player, createTeamColorPacket(color))
-            }
-        }
-        joinedPlayers().forEach { player -> colours.forEach { color ->
-            removeTeam(player, color)
-            PROTOCOL_MANAGER.sendServerPacket(player, createTeamColorPacket(color))
-        } }
     }
 }

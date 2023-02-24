@@ -24,6 +24,8 @@ object WolfAxe: IShopItem.ShopItem("wolf_axe",Material.IRON_AXE) {
 
     private val playerCharge = mutableMapOf<Player, Int>()
 
+    override fun onEnd() { playerCharge.clear() }
+
     private var Player.wolfAxeCharge: Int
         get() = playerCharge[this]?:0
         set(value) { playerCharge[this] = value }

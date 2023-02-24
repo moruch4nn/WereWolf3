@@ -24,7 +24,10 @@ object HealthCharger: IShopItem.ShopItem("health_charger", Material.REDSTONE_ORE
 
     private val healthChargers = mutableListOf<Location>()
 
-    override fun onEnd() { healthChargers.forEach { it.block.type = Material.AIR } }
+    override fun onEnd() {
+        healthChargers.forEach { it.block.type = Material.AIR }
+        healthChargers.clear()
+    }
 
     init {
         WereWolf3.INSTANCE.runTaskTimer(0L, 35L) {

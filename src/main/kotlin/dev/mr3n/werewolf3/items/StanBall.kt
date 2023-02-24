@@ -29,6 +29,8 @@ object StanBall: IShopItem.ShopItem("stan_ball", Material.SNOWBALL) {
 
     private val stunnedPlayers = mutableListOf<Player>()
 
+    override fun onEnd() { stunnedPlayers.clear() }
+
     init {
         WereWolf3.INSTANCE.registerEvent<ProjectileLaunchEvent> { event ->
             val projectile = event.entity

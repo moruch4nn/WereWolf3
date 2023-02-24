@@ -52,6 +52,7 @@ object GameInitializer {
         // 推定プレイヤー数を参加人数に設定(死亡確認時に減らしていく)
         // 役職リストとプレイヤーのリストを合体してfor
         players.zip(roleList).toMap().forEach { (player, role) ->
+            BOSSBAR.addPlayer(player)
             // プレイヤーの役職を設定。
             player.role = role
             player.co = null
@@ -75,6 +76,11 @@ object GameInitializer {
             player.inventory.contents.filterNotNull().forEach { it.amount = 0 }
             MetadataPacketUtil.resetAll(player)
             player.conversationalDistance(100,-1.0)
+
+            TeamPacketUtil.colours.forEach { color ->
+                TeamPacketUtil.removeTeam(player, color)
+                PROTOCOL_MANAGER.sendServerPacket(player, TeamPacketUtil.createTeamColorPacket(color))
+            }
         }
         PLAYERS.addAll(players.map { it.playerData })
         // 時間を設定

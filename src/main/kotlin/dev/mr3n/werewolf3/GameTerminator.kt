@@ -69,6 +69,9 @@ object GameTerminator {
             GAME_ID = null
         } catch(_: Exception) { }
 
+        // 死体を全削除
+        try { DeadBody.DEAD_BODIES.forEach { it.destroy() } } catch(_: Exception) {}
+
         try { IShopItem.ShopItem.ITEMS.forEach { it.onEnd() } } catch(_: Exception) { }
 
         try {
@@ -83,6 +86,9 @@ object GameTerminator {
 
             }
         } catch(e: Exception) { e.printStackTrace() }
+        try {
+            joinedPlayers().forEach { player -> TeamPacketUtil.colours.forEach { color -> TeamPacketUtil.removeTeam(player, color) } }
+        } catch(_: Exception) {}
         try {
             joinedPlayers().forEach { player ->
                 // プレイヤーの会話可能範囲の制限をなくす
@@ -108,16 +114,14 @@ object GameTerminator {
                 // <<< バグって動かないようにちょっとずらしてスポーン地点にてレポート <<<
             }
         } catch(e: Exception) { e.printStackTrace() }
+
         try {
             PLAYERS.clear()
             FOUNDED_PLAYERS.clear()
         } catch(_: Exception) {}
-        // 死体を全削除
-        try { DeadBody.DEAD_BODIES.forEach { it.destroy() } } catch(_: Exception) {}
+
         // プラグインをreload
-        if(!shutdown) {
-            if(isPlugmanLoaded) { PluginUtil.reload(WereWolf3.INSTANCE) } else { Bukkit.getServer().reload() }
-        }
+        if(!shutdown) { if(isPlugmanLoaded) { PluginUtil.reload(WereWolf3.INSTANCE) } else { Bukkit.getServer().reload() } }
     }
 
     fun init() {

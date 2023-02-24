@@ -96,7 +96,7 @@ object PlayerListener: Listener {
     @Suppress("unused")
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     fun onChat(event: AsyncPlayerChatEvent) {
-        if(event.player.gameMode==GameMode.SPECTATOR) {
+        if(!event.player.isAlive) {
             event.isCancelled = true
             val format = languages("death_chat_format", "%name%" to "%1\$s", "%message%" to "%2\$s")
             spectatePlayers().forEach { player ->

@@ -1,6 +1,7 @@
 package dev.mr3n.werewolf3
 
 import dev.moru3.minepie.events.EventRegister.Companion.registerEvent
+import dev.mr3n.werewolf3.utils.isAlive
 import dev.mr3n.werewolf3.utils.joinedPlayers
 import dev.mr3n.werewolf3.utils.languages
 import net.md_5.bungee.api.ChatColor
@@ -65,6 +66,7 @@ object ConversationalUtil {
     init {
         // プレイヤーがチャットした際に実行
         WereWolf3.INSTANCE.registerEvent<AsyncPlayerChatEvent>(p = EventPriority.HIGHEST, ic = true) { event ->
+            if(!event.player.isAlive) { return@registerEvent }
             // プレイヤーの会話可能範囲 / メートル
             val conversationalDistance = event.player.conversationalDistance
             // 0だった場合は会話できないのでイベントキャンセル

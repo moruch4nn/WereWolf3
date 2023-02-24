@@ -4,6 +4,7 @@ import dev.mr3n.werewolf3.roles.Role
 import dev.mr3n.werewolf3.sidebar.ISideBar.Companion.sidebar
 import dev.mr3n.werewolf3.sidebar.RunningSidebar
 import dev.mr3n.werewolf3.utils.asPrefixed
+import dev.mr3n.werewolf3.utils.conversationalDistance
 import dev.mr3n.werewolf3.utils.joinedPlayers
 import dev.mr3n.werewolf3.utils.languages
 import net.md_5.bungee.api.ChatColor

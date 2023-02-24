@@ -3,9 +3,9 @@ package dev.mr3n.werewolf3.items.wolf
 import dev.moru3.minepie.Executor.Companion.runTaskTimer
 import dev.moru3.minepie.events.EventRegister.Companion.registerEvent
 import dev.mr3n.werewolf3.WereWolf3
-import dev.mr3n.werewolf3.conversationalDistance
+import dev.mr3n.werewolf3.utils.conversationalDistance
 import dev.mr3n.werewolf3.items.IShopItem
-import dev.mr3n.werewolf3.remConversationalDistance
+import dev.mr3n.werewolf3.utils.remConversationalDistance
 import dev.mr3n.werewolf3.roles.Role
 import dev.mr3n.werewolf3.utils.joinedPlayers
 import dev.mr3n.werewolf3.utils.role

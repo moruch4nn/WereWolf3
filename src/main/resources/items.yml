@@ -27,7 +27,7 @@ seer:
   price: 1
   roles:
     - SEER
-  seer_time: 80
+  seer_time: 40
   languages:
     name: "&d占いアイテム"
     description: "プレイヤーを右クリック長押しすると\nそのプレイヤーを占うことができます。\n夜にしか使えません。"
@@ -38,7 +38,6 @@ seer:
     messages:
       canceled: "占いをキャンセルしました。"
       init: "%player%を占い中..."
-      night_only: "夜にしか使用できません。"
       hint:
         how_to: "プレヤーを右クリック長押しすることで占うことができます。"
       result:

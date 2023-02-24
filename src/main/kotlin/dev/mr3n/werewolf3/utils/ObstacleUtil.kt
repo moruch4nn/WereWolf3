@@ -1,9 +1,7 @@
 package dev.mr3n.werewolf3.utils
 
 import org.bukkit.Bukkit
-import org.bukkit.Color
 import org.bukkit.Location
-import org.bukkit.Particle
 import org.bukkit.entity.Player
 
 fun getPlayerSightHeight(player: Player): Location {
@@ -46,6 +44,7 @@ fun Player.hasObstacleInSightPath(target: Location, max: Double = Bukkit.getServ
  * プレイヤーの視線上に障害物があるかどうかを確認します。ある場合はtrue
  */
 fun Location.hasObstacleInPath(end: Location, max: Double = Bukkit.getServer().viewDistance.toDouble() * 16): Boolean {
+    if(this.world != end.world) { return false }
     // 障害物がない場合はnullが返ってくるため!=nullで比較。障害物がある場合はtrue
     val start = this.clone()
     val distance = start.distance(end)

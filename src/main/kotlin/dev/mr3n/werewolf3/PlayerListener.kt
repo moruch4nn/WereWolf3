@@ -30,6 +30,7 @@ object PlayerListener: Listener {
     @Suppress("unused")
     @EventHandler
     fun onCommand(event: PlayerCommandPreprocessEvent) {
+        if(!WereWolf3.isRunning) { return }
         if(event.player.gameMode == GameMode.SPECTATOR && Constants.MESSAGE_COMMANDS.contains(event.message.split(" ").firstOrNull())) {
             event.isCancelled = true
         }
@@ -38,6 +39,7 @@ object PlayerListener: Listener {
     @Suppress("unused")
     @EventHandler
     fun onEffect(event: EntityPotionEffectEvent) {
+        if(!WereWolf3.isRunning) { return }
         val player = event.entity
         if(player !is Player) { return }
         if(player.isAlive) { return }
@@ -50,6 +52,7 @@ object PlayerListener: Listener {
     @Suppress("unused")
     @EventHandler
     fun onDead(event: PlayerDeathEvent) {
+        if(!WereWolf3.isRunning) { return }
         val player = event.entity
         val killer = player.killer
         if(killer!=null) {
@@ -96,6 +99,7 @@ object PlayerListener: Listener {
     @Suppress("unused")
     @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     fun onChat(event: AsyncPlayerChatEvent) {
+        if(!WereWolf3.isRunning) { return }
         if(!event.player.isAlive) {
             event.isCancelled = true
             val format = languages("death_chat_format", "%name%" to "%1\$s", "%message%" to "%2\$s")
@@ -135,6 +139,7 @@ object PlayerListener: Listener {
     @Suppress("unused")
     @EventHandler
     fun onRegainHealth(event: EntityRegainHealthEvent) {
+        if(!WereWolf3.isRunning) { return }
         val player = event.entity
         if(player !is Player) { return }
         when(event.regainReason) {
@@ -152,6 +157,7 @@ object PlayerListener: Listener {
     @Suppress("unused")
     @EventHandler
     fun onDrop(event: PlayerDropItemEvent) {
+        if(!WereWolf3.isRunning) { return }
         val droppable = event.itemDrop.itemStack.getContainerValue(Keys.ITEM_DROPPABLE,BooleanDataType)?:true
         if(!droppable) {
             event.isCancelled = true
@@ -164,6 +170,7 @@ object PlayerListener: Listener {
     @Suppress("unused")
     @EventHandler
     fun onQuit(event: PlayerQuitEvent) {
+        if(!WereWolf3.isRunning) { return }
         if(event.player.isAlive) {
             //if: プレイヤーが生きている場合
             // 途中抜けしたプレイヤーの下を生成し、その上発見させる。
@@ -181,6 +188,7 @@ object PlayerListener: Listener {
     @Suppress("unused")
     @EventHandler
     fun onJoin(event: PlayerJoinEvent) {
+        if(!WereWolf3.isRunning) { return }
         val player = event.player
         PLAYER_BY_ENTITY_ID[player.entityId] = player
         // 参加メッセージを"人狼に参加しました"に変更
@@ -215,6 +223,7 @@ object PlayerListener: Listener {
     @Suppress("unused")
     @EventHandler
     fun onDamage(event: EntityDamageEvent) {
+        if(!WereWolf3.isRunning) { return }
         val player = event.entity
         if(player !is Player) { return }
         player.removePotionEffect(PotionEffectType.INVISIBILITY)

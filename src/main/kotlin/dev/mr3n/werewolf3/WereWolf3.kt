@@ -109,6 +109,8 @@ class WereWolf3: JavaPlugin() {
         StartingRunner
         WaitingRunner
         // <<< クラスの初期化 <<<
+        // いつもの
+        Bukkit.getPluginManager().registerEvents(PlayerListener,this)
     }
 
     override fun onDisable() {

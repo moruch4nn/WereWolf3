@@ -1,6 +1,7 @@
 package dev.mr3n.werewolf3
 
 import dev.moru3.minepie.item.EasyItem
+import dev.mr3n.werewolf3.items.DefaultBow
 import dev.mr3n.werewolf3.items.DefaultSword
 import dev.mr3n.werewolf3.items.quickchat.TrustYou
 import dev.mr3n.werewolf3.items.quickchat.WithYou
@@ -15,7 +16,6 @@ import dev.mr3n.werewolf3.sidebar.RunningSidebar
 import dev.mr3n.werewolf3.sidebar.StartingSidebar
 import dev.mr3n.werewolf3.utils.*
 import org.bukkit.*
-import org.bukkit.enchantments.Enchantment
 import org.bukkit.entity.Player
 import java.util.*
 
@@ -117,10 +117,7 @@ object GameInitializer {
             player.inventory.addItem(DefaultSword.itemStack)
 
             // 弓を渡す。
-            player.inventory.addItem(EasyItem(Material.BOW).also { itemStack -> itemStack.itemMeta = itemStack.itemMeta?.also { itemMeta ->
-                itemMeta.addEnchant(Enchantment.ARROW_INFINITE,1,true)
-                itemMeta.isUnbreakable = true
-            } }) // 矢を渡す。
+            player.inventory.addItem(DefaultBow.itemStack) // 矢を渡す。
             player.inventory.addItem(EasyItem(Material.ARROW))
             Role.values().forEachIndexed { index, role -> player.inventory.setItem(9+index, role.helmet) }
             // 人狼チームと村人チームの数を公表

@@ -1,6 +1,7 @@
 package dev.mr3n.werewolf3
 
 import dev.moru3.minepie.item.EasyItem
+import dev.mr3n.werewolf3.items.DefaultSword
 import dev.mr3n.werewolf3.items.quickchat.TrustYou
 import dev.mr3n.werewolf3.items.quickchat.WithYou
 import dev.mr3n.werewolf3.items.quickchat.YouAreWolf
@@ -113,7 +114,7 @@ object GameInitializer {
             player.inventory.setItem(6, TrustYou.itemStack)
             player.inventory.setItem(7, YouAreWolf.itemStack)
             // 木の剣を渡す。
-            player.inventory.addItem(EasyItem(Material.WOODEN_SWORD).also { itemStack -> itemStack.itemMeta = itemStack.itemMeta?.also { itemMeta -> itemMeta.isUnbreakable = true } })
+            player.inventory.addItem(DefaultSword.itemStack)
 
             // 弓を渡す。
             player.inventory.addItem(EasyItem(Material.BOW).also { itemStack -> itemStack.itemMeta = itemStack.itemMeta?.also { itemMeta ->

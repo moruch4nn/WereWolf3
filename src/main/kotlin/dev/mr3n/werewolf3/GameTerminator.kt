@@ -1,6 +1,5 @@
 package dev.mr3n.werewolf3
 
-import com.rylinaux.plugman.util.PluginUtil
 import dev.mr3n.werewolf3.items.IShopItem
 import dev.mr3n.werewolf3.protocol.DeadBody
 import dev.mr3n.werewolf3.protocol.MetadataPacketUtil
@@ -63,7 +62,7 @@ object GameTerminator {
     /**
      * 結果発表を無視して強制的にゲームを終了する際に使用します。
      */
-    fun run(shutdown: Boolean = false) {
+    fun run() {
         try {
             STATUS = GameStatus.WAITING
             GAME_ID = null
@@ -121,7 +120,7 @@ object GameTerminator {
         } catch(_: Exception) {}
 
         // プラグインをreload
-        if(!shutdown) { if(isPlugmanLoaded) { PluginUtil.reload(WereWolf3.INSTANCE) } else { Bukkit.getServer().reload() } }
+        // if(!shutdown) { if(isPlugmanLoaded) { PluginUtil.reload(WereWolf3.INSTANCE) } else { Bukkit.getServer().reload() } }
     }
 
     fun init() {

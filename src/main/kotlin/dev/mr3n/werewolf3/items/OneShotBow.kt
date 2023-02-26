@@ -11,23 +11,19 @@ import org.bukkit.entity.Player
 import org.bukkit.event.entity.ProjectileHitEvent
 import org.bukkit.event.entity.ProjectileLaunchEvent
 import org.bukkit.inventory.ItemFlag
-import org.bukkit.inventory.ItemStack
-import org.bukkit.inventory.meta.CrossbowMeta
 import org.bukkit.inventory.meta.Damageable
 import org.bukkit.inventory.meta.ItemMeta
 import org.bukkit.persistence.PersistentDataType
 
 @Suppress("unused")
-object OneShotCrossbow: IShopItem.ShopItem("one_shot_crossbow", Material.CROSSBOW) {
+object OneShotBow: IShopItem.ShopItem("one_shot_bow", Material.BOW) {
     override fun onSetItemMeta(itemMeta: ItemMeta) {
         if(itemMeta !is Damageable) { return }
         itemMeta.isUnbreakable = true
-        if(itemMeta !is CrossbowMeta) { return }
         itemMeta.damage = material.maxDurability.toInt()
         itemMeta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE)
         itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS)
         itemMeta.addEnchant(Enchantment.ARROW_INFINITE,1,true)
-        itemMeta.setChargedProjectiles(listOf(ItemStack(Material.ARROW)))
     }
 
     private const val ENTITY_TYPE = "ONE_SHOT_ARROW"

@@ -153,7 +153,7 @@ stan_ball:
   class: dev.mr3n.werewolf3.items.StanBall
   droppable: true
   role_lock: false
-  price: 2
+  price: 4
   radius: 4.0
   stan_time: 140
   roles:
@@ -312,8 +312,8 @@ wolf_guide:
       wolf_not_found: "人狼はもう生きていないようだ..."
       searching: "検索中..."
       searched: "&c%player%&fが人狼の中の一匹です。"
-one_shot_crossbow:
-  class: dev.mr3n.werewolf3.items.OneShotCrossbow
+one_shot_bow:
+  class: dev.mr3n.werewolf3.items.OneShotBow
   droppable: true
   role_lock: false
   price: 5
@@ -325,11 +325,11 @@ one_shot_crossbow:
     - SEER
     - MEDIUM
   languages:
-    name: "&c一撃のクロスボウ"
+    name: "&c一撃の弓"
     description: "プレイヤーを&c一撃&7で殺害できる弓。\n&n一度使用すると壊れてしまう。"
     title:
       bow:
-        title: "一撃のクロスボウ"
+        title: "一撃の弓"
         color: "&c"
     messages:
       used: "一撃の弓が壊れてしまった。"
@@ -398,21 +398,21 @@ fake_dead_body:
         color: "&c"
     messages:
       success: "死体を作成した"
-enchanted_bow:
-  class: dev.mr3n.werewolf3.items.EnchantedBow
-  droppable: false
-  role_lock: true
-  price: 5
-  roles:
-    - VILLAGER
-    - DOCTOR
-    - WOLF
-    - MADMAN
-    - SEER
-    - MEDIUM
-  languages:
-    name: "&eちょっとエンチャントの弓"
-    description: "プレイヤーを2発程度で殺れる強い弓"
+#enchanted_bow:
+#  class: dev.mr3n.werewolf3.items.EnchantedBow
+#  droppable: false
+#  role_lock: true
+#  price: 5
+#  roles:
+#    - VILLAGER
+#    - DOCTOR
+#    - WOLF
+#    - MADMAN
+#    - SEER
+#    - MEDIUM
+#  languages:
+#    name: "&eちょっとエンチャントの弓"
+#    description: "プレイヤーを2発程度で殺れる強い弓"
 shield:
   class: dev.mr3n.werewolf3.items.Shield
   droppable: false
@@ -484,7 +484,7 @@ portable_teleporter:
     description: "一度クリックすることで場所を設定し、\nもう一度クリックすることでテレポートできます。"
     title:
       teleporter:
-        title: "PORTABLE TELEPORTER"
+        title: "TELEPORTER"
         color: "&b"
     messages:
       set: "テレポート先を設定しました。"

@@ -548,6 +548,9 @@ default_bow:
   class: dev.mr3n.werewolf3.items.DefaultBow
   droppable: false
   role_lock: false
+  delay_in_adding_arrow: 200
   languages:
     name: "&a剣"
     description: "アイテムの購入や取引に使える通貨"
+    messages:
+      arrow_will_adding_in: "消費した矢は%sec%秒後に追加されます。"

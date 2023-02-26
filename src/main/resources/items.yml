@@ -471,6 +471,26 @@ dead_body_remover:
         color: "&4"
     messages:
       subtitle: "%player%の死体を燃やした"
+portable_teleporter:
+  class: dev.mr3n.werewolf3.items.wolf.PortableTeleporter
+  droppable: false
+  role_lock: false
+  delay_per_block: 0.1
+  price: 4
+  roles:
+    - WOLF
+  languages:
+    name: "&bポータブルテレポーター"
+    description: "一度クリックすることで場所を設定し、\nもう一度クリックすることでテレポートできます。"
+    title:
+      teleporter:
+        title: "PORTABLE TELEPORTER"
+        color: "&b"
+    messages:
+      set: "テレポート先を設定しました。"
+      cancelled: "キャンセルしました"
+      teleporting: "テレポート中...: %sec%"
+      teleported: "テレポート完了"
 
 #
 # ここから先に変更を加えるとショップやクイックチャットに不具合が発生する可能性があります。
@@ -516,4 +536,18 @@ currency:
   role_lock: false
   languages:
     name: "&aエメラルド"
+    description: "アイテムの購入や取引に使える通貨"
+default_sword:
+  class: dev.mr3n.werewolf3.items.DefaultSword
+  droppable: false
+  role_lock: false
+  languages:
+    name: "&a剣"
+    description: "最初に"
+default_bow:
+  class: dev.mr3n.werewolf3.items.DefaultBow
+  droppable: false
+  role_lock: false
+  languages:
+    name: "&a剣"
     description: "アイテムの購入や取引に使える通貨"

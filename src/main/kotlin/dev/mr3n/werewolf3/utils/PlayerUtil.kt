@@ -112,4 +112,4 @@ fun alivePlayers(): Collection<Player> = joinedPlayers().filter { it.isAlive }
 /**
  * ゲームに参加しているプレイヤー一覧
  */
-fun joinedPlayers(): Collection<Player> = PLAYERS.mapNotNull { it.offlinePlayer.player }
+fun joinedPlayers(): Collection<Player> = PLAYERS.mapNotNull { it.player }

@@ -51,7 +51,7 @@ object WolfGuide: IShopItem.ShopItem("wolf_guide", Material.BOOK) {
                     val message = messages("searched", "%player%" to wolf.name)
                     player.sendTitle(GUIDE_TITLE_TEXT, message, 20, 100, 0)
                     player.sendMessage(message.asPrefixed())
-                    wolf.offlinePlayer.player?.let {
+                    wolf.player?.let {
                         TeamPacketUtil.add(player, ChatColor.DARK_RED, listOf(it))
                         MetadataPacketUtil.addToGlowing(player, it)
                     }

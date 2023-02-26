@@ -51,8 +51,6 @@ var FOUNDED_PLAYERS = mutableSetOf<UUID>()
 
 // EntityID to Playerのマップ
 val PLAYER_BY_ENTITY_ID: MutableMap<Int, Player> = mutableMapOf()
-// サーバーにPlugmanXが導入されているかどうか
-val isPlugmanLoaded: Boolean by lazy { Bukkit.getPluginManager().isPluginEnabled("PlugManX") }
 
 // 現在の時刻(朝/夜)
 var TIME_OF_DAY: Time = Time.MORNING
@@ -116,7 +114,7 @@ class WereWolf3: JavaPlugin() {
     override fun onDisable() {
         // ゲームが起動中の場合停止
         if(isRunning) {
-            GameTerminator.run(true)
+            GameTerminator.run()
         }
         // ボスバーを削除
         BOSSBAR.removeAll()

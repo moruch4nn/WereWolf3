@@ -6,6 +6,8 @@ import dev.moru3.minepie.item.EasyItem
 import dev.mr3n.werewolf3.WereWolf3
 import dev.mr3n.werewolf3.utils.asPrefixed
 import org.bukkit.Material
+import org.bukkit.entity.AbstractArrow
+import org.bukkit.entity.Arrow
 import org.bukkit.entity.Player
 import org.bukkit.event.entity.EntityShootBowEvent
 import org.bukkit.inventory.ItemFlag
@@ -26,7 +28,9 @@ object DefaultBow: IShopItem.ShopItem("default_bow", Material.BOW) {
             val player = event.entity
             if(player !is Player) { return@registerEvent }
             val bow = event.bow?:return@registerEvent
-            if(isSimilar(bow)) { return@registerEvent }
+            if(!isSimilar(bow)) { return@registerEvent }
+            val arrow = event.projectile
+            if(arrow is Arrow) { arrow.pickupStatus = AbstractArrow.PickupStatus.CREATIVE_ONLY }
             player.sendMessage(messages("arrow_will_adding_in", "%sec%" to DELAY_IN_ADDING_ARROW / 20).asPrefixed())
             WereWolf3.INSTANCE.runTaskLater(DELAY_IN_ADDING_ARROW) { player.inventory.addItem(EasyItem(Material.ARROW)) }
         }

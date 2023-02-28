@@ -2,10 +2,8 @@ main: dev.mr3n.werewolf3.WereWolf3
 api-version: 1.19
 name: WereWolf3
 version: 1.0
-depend:
-  - ProtocolLib
 softdepend:
-  - PlugManX
+  - ProtocolLib
 commands:
   start:
     description: 人狼を開始します。

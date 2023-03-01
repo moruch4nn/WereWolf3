@@ -411,7 +411,7 @@ fake_dead_body:
 #    - SEER
 #    - MEDIUM
 #  languages:
-#    name: "&eちょっとエンチャントの弓"
+#    name: "&eちょっと強いエンチャントの弓"
 #    description: "プレイヤーを2発程度で殺れる強い弓"
 shield:
   class: dev.mr3n.werewolf3.items.Shield
@@ -543,14 +543,14 @@ default_sword:
   role_lock: false
   languages:
     name: "&a剣"
-    description: "最初に"
+    description: "初期装備として配布される剣"
 default_bow:
   class: dev.mr3n.werewolf3.items.DefaultBow
   droppable: false
   role_lock: false
   delay_in_adding_arrow: 100
   languages:
-    name: "&a剣"
-    description: "アイテムの購入や取引に使える通貨"
+    name: "&a弓"
+    description: "初期装備として配布される弓\n使用すると%sec%秒後に矢が再補充される。"
     messages:
       arrow_will_adding_in: "消費した矢は%sec%秒後に追加されます。"

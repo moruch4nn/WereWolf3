@@ -16,7 +16,10 @@ import org.bukkit.inventory.meta.ItemMeta
 @Suppress("unused")
 object DefaultBow: IShopItem.ShopItem("default_bow", Material.BOW) {
 
-    val DELAY_IN_ADDING_ARROW: Long = itemConstant("delay_in_adding_arrow")
+    private val DELAY_IN_ADDING_ARROW: Long = itemConstant("delay_in_adding_arrow")
+
+    override val description: List<String>
+        get() = super.description.map { it.replace("%sec%", (DELAY_IN_ADDING_ARROW / 20).toString()) }
 
     override fun onSetItemMeta(itemMeta: ItemMeta) {
         itemMeta.isUnbreakable = true

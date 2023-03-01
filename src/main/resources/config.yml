@@ -2,8 +2,12 @@ voice_chat:
   discord:
     enable: false
     bot_token: ""
-    voice_channel_id: ""
-    dead_voice_chat_id: ""
+    voice_channel:
+      id: ""
+      type: "STAGE"
+    spectators_voice_chat:
+      id: ""
+      type: "VOICE"
   web_ui:
     enable: false
     url_link: ""
@@ -19,16 +23,15 @@ game:
   day_time: 3600 # 3 minute
   night_time: 3600 # 3 minute
   max_days: 3 # 最大日数。最大この日数+1日になる(人狼の"苦肉の策"アイテム)
-  end_time: DAY # DAY or NIGHT
+  end_time: NIGHT # DAY or NIGHT
   conversation_distance: 20.0 # 夜に会話可能な半径
   team_kill_bonus: 2 # 村人が同士討ちした際に人狼に入るボーナス
   money:
-    dead_body_prize: 2 # 死体発見時の賞金
     initial_funds: 3
     money_interval: 1200
     money_amount: 1 # per 30 sec
 bedrock_edition:
-  prefix: "BE." # for geyser and floodgate servers.
+  prefix: "BE." # for geyser with floodgate servers.
 roles:
   seer:
     items:

@@ -35,6 +35,9 @@ class DeadBody(val player: Player) {
 
     val time = System.currentTimeMillis()
 
+    var balance = player.money
+        private set
+
     private val co = player.co
 
     /**
@@ -50,8 +53,9 @@ class DeadBody(val player: Player) {
             val sidebar = it.sidebar
             if(sidebar is RunningSidebar) { sidebar.playersEst(PLAYERS.size - FOUNDED_PLAYERS.size) }
         }
-        // 死体を発見したプレイヤーにボーナスを与える
-        player.money += Constants.DEAD_BODY_PRIZE
+        // 死体を発見したプレイヤーに死体が所持していたエメラルドを全額渡す
+        player.money += this.balance
+        this.balance = 0
         // 死体が発見されたことを全プレイヤーに通知
         joinedPlayers().forEach { player2 ->
             player2.sendMessage(languages("messages.found_dead_body", "%player%" to name).asPrefixed())

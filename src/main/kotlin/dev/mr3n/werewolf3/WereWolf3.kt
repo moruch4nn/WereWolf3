@@ -11,10 +11,7 @@ import dev.mr3n.werewolf3.items.IShopItem
 import dev.mr3n.werewolf3.protocol.DeadBody
 import dev.mr3n.werewolf3.protocol.SpectatorPacketUtil
 import dev.mr3n.werewolf3.protocol.TeamPacketUtil
-import dev.mr3n.werewolf3.runners.GameRunner
-import dev.mr3n.werewolf3.runners.HidePlayersRunner
-import dev.mr3n.werewolf3.runners.StartingRunner
-import dev.mr3n.werewolf3.runners.WaitingRunner
+import dev.mr3n.werewolf3.runners.*
 import dev.mr3n.werewolf3.utils.joinedPlayers
 import dev.mr3n.werewolf3.utils.languages
 import org.bukkit.Bukkit
@@ -67,6 +64,7 @@ class WereWolf3: JavaPlugin() {
         CONFIG.getKeys(true)
         LANGUAGES_CONFIG.getKeys(true)
         ITEMS_CONFIG.getKeys(true)
+        HINTS_CONFIG.getKeys(true)
         // ゲームルールを設定
         Bukkit.getWorlds()[0].apply {
             setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false)
@@ -100,6 +98,7 @@ class WereWolf3: JavaPlugin() {
         TeamPacketUtil
         Time.MORNING.title
         Time.NIGHT.title
+        GameHintRunner
         GameRunner
         HidePlayersRunner
         StartingRunner
@@ -136,6 +135,7 @@ class WereWolf3: JavaPlugin() {
         // config.ymlファイル
         val CONFIG: FileConfiguration by lazy { Config(INSTANCE,"config.yml").apply{saveDefaultConfig()}.config()!! }
         val ITEMS_CONFIG: FileConfiguration by lazy { Config(INSTANCE, "items.yml").apply{saveDefaultConfig()}.config()!! }
+        val HINTS_CONFIG: FileConfiguration by lazy { Config(INSTANCE, "hints.yml").apply{saveDefaultConfig()}.config()!! }
 
         /**
          * 人狼を開始する関数です。

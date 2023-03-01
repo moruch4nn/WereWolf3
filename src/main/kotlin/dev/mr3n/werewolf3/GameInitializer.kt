@@ -73,7 +73,6 @@ object GameInitializer {
             player.gameMode = GameMode.ADVENTURE
             player.kills.clear()
             player.inventory.contents.filterNotNull().forEach { it.amount = 0 }
-            MetadataPacketUtil.resetAll(player)
             player.conversationalDistance(100,-1.0)
 
             TeamPacketUtil.colours.forEach { color ->

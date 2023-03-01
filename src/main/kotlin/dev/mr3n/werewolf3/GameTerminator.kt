@@ -11,7 +11,6 @@ import dev.mr3n.werewolf3.utils.*
 import net.md_5.bungee.api.chat.HoverEvent
 import net.md_5.bungee.api.chat.TextComponent
 import net.md_5.bungee.api.chat.hover.content.Text
-import org.bukkit.Bukkit
 import org.bukkit.ChatColor
 import org.bukkit.GameMode
 import org.bukkit.Sound
@@ -25,7 +24,7 @@ object GameTerminator {
         if(STATUS==GameStatus.ENDING||STATUS==GameStatus.WAITING) { return }
         STATUS = GameStatus.ENDING
         // 役職 to プレイヤー一覧 のマップ
-        val players = Role.ROLES.map { it.key to it.value.map { uniqueId -> Bukkit.getOfflinePlayer(uniqueId) } }
+        val players = Role.values().map { it to it.players }
         joinedPlayers().forEach { player ->
             // どちらサイドが勝利したかをタイトルで表示
             player.sendTitle(languages("title.win.title", "%role%" to win.displayName, "%color%" to win.color), reason, 20, 100, 20)
@@ -93,7 +92,7 @@ object GameTerminator {
                 // プレイヤーの会話可能範囲の制限をなくす
                 player.clearConversationalDistance()
                 // サイドバーを待機中のものに変更
-                player.sidebar = WaitingSidebar()
+                try { player.sidebar = WaitingSidebar() } catch(e: Exception) { e.printStackTrace() }
                 player.gameMode = GameMode.ADVENTURE
                 // co帽子などで表示名が変わっている場合は戻す
                 player.setDisplayName(player.name)
@@ -102,10 +101,10 @@ object GameTerminator {
                 player.flySpeed = 0.2f
                 player.walkSpeed = 0.2f
                 // チームの色を削除
-                TeamPacketUtil.removeAll(player, ChatColor.DARK_RED,)
+                try { TeamPacketUtil.removeAll(player, ChatColor.DARK_RED,) } catch(e: Exception) { e.printStackTrace() }
                 // パケットで発光、透明化を送信していた場合は削除
-                MetadataPacketUtil.removeAllInvisible(player)
-                MetadataPacketUtil.removeAllGlowing(player)
+                try { MetadataPacketUtil.removeAllInvisible(player) } catch(e: Exception) { e.printStackTrace() }
+                try { MetadataPacketUtil.removeAllGlowing(player) } catch(e: Exception) { e.printStackTrace() }
                 player.activePotionEffects.forEach { player.removePotionEffect(it.type) }
                 // >>> バグって動かないようにちょっとずらしてスポーン地点にてレポート >>>
                 val tc = (0..100)

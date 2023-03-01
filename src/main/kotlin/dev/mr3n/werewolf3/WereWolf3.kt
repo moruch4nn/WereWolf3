@@ -7,6 +7,7 @@ import dev.mr3n.werewolf3.GameStatus.WAITING
 import dev.mr3n.werewolf3.commands.EndCommand
 import dev.mr3n.werewolf3.commands.ShopCommand
 import dev.mr3n.werewolf3.commands.StartCommand
+import dev.mr3n.werewolf3.discord.DiscordBotManager
 import dev.mr3n.werewolf3.items.IShopItem
 import dev.mr3n.werewolf3.protocol.DeadBody
 import dev.mr3n.werewolf3.protocol.SpectatorPacketUtil
@@ -94,6 +95,7 @@ class WereWolf3: JavaPlugin() {
         HidePlayersRunner
         StartingRunner
         WaitingRunner
+        DiscordBotManager
         // <<< クラスの初期化 <<<
         // いつもの
         Bukkit.getPluginManager().registerEvents(PlayerListener,this)

@@ -27,6 +27,7 @@ dependencies {
     compileOnly("com.comphenix.protocol:ProtocolLib:5.0.0-SNAPSHOT")
     compileOnly("com.rylinaux:PlugMan:2.2.9")
     implementation("com.github.moruch4nn:MinePie:4406de1615")
+    implementation("com.github.DV8FromTheWorld:JDA:v5.0.0-beta.4")
 }
 
 tasks.test {

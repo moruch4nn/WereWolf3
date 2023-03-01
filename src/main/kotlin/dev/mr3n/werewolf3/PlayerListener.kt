@@ -4,6 +4,7 @@ import dev.mr3n.werewolf3.datatypes.BooleanDataType
 import dev.mr3n.werewolf3.protocol.DeadBody
 import dev.mr3n.werewolf3.protocol.InvisibleEquipmentPacketUtil
 import dev.mr3n.werewolf3.protocol.MetadataPacketUtil
+import dev.mr3n.werewolf3.protocol.TeamPacketUtil
 import dev.mr3n.werewolf3.roles.Role
 import dev.mr3n.werewolf3.sidebar.DeathSidebar
 import dev.mr3n.werewolf3.sidebar.ISideBar.Companion.sidebar
@@ -80,11 +81,21 @@ object PlayerListener: Listener {
         player.sidebar = DeathSidebar(player)
         // すべてのプレイヤーを表示する
         joinedPlayers().forEach {
+            // 生存者の透明を消す
             InvisibleEquipmentPacketUtil.remove(player, it, 0)
             MetadataPacketUtil.removeFromInvisible(player, it)
+            // 生存者を光らせる
+            MetadataPacketUtil.addToGlowing(player, it)
+            // 死亡者の透明を消す
+            MetadataPacketUtil.removeFromInvisible(it, player)
+            // 死亡者の発光を消す
+            MetadataPacketUtil.removeFromGlowing(it, player)
         }
-        MetadataPacketUtil.removeAllInvisible(player)
 
+        // 生存者の発光色を役職の色にする
+        Role.values().forEach { role -> TeamPacketUtil.add(player,role.color,role.players.mapNotNull { it.player }) }
+
+        // 自分の死体を全員に表示
         DeadBody.DEAD_BODIES.forEach { it.show(listOf(player)) }
 
         // 死んだ人にタイトルを表示

@@ -15,7 +15,6 @@ import dev.mr3n.werewolf3.runners.*
 import dev.mr3n.werewolf3.utils.joinedPlayers
 import dev.mr3n.werewolf3.utils.languages
 import org.bukkit.Bukkit
-import org.bukkit.GameRule
 import org.bukkit.Location
 import org.bukkit.boss.BarColor
 import org.bukkit.boss.BarStyle
@@ -65,14 +64,6 @@ class WereWolf3: JavaPlugin() {
         LANGUAGES_CONFIG.getKeys(true)
         ITEMS_CONFIG.getKeys(true)
         HINTS_CONFIG.getKeys(true)
-        // ゲームルールを設定
-        Bukkit.getWorlds()[0].apply {
-            setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false)
-            setGameRule(GameRule.DO_WEATHER_CYCLE, false)
-            setGameRule(GameRule.KEEP_INVENTORY, true)
-            setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false)
-            setGameRule(GameRule.DO_MOB_SPAWNING, false)
-        }
         // すでにサーバーにいるプレイヤーのjoin eventを発生させる(初期化用)
         joinedPlayers().forEach { PlayerListener.onJoin(PlayerJoinEvent(it,null)) }
         // /start コマンドの登録

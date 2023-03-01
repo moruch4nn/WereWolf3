@@ -39,6 +39,13 @@ object GameInitializer {
         GAME_ID = UUID.randomUUID().toString()
         // ゲームのステータスを設定、
         STATUS = GameStatus.STARTING
+        location.world?.apply {
+            setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false)
+            setGameRule(GameRule.DO_WEATHER_CYCLE, false)
+            setGameRule(GameRule.KEEP_INVENTORY, true)
+            setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false)
+            setGameRule(GameRule.DO_MOB_SPAWNING, false)
+        }
         // 時間を朝に
         location.world!!.time = 0L
         // 日にちを0に設定

@@ -19,13 +19,13 @@ object TeamPacketUtil {
         // チーム作成のためのパケットを生成
         val packet = PROTOCOL_MANAGER.createPacket(PacketType.Play.Server.SCOREBOARD_TEAM)
         // チーム名を設定。この場合は色の名前にしています。
-        packet.strings.write(0,"$color")
+        packet.strings.write(0,color.name)
         // 操作内容は0、つまりチームの新規作成
         packet.integers.write(0,0)
         // チームの情報格納用のos
         val internalStructure = packet.optionalStructures.read(0).get()
         // チームの表示名を設定。個々の場合は色の名前
-        internalStructure.chatComponents.write(0, WrappedChatComponent.fromText("$color"))
+        internalStructure.chatComponents.write(0, WrappedChatComponent.fromText(color.name))
         // 当たり判定やネームタグの表示/非表示を設定。
         internalStructure.integers.write(0,0x01)
         internalStructure.strings.write(0,"always")
@@ -42,8 +42,9 @@ object TeamPacketUtil {
     fun sendTeamJLPacket(player: Player, color: ChatColor, entities: Collection<String>, operation: Int) {
         // パケットを作成
         val packet = PROTOCOL_MANAGER.createPacket(PacketType.Play.Server.SCOREBOARD_TEAM)
+        packet.modifier.writeDefaults()
         // チーム名を指定
-        packet.strings.write(0,"$color")
+        packet.strings.write(0,color.name)
         // 操作を4，つまりエンティティの削除に設定
         packet.integers.write(0,operation)
         // 追加するプレイヤーを格納
@@ -61,10 +62,11 @@ object TeamPacketUtil {
             val filteredMembers = players.filter { members1.contains(it.name) }
             if(filteredMembers.isNotEmpty()) { remove(player, color, filteredMembers.map { it.name }) }
         }
-        members[color] = players.map { it.name }.toMutableList()
+        val playerList = members[color]?: mutableListOf()
+        playerList.addAll(players.map { it.name })
+        members[color] = playerList
         TEAMS[player] = members
-        val playerTeam = TEAMS[player]?.filterValues { it.contains(player.name) }?.keys?.firstOrNull()?:return
-        sendTeamJLPacket(player, playerTeam, players.map { it.name }, 3)
+        sendTeamJLPacket(player, color, players.map { it.name }, 3)
     }
 
     /**
@@ -110,7 +112,7 @@ object TeamPacketUtil {
         // パケットを作成
         val packet = PROTOCOL_MANAGER.createPacket(PacketType.Play.Server.SCOREBOARD_TEAM)
         // 削除するチーム名を指定
-        packet.strings.write(0,"$color")
+        packet.strings.write(0,color.name)
         // 操作を１，つまりチームの削除に設定
         packet.integers.write(0,1)
         // パケットを送信

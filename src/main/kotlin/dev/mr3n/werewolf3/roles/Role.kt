@@ -2,19 +2,20 @@ package dev.mr3n.werewolf3.roles
 
 import dev.moru3.minepie.Executor.Companion.runTaskTimerAsync
 import dev.mr3n.werewolf3.Keys
+import dev.mr3n.werewolf3.PLAYERS
+import dev.mr3n.werewolf3.PlayerData
 import dev.mr3n.werewolf3.WereWolf3
 import dev.mr3n.werewolf3.datatypes.BooleanDataType
 import dev.mr3n.werewolf3.datatypes.RoleDataType
 import dev.mr3n.werewolf3.items.IShopItem
 import dev.mr3n.werewolf3.utils.*
-import net.md_5.bungee.api.ChatColor
+import org.bukkit.ChatColor
 import org.bukkit.Color
 import org.bukkit.Material
 import org.bukkit.NamespacedKey
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.LeatherArmorMeta
-import java.util.*
 import kotlin.math.ceil
 
 enum class Role() {
@@ -32,7 +33,7 @@ enum class Role() {
     fun lowercase() = this.toString().lowercase()
 
     // 役職の色
-    val color = ChatColor.of(config.getString("roles.${this.lowercase()}.color")!!)
+    val color = ChatColor.valueOf(config.getString("roles.${this.lowercase()}.color")!!)
     // 役職の陣営 (白陣営/黒陣営)
     val team = Team.valueOf(config.getString("roles.${this.lowercase()}.team")!!)
     // 表示名
@@ -81,6 +82,9 @@ enum class Role() {
         }
     }
 
+    val players: List<PlayerData>
+        get() = PLAYERS.filter { it.role == this }
+
     // toStringをoverrideするとvalueOfを使えないため。
     fun asString() = "${color}${displayName}"
 
@@ -88,7 +92,7 @@ enum class Role() {
     val helmet: ItemStack
         get() = ItemStack(Material.LEATHER_HELMET).also { item ->
             item.itemMeta = (item.itemMeta as LeatherArmorMeta?)?.also { meta ->
-                val color = this.color.color
+                val color = this.color.asBungee().color
                 meta.container.set(HELMET_ROLE_TAG_KEY,RoleDataType,this)
                 meta.container.set(Keys.ITEM_DROPPABLE,BooleanDataType,false)
                 meta.setColor(Color.fromRGB(color.red,color.green,color.blue))
@@ -100,7 +104,6 @@ enum class Role() {
 
     companion object {
         val HELMET_ROLE_TAG_KEY = NamespacedKey(WereWolf3.INSTANCE,"role")
-        val ROLES = mutableMapOf<Role, List<UUID>>()
 
         init {
             // >>> カミングアウト帽子に関する処理 >>>

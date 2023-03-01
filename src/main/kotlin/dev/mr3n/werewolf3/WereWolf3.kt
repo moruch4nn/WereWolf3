@@ -11,7 +11,6 @@ import dev.mr3n.werewolf3.items.IShopItem
 import dev.mr3n.werewolf3.protocol.DeadBody
 import dev.mr3n.werewolf3.protocol.SpectatorPacketUtil
 import dev.mr3n.werewolf3.protocol.TeamPacketUtil
-import dev.mr3n.werewolf3.roles.Role
 import dev.mr3n.werewolf3.runners.GameRunner
 import dev.mr3n.werewolf3.runners.HidePlayersRunner
 import dev.mr3n.werewolf3.runners.StartingRunner
@@ -97,7 +96,6 @@ class WereWolf3: JavaPlugin() {
         IShopItem.ShopItem.Companion
         SpectatorPacketUtil.init()
         GameTerminator.init()
-        Role.ROLES
         DeadBody.DEAD_BODIES
         TeamPacketUtil
         Time.MORNING.title

@@ -46,28 +46,7 @@ val OfflinePlayer.playerData: PlayerData
 
 var OfflinePlayer.role: Role?
     get() = this.playerData.role
-    set(value) {
-        if(value==null) {
-            val role = this.role
-            if(role!=null) {
-                val list = Role.ROLES[role]?.toMutableList()?: mutableListOf()
-                list.remove(this.uniqueId)
-                Role.ROLES[role] = list
-            }
-            this.playerData.role = null
-        } else {
-            val role = this.role
-            if(role!=null) {
-                val old = Role.ROLES[role]?.toMutableList()?: mutableListOf()
-                old.remove(this.uniqueId)
-                Role.ROLES[role] = old
-            }
-            val new = Role.ROLES[value]?.toMutableList()?: mutableListOf()
-            new.add(this.uniqueId)
-            Role.ROLES[value] = new
-            this.playerData.role = value
-        }
-    }
+    set(value) { this.playerData.role = value }
 
 var OfflinePlayer.co: Role?
     get() = this.playerData.co

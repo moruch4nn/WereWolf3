@@ -45,10 +45,9 @@ object DivinationItem: IShopItem.ShopItem("divination", Material.MUSIC_DISC_CHIR
                     task?.cancel()
                 } else {
                     info.length += 2
-                    val location = player.location
-                    val traceResult = player.world.rayTraceEntities(location, location.direction, 4.0)
+                    val traceResult = player.world.rayTraceEntities(player.eyeLocation, player.eyeLocation.direction, 4.0) { it == target && it is Player }
                     val lookingTarget = traceResult?.hitEntity
-                    if (lookingTarget is Player) {
+                    if (lookingTarget is Player && lookingTarget.uniqueId == target.uniqueId) {
                         if(info.length >= TIME) {
                             // if:3秒以上押し続けている場合
                             this.divinationPlayers.remove(player.uniqueId)

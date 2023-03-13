@@ -1,6 +1,8 @@
 package dev.mr3n.werewolf3
 
 import dev.moru3.minepie.item.EasyItem
+import dev.mr3n.werewolf3.discord.VOICE_CHANNEL
+import dev.mr3n.werewolf3.discord.connectTo
 import dev.mr3n.werewolf3.items.DefaultBow
 import dev.mr3n.werewolf3.items.DefaultSword
 import dev.mr3n.werewolf3.items.quickchat.TrustYou
@@ -80,6 +82,9 @@ object GameInitializer {
             player.kills.clear()
             player.inventory.contents.filterNotNull().forEach { it.amount = 0 }
             player.conversationalDistance(100,-1.0)
+
+            // Discordのボイスチャットに接続する
+            player.connectTo(VOICE_CHANNEL)
 
             TeamPacketUtil.colours.forEach { color ->
                 TeamPacketUtil.removeTeam(player, color)

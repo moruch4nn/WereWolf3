@@ -1,5 +1,6 @@
 package dev.mr3n.werewolf3
 
+import dev.mr3n.werewolf3.discord.*
 import dev.mr3n.werewolf3.roles.Role
 import dev.mr3n.werewolf3.sidebar.ISideBar.Companion.sidebar
 import dev.mr3n.werewolf3.sidebar.RunningSidebar
@@ -45,6 +46,8 @@ enum class Time(val barColor: BarColor) {
             MORNING -> { morning() }
             NIGHT -> { night() }
         }
+        // プレイヤーのミュート状態を更新
+        joinedPlayers().forEach(DiscordManager::updateVoiceChannelState)
     }
 
     val title: String

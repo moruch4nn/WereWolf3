@@ -1,5 +1,7 @@
 package dev.mr3n.werewolf3
 
+import dev.mr3n.werewolf3.discord.SPECTATORS_VOICE_CHANNEL
+import dev.mr3n.werewolf3.discord.connectTo
 import dev.mr3n.werewolf3.items.IShopItem
 import dev.mr3n.werewolf3.protocol.DeadBody
 import dev.mr3n.werewolf3.protocol.MetadataPacketUtil
@@ -71,6 +73,10 @@ object GameTerminator {
         try { DeadBody.DEAD_BODIES.forEach { it.destroy() } } catch(_: Exception) {}
 
         try { IShopItem.ShopItem.ITEMS.forEach { it.onEnd() } } catch(_: Exception) { }
+
+        try {
+            joinedPlayers().forEach { player -> player.connectTo(SPECTATORS_VOICE_CHANNEL) }
+        } catch(_: Exception) { }
 
         try {
             joinedPlayers().forEach { player ->

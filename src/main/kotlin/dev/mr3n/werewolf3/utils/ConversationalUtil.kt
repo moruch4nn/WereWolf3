@@ -2,6 +2,7 @@ package dev.mr3n.werewolf3.utils
 
 import dev.moru3.minepie.events.EventRegister.Companion.registerEvent
 import dev.mr3n.werewolf3.WereWolf3
+import dev.mr3n.werewolf3.discord.DiscordManager
 import net.md_5.bungee.api.ChatColor
 import net.md_5.bungee.api.ChatMessageType
 import net.md_5.bungee.api.chat.TextComponent
@@ -19,6 +20,8 @@ fun Player.conversationalDistance(priority: Int, distance: Double) {
     val map = ConversationalUtil.players[this]?:TreeMap()
     map[priority] = distance
     ConversationalUtil.players[this] = map
+    // プレイヤーのミュート状態を更新
+    DiscordManager.updateVoiceChannelState(this)
 }
 
 /**
@@ -26,6 +29,8 @@ fun Player.conversationalDistance(priority: Int, distance: Double) {
  */
 fun Player.clearConversationalDistance() {
     ConversationalUtil.players[this]?.clear()
+    // プレイヤーのミュート状態を更新
+    DiscordManager.updateVoiceChannelState(this)
 }
 
 /**
@@ -33,6 +38,8 @@ fun Player.clearConversationalDistance() {
  */
 fun Player.remConversationalDistance(priority: Int) {
     ConversationalUtil.players[this]?.remove(priority)
+    // プレイヤーのミュート状態を更新
+    DiscordManager.updateVoiceChannelState(this)
 }
 
 /**
@@ -44,9 +51,7 @@ fun Player.canConversationWith(target: Player): Boolean {
     val distance = player.location.distance(target.location)
     // プレイヤーの会話可能範囲を超えている場合は return false
     if(distance > player.conversationalDistance) { return false }
-    // ターゲットの会話可能範囲を超えている場合は return false
-    if(distance > target.conversationalDistance) { return false }
-    return true
+    return distance <= target.conversationalDistance
 }
 
 /**

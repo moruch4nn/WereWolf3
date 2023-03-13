@@ -16,10 +16,11 @@ object JDAEventListener: ListenerAdapter() {
             else -> null
         }
         SPECTATORS_VOICE_CHANNEL = when(WereWolf3.CONFIG.getString("voice_chat.discord.spectators_voice_chat.type")) {
-            "VOICE", "VOICE_CHANNEL" -> DiscordManager.deathVoiceChannelId?.let { event.jda.getVoiceChannelById(it) }
-            "STAGE", "STAGE_CHANNEL" -> DiscordManager.deathVoiceChannelId?.let { event.jda.getStageChannelById(it) }
+            "VOICE", "VOICE_CHANNEL" -> DiscordManager.spectatorsVoiceChannelId?.let { event.jda.getVoiceChannelById(it) }
+            "STAGE", "STAGE_CHANNEL" -> DiscordManager.spectatorsVoiceChannelId?.let { event.jda.getStageChannelById(it) }
             else -> null
         }
+        GUILD = VOICE_CHANNEL?.guild
     }
 
     override fun onGuildVoiceRequestToSpeak(event: GuildVoiceRequestToSpeakEvent) {
@@ -28,8 +29,10 @@ object JDAEventListener: ListenerAdapter() {
     }
 
     override fun onGuildVoiceUpdate(event: GuildVoiceUpdateEvent) {
-        val channel = event.channelJoined?:return
-        if(channel is StageChannel) {
+        val channel = event.channelJoined
+        if(channel == null) {
+            event.member.deafen(false)
+        } else if(channel is StageChannel) {
             if(VOICE_CHANNEL != null && event.voiceState.channel?.id == VOICE_CHANNEL?.id) { event.voiceState.inviteSpeaker().queue() }
             if(SPECTATORS_VOICE_CHANNEL != null && event.voiceState.channel?.id == SPECTATORS_VOICE_CHANNEL?.id) { event.voiceState.inviteSpeaker().queue() }
         }

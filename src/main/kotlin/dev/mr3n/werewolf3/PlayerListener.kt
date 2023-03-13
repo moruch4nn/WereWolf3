@@ -1,6 +1,8 @@
 package dev.mr3n.werewolf3
 
 import dev.mr3n.werewolf3.datatypes.BooleanDataType
+import dev.mr3n.werewolf3.discord.SPECTATORS_VOICE_CHANNEL
+import dev.mr3n.werewolf3.discord.connectTo
 import dev.mr3n.werewolf3.protocol.DeadBody
 import dev.mr3n.werewolf3.protocol.InvisibleEquipmentPacketUtil
 import dev.mr3n.werewolf3.protocol.MetadataPacketUtil
@@ -102,6 +104,8 @@ object PlayerListener: Listener {
         player.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS,20,1,false,false,false))
         // 死亡メッセージを削除
         event.deathMessage = null
+
+        player.connectTo(SPECTATORS_VOICE_CHANNEL)
     }
 
     /**

@@ -37,7 +37,6 @@ fun Player.connectTo(audioChannel: AudioChannel?) {
     if(audioChannel == null) { return }
     if(!WereWolf3.CONFIG.getBoolean("voice_chat.discord.enable")) { return }
     this.members.forEach { member -> audioChannel.guild.moveVoiceMember(member, audioChannel) }
-    DiscordManager.updateVoiceChannelState(this)
 }
 
 object DiscordManager {
@@ -55,12 +54,12 @@ object DiscordManager {
     internal fun updateVoiceChannelState(player: Player) {
         if(player.isAlive) {
             player.members.forEach { it.deafen(false) }
+        } else if(STATUS != GameStatus.RUNNING) {
+            player.members.forEach { it.deafen(false) }
+        } else if(TIME_OF_DAY == Time.MORNING && player.conversationalDistance < 0) {
+            player.members.forEach { it.deafen(false) }
         } else {
-            if (STATUS != GameStatus.RUNNING && (TIME_OF_DAY == Time.NIGHT || player.conversationalDistance < 0)) {
-                player.members.forEach { it.deafen(false) }
-            } else {
-                player.members.forEach { it.deafen(true) }
-            }
+            player.members.forEach { it.deafen(true) }
         }
     }
 

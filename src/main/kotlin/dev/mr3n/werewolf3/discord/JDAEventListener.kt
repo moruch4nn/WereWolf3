@@ -32,9 +32,11 @@ object JDAEventListener: ListenerAdapter() {
         val channel = event.channelJoined
         if(channel == null) {
             event.member.deafen(false)
-        } else if(channel is StageChannel) {
-            if(VOICE_CHANNEL != null && event.voiceState.channel?.id == VOICE_CHANNEL?.id) { event.voiceState.inviteSpeaker().queue() }
-            if(SPECTATORS_VOICE_CHANNEL != null && event.voiceState.channel?.id == SPECTATORS_VOICE_CHANNEL?.id) { event.voiceState.inviteSpeaker().queue() }
+        } else {
+            if (channel is StageChannel) {
+                if (VOICE_CHANNEL != null && event.voiceState.channel?.id == VOICE_CHANNEL?.id) { event.voiceState.inviteSpeaker().queue() }
+                if (SPECTATORS_VOICE_CHANNEL != null && event.voiceState.channel?.id == SPECTATORS_VOICE_CHANNEL?.id) { event.voiceState.inviteSpeaker().queue() }
+            }
         }
     }
 }

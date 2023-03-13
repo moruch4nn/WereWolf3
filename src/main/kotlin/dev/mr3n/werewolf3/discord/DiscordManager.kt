@@ -5,6 +5,8 @@ import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel
 import net.dv8tion.jda.api.requests.GatewayIntent
+import org.bukkit.entity.Player
+import java.util.UUID
 
 /**
  * ゲーム中に製造者が使用するボイスチャットです。
@@ -16,13 +18,18 @@ internal var VOICE_CHANNEL: AudioChannel? = null
  */
 internal var SPECTATORS_VOICE_CHANNEL: AudioChannel? = null
 
-object DiscordBotManager {
+object DiscordManager {
     private var jda: JDA? = null
 
     init { this.initializeBot() }
 
-    private val voiceChannelId = WereWolf3.CONFIG.getString("voice_chat.discord.voice_channel.id")
-    private val deathVoiceChannelId = WereWolf3.CONFIG.getString("voice_chat.discord.spectators_voice_chat.id")
+    val voiceChannelId = WereWolf3.CONFIG.getString("voice_chat.discord.voice_channel.id")
+    val deathVoiceChannelId = WereWolf3.CONFIG.getString("voice_chat.discord.spectators_voice_chat.id")
+
+    private val discordIdsByPlayer = mutableMapOf<UUID, MutableSet<String>>()
+
+    val Player.discordIds: Set<String>
+        get() = discordIdsByPlayer.getOrPut(this.uniqueId) { mutableSetOf() }
 
     /**
      * DiscordBOTを起動し、リスナーを登録する
@@ -34,15 +41,5 @@ object DiscordBotManager {
             .enableIntents(GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_MEMBERS)
             .addEventListeners(JDAEventListener)
             .build()
-        VOICE_CHANNEL = when(WereWolf3.CONFIG.getString("voice_chat.discord.voice_channel.type")) {
-            "VOICE", "VOICE_CHANNEL" -> voiceChannelId?.let { jda?.getVoiceChannelById(it) }
-            "STAGE", "STAGE_CHANNEL" -> voiceChannelId?.let { jda?.getStageChannelById(it) }
-            else -> null
-        }
-        SPECTATORS_VOICE_CHANNEL = when(WereWolf3.CONFIG.getString("voice_chat.discord.spectators_voice_chat.type")) {
-            "VOICE", "VOICE_CHANNEL" -> deathVoiceChannelId?.let { jda?.getVoiceChannelById(it) }
-            "STAGE", "STAGE_CHANNEL" -> deathVoiceChannelId?.let { jda?.getStageChannelById(it) }
-            else -> null
-        }
     }
 }

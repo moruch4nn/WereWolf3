@@ -11,6 +11,8 @@ import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.bukkit.event.player.PlayerInteractAtEntityEvent
+import org.bukkit.potion.PotionEffect
+import org.bukkit.potion.PotionEffectType
 import org.bukkit.scheduler.BukkitTask
 import java.util.*
 
@@ -44,7 +46,6 @@ object DivinationItem: IShopItem.ShopItem("divination", Material.MUSIC_DISC_CHIR
                 if(info == null) {
                     task?.cancel()
                 } else {
-                    info.length += 2
                     val traceResult = player.world.rayTraceEntities(player.eyeLocation, player.eyeLocation.direction, 4.0) { it == target && it is Player }
                     val lookingTarget = traceResult?.hitEntity
                     if (lookingTarget is Player && lookingTarget.uniqueId == target.uniqueId) {
@@ -60,7 +61,12 @@ object DivinationItem: IShopItem.ShopItem("divination", Material.MUSIC_DISC_CHIR
                             player.sendTitle(DIVINATION_TITLE_TEXT, result, 0, 100, 20)
                             player.sendMessage(result.asPrefixed())
                             player.playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f)
+                            player.removePotionEffect(PotionEffectType.SLOW)
+                        } else if(info.length % 20 == 0) {
+                            player.playSound(player, Sound.BLOCK_BEACON_DEACTIVATE, 1f, 2f)
+                            player.addPotionEffect(PotionEffect(PotionEffectType.SLOW,Int.MAX_VALUE,(info.length / 10), false, false, false))
                         }
+                        info.length += 2
                     } else {
                         this.divinationPlayers.remove(player.uniqueId)
                         task?.cancel()
@@ -68,6 +74,7 @@ object DivinationItem: IShopItem.ShopItem("divination", Material.MUSIC_DISC_CHIR
                         player.sendTitle(DIVINATION_TITLE_TEXT, messages("canceled"), 0, TIME, 20)
                         // キラリーンの音を鳴らす
                         player.playSound(player, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f)
+                        player.removePotionEffect(PotionEffectType.SLOW)
                     }
                 }
             }

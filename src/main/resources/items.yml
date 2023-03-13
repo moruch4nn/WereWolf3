@@ -20,43 +20,42 @@ doctor_sword:
       not_working: "ダメージを受けていないようです。"
       healed: "回復されました。"
       healing: "%player%を回復しています。"
-seer:
-  class: dev.mr3n.werewolf3.items.seer.SeerItem
+divination:
+  class: dev.mr3n.werewolf3.items.seer.DivinationItem
   droppable: false
   role_lock: true
-  price: 1
+  price: 2
   roles:
     - SEER
-  seer_time: 40
+  time: 60
   languages:
     name: "&d占いアイテム"
-    description: "プレイヤーを右クリック長押しすると\nそのプレイヤーを占うことができます。\n夜にしか使えません。"
+    description: "プレイヤーを右クリック後凝視し続けると\nそのプレイヤーを占うことができる。\n視線を逸らすことでキャンセルも可能"
     title:
-      seer:
+      divination:
         color: "&d"
         title: "占い"
     messages:
       canceled: "占いをキャンセルしました。"
       init: "%player%を占い中..."
       hint:
-        how_to: "プレヤーを右クリック長押しすることで占うことができます。"
+        how_to: "プレイヤーを凝視し続けることで占うことができます"
       result:
         wolf: "%player%は&c人狼です。"
         villager: "%player%は&c人狼では&nありません。"
-multiple_seer:
-  class: dev.mr3n.werewolf3.items.seer.MultipleSeerItem
+multiple_divination:
+  class: dev.mr3n.werewolf3.items.seer.MultipleDivinationItem
   droppable: false
   role_lock: true
-  price: 2
+  price: 3
   roles:
     - SEER
-  distance: 5.0
-  seer_time: 30
+  distance: 2.5
   languages:
     name: "&d範囲占いアイテム"
-    description: "半径数m以内に人狼かいるかどうかを\n知ることができる。"
+    description: "半径約3m以内に人狼かいるかどうかを\n知ることができる。"
     title:
-      seer:
+      divination:
         color: "&d"
         title: "占い"
     messages:
@@ -129,8 +128,8 @@ wolf_axe:
       charged: "チャージ完了"
       not_enough_charge: "チャージが足りなかった。"
       used: "一撃の斧を使用した"
-fake_seer:
-  class: dev.mr3n.werewolf3.items.madman.FakeSeerItem
+fake_divination:
+  class: dev.mr3n.werewolf3.items.madman.FakeDivinationItem
   droppable: false
   role_lock: true
   price: 3
@@ -139,6 +138,16 @@ fake_seer:
   languages:
     name: "&dニセ占いアイテム(偽物)"
     description: "偽物の占いアイテム。プレイヤーを騙す以外に使用する手段はない。"
+fake_multiple_divination:
+  class: dev.mr3n.werewolf3.items.madman.FakeMultipleDivinationItem
+  droppable: false
+  role_lock: true
+  price: 3
+  roles:
+    - MADMAN
+  languages:
+    name: "&dニセ範囲占いアイテム(偽物)"
+    description: "偽物の範囲占いアイテム。プレイヤーを騙す以外に使用する手段はない。"
 fake_medium:
   class: dev.mr3n.werewolf3.items.madman.FakeMediumItem
   droppable: false

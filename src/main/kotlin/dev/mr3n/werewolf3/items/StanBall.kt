@@ -4,7 +4,6 @@ import dev.moru3.minepie.Executor.Companion.runTaskLater
 import dev.moru3.minepie.events.EventRegister.Companion.registerEvent
 import dev.mr3n.werewolf3.Keys
 import dev.mr3n.werewolf3.WereWolf3
-import dev.mr3n.werewolf3.items.wolf.BombBall
 import dev.mr3n.werewolf3.utils.alivePlayers
 import org.bukkit.GameMode
 import org.bukkit.Material
@@ -13,7 +12,6 @@ import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.bukkit.entity.Snowball
 import org.bukkit.event.entity.ProjectileHitEvent
-import org.bukkit.event.entity.ProjectileLaunchEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerMoveEvent
 import org.bukkit.persistence.PersistentDataType

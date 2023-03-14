@@ -10,8 +10,9 @@ import org.bukkit.Material
 import org.bukkit.Particle
 import org.bukkit.Sound
 import org.bukkit.entity.Player
+import org.bukkit.entity.Snowball
 import org.bukkit.event.entity.ProjectileHitEvent
-import org.bukkit.event.entity.ProjectileLaunchEvent
+import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerMoveEvent
 import org.bukkit.persistence.PersistentDataType
 import org.bukkit.potion.PotionEffect
@@ -32,14 +33,14 @@ object StanBall: IShopItem.ShopItem("stan_ball", Material.SNOWBALL) {
     override fun onEnd() { stunnedPlayers.clear() }
 
     init {
-        WereWolf3.INSTANCE.registerEvent<ProjectileLaunchEvent> { event ->
-            val projectile = event.entity
-            val shooter = projectile.shooter?:return@registerEvent
-            if(shooter !is Player) { return@registerEvent }
-            if(!isSimilar(shooter.inventory.itemInMainHand)) { return@registerEvent }
-            // 爆発玉識別用のタグを付与
+        WereWolf3.INSTANCE.registerEvent<PlayerInteractEvent> { event ->
+            val player = event.player
+            val item = event.item
+            if(item == null || !isSimilar(item)) { return@registerEvent }
+            val projectile = player.launchProjectile(Snowball::class.java)
             projectile.persistentDataContainer.set(Keys.ENTITY_TYPE, PersistentDataType.STRING, ENTITY_TYPE)
         }
+
         WereWolf3.INSTANCE.registerEvent<PlayerMoveEvent> { event ->
             if(event.player.gameMode == GameMode.SPECTATOR) { return@registerEvent }
             if(stunnedPlayers.contains(event.player)) {

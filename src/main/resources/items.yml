@@ -456,9 +456,7 @@ last_resort:
       subtitle: "残り日数が1日追加される..."
       description: "&f人狼が &4苦肉の策&f を使用しました。\n試合時間が&c1日延長&fされる代わりに、&c&nすべての人狼のプレイヤー名が公開&fされます。"
       wolfs: "&4&l人狼一覧: &f今回の人狼は %wolfs% です。"
-      bought: "&4苦肉の策&f を%player%が購入した"
-      what: "&4苦肉の策&f の詳細は詳しくはショップをご確認ください。"
-      already_bought: "すでにこのアイテムは人狼に購入されています。このアイテムは試合中に一度しか購入できません。"
+      already_used: "すでにこのアイテムは使用されています。"
 dead_body_remover:
   class: dev.mr3n.werewolf3.items.DeadBodyRemover
   droppable: true

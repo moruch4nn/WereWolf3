@@ -7,9 +7,10 @@ import dev.mr3n.werewolf3.utils.damageTo
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.enchantments.Enchantment
+import org.bukkit.entity.Arrow
 import org.bukkit.entity.Player
 import org.bukkit.event.entity.ProjectileHitEvent
-import org.bukkit.event.entity.ProjectileLaunchEvent
+import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.meta.Damageable
 import org.bukkit.inventory.meta.ItemMeta
@@ -31,17 +32,16 @@ object OneShotBow: IShopItem.ShopItem("one_shot_bow", Material.BOW) {
     private val BOW_TITLE_TEXT = titleText("bow")
 
     init {
-        WereWolf3.INSTANCE.registerEvent<ProjectileLaunchEvent> { event ->
-            val projectile = event.entity
-            val shooter = projectile.shooter?:return@registerEvent
-            if(shooter !is Player) { return@registerEvent }
-            if(!isSimilar(shooter.inventory.itemInMainHand)) { return@registerEvent }
-            // 爆発玉識別用のタグを付与
-            shooter.inventory.itemInMainHand.amount--
+        WereWolf3.INSTANCE.registerEvent<PlayerInteractEvent> { event ->
+            val player = event.player
+            val item = event.item
+            if(item == null || !isSimilar(item)) { return@registerEvent }
+            val projectile = player.launchProjectile(Arrow::class.java)
+            item.amount--
             projectile.persistentDataContainer.set(Keys.ENTITY_TYPE, PersistentDataType.STRING, ENTITY_TYPE)
-            shooter.sendTitle(BOW_TITLE_TEXT, messages("used"), 0, 60, 20)
-
+            player.sendTitle(BOW_TITLE_TEXT, messages("used"), 0, 60, 20)
         }
+
         WereWolf3.INSTANCE.registerEvent<ProjectileHitEvent> { event ->
             val projectile = event.entity
             // 当たったやつが一撃の矢じゃなかったらreturn

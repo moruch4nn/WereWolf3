@@ -15,7 +15,6 @@ import org.bukkit.Sound
 import org.bukkit.enchantments.Enchantment
 import org.bukkit.event.block.Action
 import org.bukkit.event.player.PlayerInteractEvent
-import org.bukkit.inventory.EquipmentSlot
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.meta.ItemMeta
 
@@ -31,13 +30,11 @@ object WolfGuide: IShopItem.ShopItem("wolf_guide", Material.BOOK) {
     init {
         WereWolf3.INSTANCE.registerEvent<PlayerInteractEvent> { event ->
             val player = event.player
-            // main handじゃない場合はreturn
-            if(event.hand!=EquipmentSlot.HAND) { return@registerEvent }
             // 右クリックしていない場合はreturn
             if(event.action!=Action.RIGHT_CLICK_AIR&&event.action!=Action.RIGHT_CLICK_BLOCK) { return@registerEvent }
-            val item = player.inventory.itemInMainHand
+            val item = event.item
             // 人狼ガイドを持っていない場合はreturn
-            if(!isSimilar(item)) { return@registerEvent }
+            if(item == null || !isSimilar(item)) { return@registerEvent }
             player.sendTitle(GUIDE_TITLE_TEXT, messages("searching"), 10, 35 + 10, 0)
             player.playSound(event.player, Sound.BLOCK_PORTAL_TRIGGER, 0.3F, 2F)
             item.amount--

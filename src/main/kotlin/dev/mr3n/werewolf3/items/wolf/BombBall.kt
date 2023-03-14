@@ -13,8 +13,9 @@ import org.bukkit.*
 import org.bukkit.entity.Item
 import org.bukkit.entity.Player
 import org.bukkit.entity.Projectile
+import org.bukkit.entity.Snowball
 import org.bukkit.event.entity.ProjectileHitEvent
-import org.bukkit.event.entity.ProjectileLaunchEvent
+import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
 import org.bukkit.persistence.PersistentDataType
 
@@ -53,12 +54,11 @@ object BombBall: IShopItem.ShopItem("bomb_ball", Material.SNOWBALL) {
     }
 
     init {
-        WereWolf3.INSTANCE.registerEvent<ProjectileLaunchEvent> { event ->
-            val projectile = event.entity
-            val shooter = projectile.shooter?:return@registerEvent
-            if(shooter !is Player) { return@registerEvent }
-            if(!isSimilar(shooter.inventory.itemInMainHand)) { return@registerEvent }
-            // 爆発玉識別用のタグを付与
+        WereWolf3.INSTANCE.registerEvent<PlayerInteractEvent> { event ->
+            val player = event.player
+            val item = event.item
+            if(item == null || !isSimilar(item)) { return@registerEvent }
+            val projectile = player.launchProjectile(Snowball::class.java)
             this.balls.add(projectile)
             projectile.persistentDataContainer.set(Keys.ENTITY_TYPE, PersistentDataType.STRING, ENTITY_TYPE)
         }

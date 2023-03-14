@@ -30,9 +30,9 @@ object GlowInk: IShopItem.ShopItem("glow_ink", Material.GLOW_INK_SAC) {
             if(event.hand!=EquipmentSlot.HAND) { return@registerEvent }
             // 右クリックしていない場合はreturn
             if(event.action!=Action.RIGHT_CLICK_AIR&&event.action!=Action.RIGHT_CLICK_BLOCK) { return@registerEvent }
-            val item = player.inventory.itemInMainHand
+            val item = event.item
             // ピカピカインクを持っていない場合はreturn
-            if(!isSimilar(item)) { return@registerEvent }
+            if(item == null || !isSimilar(item)) { return@registerEvent }
             item.amount--
             player.playSound(player, Sound.ENTITY_GLOW_SQUID_SQUIRT, 2f, 1f)
             glowing = GLOWING_TIME

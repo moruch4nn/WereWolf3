@@ -64,7 +64,7 @@ class WereWolf3: JavaPlugin() {
         CONFIG.getKeys(true)
         LANGUAGES_CONFIG.getKeys(true)
         ITEMS_CONFIG.getKeys(true)
-        HINTS_CONFIG.getKeys(true)
+        TIPS_CONFIG.getKeys(true)
         // すでにサーバーにいるプレイヤーのjoin eventを発生させる(初期化用)
         joinedPlayers().forEach { PlayerListener.onJoin(PlayerJoinEvent(it,null)) }
         // /start コマンドの登録
@@ -90,7 +90,7 @@ class WereWolf3: JavaPlugin() {
         TeamPacketUtil
         Time.MORNING.title
         Time.NIGHT.title
-        GameHintRunner
+        GameTipsRunner
         GameRunner
         HidePlayersRunner
         StartingRunner
@@ -128,7 +128,7 @@ class WereWolf3: JavaPlugin() {
         // config.ymlファイル
         val CONFIG: FileConfiguration by lazy { Config(INSTANCE,"config.yml").apply{saveDefaultConfig()}.config()!! }
         val ITEMS_CONFIG: FileConfiguration by lazy { Config(INSTANCE, "items.yml").apply{saveDefaultConfig()}.config()!! }
-        val HINTS_CONFIG: FileConfiguration by lazy { Config(INSTANCE, "hints.yml").apply{saveDefaultConfig()}.config()!! }
+        val TIPS_CONFIG: FileConfiguration by lazy { Config(INSTANCE, "tips.yml").apply{saveDefaultConfig()}.config()!! }
 
         /**
          * 人狼を開始する関数です。

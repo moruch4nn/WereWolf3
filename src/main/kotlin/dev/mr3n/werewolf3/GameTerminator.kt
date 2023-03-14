@@ -117,9 +117,6 @@ object GameTerminator {
             PLAYERS.clear()
             FOUNDED_PLAYERS.clear()
         } catch(_: Exception) {}
-
-        // プラグインをreload
-        // if(!shutdown) { if(isPlugmanLoaded) { PluginUtil.reload(WereWolf3.INSTANCE) } else { Bukkit.getServer().reload() } }
     }
 
     fun init() {

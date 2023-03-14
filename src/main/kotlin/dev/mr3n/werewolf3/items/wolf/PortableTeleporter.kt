@@ -27,9 +27,9 @@ object PortableTeleporter: IShopItem.ShopItem("portable_teleporter", Material.EC
             if(event.hand!= EquipmentSlot.HAND) { return@registerEvent }
             // 右クリックしていない場合はreturn
             if(event.action!= Action.RIGHT_CLICK_AIR&&event.action!= Action.RIGHT_CLICK_BLOCK) { return@registerEvent }
-            val item = player.inventory.itemInMainHand
+            val item = event.item
             // ピカピカインクを持っていない場合はreturn
-            if(!isSimilar(item)) { return@registerEvent }
+            if(item == null || !isSimilar(item)) { return@registerEvent }
 
             val targetLocation = item.getContainerValue(Keys.TELEPORTER_TARGET, LocationDataType)
             if(targetLocation==null) {

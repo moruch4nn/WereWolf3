@@ -14,12 +14,13 @@ object FakeDeadBody: IShopItem.ShopItem("fake_dead_body", Material.LEAD) {
 
     init {
         WereWolf3.INSTANCE.registerEvent<PlayerInteractEvent> { event ->
-            val item = event.player.inventory.itemInMainHand
-            if(!isSimilar(item)) { return@registerEvent }
-            val deadBody = DeadBody(event.player)
+            val player = event.player
+            val item = event.item
+            if(item == null || !isSimilar(item)) { return@registerEvent }
+            val deadBody = DeadBody(player)
             deadBody.balance = (1..3).random()
-            event.player.sendTitle(SUCCESS_TITLE_TEXT,messages("success"),0,100,20)
-            event.player.playSound(event.player, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f)
+            player.sendTitle(SUCCESS_TITLE_TEXT,messages("success"),0,100,20)
+            player.playSound(player, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f)
             item.amount--
             event.isCancelled = true
         }

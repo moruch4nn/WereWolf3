@@ -50,8 +50,8 @@ object LastResort: IShopItem.ShopItem("last_resort",Material.END_CRYSTAL) {
 
     init {
         WereWolf3.INSTANCE.registerEvent<PlayerInteractEvent> { event ->
-            val item = event.player.inventory.itemInMainHand
-            if(!isSimilar(item)) { return@registerEvent }
+            val item = event.item
+            if(item == null || !isSimilar(item)) { return@registerEvent }
             DAYS--
             item.amount--
             val wolfs = joinedPlayers().filter { p -> p.role == Role.WOLF }

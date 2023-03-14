@@ -44,8 +44,8 @@ object HealthCharger: IShopItem.ShopItem("health_charger", Material.REDSTONE_ORE
             if(event.hand!=EquipmentSlot.HAND) { return@registerEvent }
             if(event.action!=Action.RIGHT_CLICK_BLOCK) { return@registerEvent }
             val player = event.player
-            val item = player.inventory.itemInMainHand
-            if(!isSimilar(item)) { return@registerEvent }
+            val item = event.item
+            if(item == null || !isSimilar(item)) { return@registerEvent }
             val clickedBlock = event.clickedBlock?:return@registerEvent
             val face = event.blockFace
             val placedLocation = clickedBlock.location.clone().add(Vector(face.modX,face.modY,face.modZ))

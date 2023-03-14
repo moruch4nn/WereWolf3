@@ -27,9 +27,9 @@ object MultipleDivinationItem: IShopItem.ShopItem("multiple_divination", Materia
     init {
         WereWolf3.INSTANCE.registerEvent<PlayerInteractEvent> { event ->
             val player = event.player
-            val item = player.inventory.itemInMainHand
+            val item = event.item
             // 占いアイテムを手に持っていない場合はreturn
-            if(!isSimilar(item)) { return@registerEvent }
+            if(item == null || !isSimilar(item)) { return@registerEvent }
             val base = player.location.clone()
             event.isCancelled = true
             item.amount--

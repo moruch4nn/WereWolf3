@@ -36,7 +36,6 @@ class DeadBody(val player: Player) {
     val time = System.currentTimeMillis()
 
     var balance = player.money
-        private set
 
     private val co = player.co
 

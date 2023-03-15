@@ -51,7 +51,7 @@ object DiscordManager {
      * 朝/夜になった場合や会話可能範囲が変更された場合などユーザーのミュート状態を切り替える必要がある場合に呼び出してください
      */
     internal fun updateVoiceChannelState(player: Player) {
-        if(player.isAlive) {
+        if(!player.isAlive) {
             player.members.forEach { it.deafen(false).queue() }
         } else if(STATUS != GameStatus.RUNNING) {
             player.members.forEach { it.deafen(false).queue() }

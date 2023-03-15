@@ -73,7 +73,6 @@ object GameInitializer {
             player.flySpeed = 0.2f
             player.walkSpeed = 0.2f
             player.health = player.healthScale
-            player.world.difficulty = Difficulty.PEACEFUL
             TeamPacketUtil.add(player,ChatColor.WHITE,players)
             player.setDisplayName(player.name)
             player.setPlayerListName(player.name)

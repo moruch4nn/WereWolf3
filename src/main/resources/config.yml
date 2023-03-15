@@ -33,9 +33,9 @@ game:
 bedrock_edition:
   prefix: "BE." # for geyser with floodgate servers.
 roles:
-  seer:
+  diviner:
     items:
-      - "seer"
+      - "divination"
     priority: 1
     name: 占い師
     team: VILLAGER

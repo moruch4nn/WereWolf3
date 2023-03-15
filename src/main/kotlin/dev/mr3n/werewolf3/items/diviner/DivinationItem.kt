@@ -1,4 +1,4 @@
-package dev.mr3n.werewolf3.items.seer
+package dev.mr3n.werewolf3.items.diviner
 
 import dev.moru3.minepie.Executor.Companion.runTaskTimer
 import dev.moru3.minepie.events.EventRegister.Companion.registerEvent

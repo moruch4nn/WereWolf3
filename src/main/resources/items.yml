@@ -21,12 +21,12 @@ doctor_sword:
       healed: "回復されました。"
       healing: "%player%を回復しています。"
 divination:
-  class: dev.mr3n.werewolf3.items.seer.DivinationItem
+  class: dev.mr3n.werewolf3.items.diviner.DivinationItem
   droppable: false
   role_lock: true
   price: 2
   roles:
-    - SEER
+    - DIVINER
   time: 60
   languages:
     name: "&d占いアイテム"
@@ -44,12 +44,12 @@ divination:
         wolf: "%player%は&c人狼です。"
         villager: "%player%は&c人狼では&nありません。"
 multiple_divination:
-  class: dev.mr3n.werewolf3.items.seer.MultipleDivinationItem
+  class: dev.mr3n.werewolf3.items.diviner.MultipleDivinationItem
   droppable: false
   role_lock: true
   price: 3
   roles:
-    - SEER
+    - DIVINER
   distance: 2.5
   languages:
     name: "&d範囲占いアイテム"
@@ -170,7 +170,7 @@ stan_ball:
     - DOCTOR
     - WOLF
     - MADMAN
-    - SEER
+    - DIVINER
     - MEDIUM
   languages:
     name: "&cスタンボール"
@@ -192,7 +192,7 @@ glow_ink:
     - DOCTOR
     - WOLF
     - MADMAN
-    - SEER
+    - DIVINER
     - MEDIUM
   languages:
     name: "&aピカピカインク"
@@ -252,7 +252,7 @@ heal_potion:
     - DOCTOR
     - WOLF
     - MADMAN
-    - SEER
+    - DIVINER
     - MEDIUM
   heal_amount: 10.0
   languages:
@@ -297,7 +297,7 @@ invisible_potion:
     - DOCTOR
     - WOLF
     - MADMAN
-    - SEER
+    - DIVINER
     - MEDIUM
   time: 600
   languages:
@@ -331,7 +331,7 @@ one_shot_bow:
     - DOCTOR
     - WOLF
     - MADMAN
-    - SEER
+    - DIVINER
     - MEDIUM
   languages:
     name: "&c一撃の弓"
@@ -352,7 +352,7 @@ totem_of_undying:
     - DOCTOR
     - WOLF
     - MADMAN
-    - SEER
+    - DIVINER
     - MEDIUM
   speed_level: 2
   speed_time: 200
@@ -369,7 +369,7 @@ speed_potion:
     - DOCTOR
     - WOLF
     - MADMAN
-    - SEER
+    - DIVINER
     - MEDIUM
   time: 600
   level: 6
@@ -386,7 +386,7 @@ stone_sword:
     - DOCTOR
     - WOLF
     - MADMAN
-    - SEER
+    - DIVINER
     - MEDIUM
   languages:
     name: "&eちょっと強い石の剣"
@@ -417,7 +417,7 @@ fake_dead_body:
 #    - DOCTOR
 #    - WOLF
 #    - MADMAN
-#    - SEER
+#    - DIVINER
 #    - MEDIUM
 #  languages:
 #    name: "&eちょっと強いエンチャントの弓"
@@ -433,7 +433,7 @@ shield:
     - DOCTOR
     - WOLF
     - MADMAN
-    - SEER
+    - DIVINER
     - MEDIUM
   languages:
     name: "&eすごい盾"
@@ -467,7 +467,7 @@ dead_body_remover:
     - DOCTOR
     - WOLF
     - MADMAN
-    - SEER
+    - DIVINER
     - MEDIUM
   languages:
     name: "&c死体消し"

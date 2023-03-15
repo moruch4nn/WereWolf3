@@ -6,7 +6,6 @@ plugins {
 }
 
 group = "dev.mr3n"
-version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()

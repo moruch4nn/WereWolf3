@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel
 import net.dv8tion.jda.api.requests.GatewayIntent
 import org.bukkit.entity.Player
 import java.util.*
+import kotlin.concurrent.thread
 
 internal var GUILD: Guild? = null
 
@@ -36,13 +37,11 @@ val Player.members: List<Member>
 fun Player.connectTo(audioChannel: AudioChannel?) {
     if(audioChannel == null) { return }
     if(!WereWolf3.CONFIG.getBoolean("voice_chat.discord.enable")) { return }
-    this.members.forEach { member -> audioChannel.guild.moveVoiceMember(member, audioChannel) }
+    this.members.forEach { member -> audioChannel.guild.moveVoiceMember(member, audioChannel).queue() }
 }
 
 object DiscordManager {
     private var jda: JDA? = null
-
-    init { this.initializeBot() }
 
     val voiceChannelId = WereWolf3.CONFIG.getString("voice_chat.discord.voice_channel.id")
     val spectatorsVoiceChannelId = WereWolf3.CONFIG.getString("voice_chat.discord.spectators_voice_chat.id")
@@ -53,13 +52,13 @@ object DiscordManager {
      */
     internal fun updateVoiceChannelState(player: Player) {
         if(player.isAlive) {
-            player.members.forEach { it.deafen(false) }
+            player.members.forEach { it.deafen(false).queue() }
         } else if(STATUS != GameStatus.RUNNING) {
-            player.members.forEach { it.deafen(false) }
+            player.members.forEach { it.deafen(false).queue() }
         } else if(TIME_OF_DAY == Time.MORNING && player.conversationalDistance < 0) {
-            player.members.forEach { it.deafen(false) }
+            player.members.forEach { it.deafen(false).queue() }
         } else {
-            player.members.forEach { it.deafen(true) }
+            player.members.forEach { it.deafen(true).queue() }
         }
     }
 
@@ -71,9 +70,13 @@ object DiscordManager {
     private fun initializeBot() {
         if(!WereWolf3.CONFIG.getBoolean("voice_chat.discord.enable")) { return }
         val token = WereWolf3.CONFIG.getString("voice_chat.discord.bot_token")
-        this.jda = JDABuilder.createDefault(token)
-            .enableIntents(GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_MEMBERS)
-            .addEventListeners(JDAEventListener)
-            .build()
+        thread {
+            this.jda = JDABuilder.createDefault(token)
+                .enableIntents(GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_MEMBERS)
+                .addEventListeners(JDAEventListener)
+                .build()
+        }
     }
+
+    init { this.initializeBot() }
 }

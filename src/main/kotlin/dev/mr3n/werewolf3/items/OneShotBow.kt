@@ -7,10 +7,9 @@ import dev.mr3n.werewolf3.utils.damageTo
 import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.enchantments.Enchantment
-import org.bukkit.entity.Arrow
 import org.bukkit.entity.Player
+import org.bukkit.event.entity.EntityShootBowEvent
 import org.bukkit.event.entity.ProjectileHitEvent
-import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemFlag
 import org.bukkit.inventory.meta.Damageable
 import org.bukkit.inventory.meta.ItemMeta
@@ -32,13 +31,13 @@ object OneShotBow: IShopItem.ShopItem("one_shot_bow", Material.BOW) {
     private val BOW_TITLE_TEXT = titleText("bow")
 
     init {
-        WereWolf3.INSTANCE.registerEvent<PlayerInteractEvent> { event ->
-            val player = event.player
-            val item = event.item
+        WereWolf3.INSTANCE.registerEvent<EntityShootBowEvent> { event ->
+            val player = event.entity
+            val item = event.bow
+            if(player !is Player) { return@registerEvent }
             if(item == null || !isSimilar(item)) { return@registerEvent }
-            val projectile = player.launchProjectile(Arrow::class.java)
             item.amount--
-            projectile.persistentDataContainer.set(Keys.ENTITY_TYPE, PersistentDataType.STRING, ENTITY_TYPE)
+            event.projectile.persistentDataContainer.set(Keys.ENTITY_TYPE, PersistentDataType.STRING, ENTITY_TYPE)
             player.sendTitle(BOW_TITLE_TEXT, messages("used"), 0, 60, 20)
         }
 

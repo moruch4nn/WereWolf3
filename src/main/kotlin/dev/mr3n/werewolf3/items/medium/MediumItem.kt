@@ -24,7 +24,7 @@ object MediumItem: IShopItem.ShopItem("medium", Material.MUSIC_DISC_WAIT) {
             player.playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 1f, 1f)
             player.sendMessage(messages("header"))
             val role = target.role
-            player.sendMessage(messages("team", "%team%" to "${role?.team?.color}${role?.team?.displayName}"))
+            player.sendMessage(messages("role", "%role%" to "${role?.color}${role?.displayName}"))
             player.sendMessage(messages("time", "%sec%" to (System.currentTimeMillis() - target.time) / 1000))
             player.sendMessage(messages("will", "%will%" to "\"${target.will}\""))
         }

@@ -81,7 +81,7 @@ medium:
       success: "霊媒が完了しました。"
       header: "&5========== 霊媒 =========="
       will: "&5遺言&7: &f%will%"
-      team: "&5陣営&7: &f%team%陣営"
+      role: "&5役職&7: &f%role%"
       time: "&5死亡時刻&7: &f%sec%秒前"
 bomb_ball:
   class: dev.mr3n.werewolf3.items.wolf.BombBall

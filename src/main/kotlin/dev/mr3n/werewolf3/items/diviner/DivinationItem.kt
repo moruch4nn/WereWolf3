@@ -41,12 +41,12 @@ object DivinationItem: IShopItem.ShopItem("divination", Material.MUSIC_DISC_CHIR
             player.sendTitle(DIVINATION_TITLE_TEXT, messages("init", "%player%" to target.name), 0, Int.MAX_VALUE, 0)
             player.playSound(player, Sound.BLOCK_ENCHANTMENT_TABLE_USE, 1f, 1f)
             var task: BukkitTask? = null
-            task = WereWolf3.INSTANCE.runTaskTimer(2, 2) {
+            task = WereWolf3.INSTANCE.runTaskTimer(5, 5) {
                 val info = this.divinationPlayers[player.uniqueId]
                 if(info == null) {
                     task?.cancel()
                 } else {
-                    val traceResult = player.world.rayTraceEntities(player.eyeLocation, player.eyeLocation.direction, 4.0) { it == target && it is Player }
+                    val traceResult = player.world.rayTraceEntities(player.eyeLocation, player.eyeLocation.direction, 6.0, 0.6) { it == target && it is Player }
                     val lookingTarget = traceResult?.hitEntity
                     if (lookingTarget is Player && lookingTarget.uniqueId == target.uniqueId) {
                         if(info.length >= TIME) {
@@ -66,7 +66,7 @@ object DivinationItem: IShopItem.ShopItem("divination", Material.MUSIC_DISC_CHIR
                             player.playSound(player, Sound.BLOCK_BEACON_DEACTIVATE, 1f, 2f)
                             player.addPotionEffect(PotionEffect(PotionEffectType.SLOW,Int.MAX_VALUE,(info.length / 10), false, false, false))
                         }
-                        info.length += 2
+                        info.length += 5
                     } else {
                         this.divinationPlayers.remove(player.uniqueId)
                         task?.cancel()

@@ -438,6 +438,16 @@ shield:
   languages:
     name: "&eすごい盾"
     description: "一撃の弓などの攻撃を弾くが一回で壊れてしまう。"
+self_bomb:
+  class: dev.mr3n.werewolf3.items.wolf.SelfBomb
+  droppable: false
+  role_lock: true
+  distance: 6
+  roles:
+    - WOLF
+  languages:
+    name: "&c自爆"
+    description: "使用することで自分を含む周囲にいる\nプレイヤーを巻き込んで爆発する。\n範囲はすごいでかい。"
 last_resort:
   class: dev.mr3n.werewolf3.items.wolf.LastResort
   droppable: false

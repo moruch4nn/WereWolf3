@@ -3,27 +3,21 @@ package dev.mr3n.werewolf3.discord
 import dev.mr3n.werewolf3.*
 import dev.mr3n.werewolf3.utils.conversationalDistance
 import dev.mr3n.werewolf3.utils.isAlive
-import net.dv8tion.jda.api.JDA
-import net.dv8tion.jda.api.JDABuilder
-import net.dv8tion.jda.api.entities.Guild
-import net.dv8tion.jda.api.entities.Member
-import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel
-import net.dv8tion.jda.api.requests.GatewayIntent
 import org.bukkit.entity.Player
 import java.util.*
 import kotlin.concurrent.thread
 
-internal var GUILD: Guild? = null
+internal var GUILD: String? = null
 
 /**
  * ゲーム中に製造者が使用するボイスチャットです。
  */
-internal var VOICE_CHANNEL: AudioChannel? = null
+internal var VOICE_CHANNEL: String? = null
 
 /**
  * ゲーム中に観戦者が使用するボイスチャットです。
  */
-internal var SPECTATORS_VOICE_CHANNEL: AudioChannel? = null
+internal var SPECTATORS_VOICE_CHANNEL: String? = null
 
 /**
  * プレイヤーが所有しているDiscordアカウントのID一覧。
@@ -31,18 +25,12 @@ internal var SPECTATORS_VOICE_CHANNEL: AudioChannel? = null
 val Player.discordIds: Set<String>
     get() = DiscordManager.discordIdsByPlayer.getOrPut(this.uniqueId) { mutableSetOf() }
 
-val Player.members: List<Member>
-    get() = this.discordIds.mapNotNull { GUILD?.getMemberById(it) }
-
-fun Player.connectTo(audioChannel: AudioChannel?) {
+fun Player.connectTo(audioChannel: String?) {
     if(audioChannel == null) { return }
     if(!WereWolf3.CONFIG.getBoolean("voice_chat.discord.enable")) { return }
-    this.members.forEach { member -> audioChannel.guild.moveVoiceMember(member, audioChannel).queue() }
 }
 
 object DiscordManager {
-    private var jda: JDA? = null
-
     val voiceChannelId = WereWolf3.CONFIG.getString("voice_chat.discord.voice_channel.id")
     val spectatorsVoiceChannelId = WereWolf3.CONFIG.getString("voice_chat.discord.spectators_voice_chat.id")
 
@@ -52,13 +40,13 @@ object DiscordManager {
      */
     internal fun updateVoiceChannelState(player: Player) {
         if(!player.isAlive) {
-            player.members.forEach { it.deafen(false).queue() }
+//            player.members.forEach { it.deafen(false).queue() }
         } else if(STATUS != GameStatus.RUNNING) {
-            player.members.forEach { it.deafen(false).queue() }
+//            player.members.forEach { it.deafen(false).queue() }
         } else if(TIME_OF_DAY == Time.MORNING && player.conversationalDistance < 0) {
-            player.members.forEach { it.deafen(false).queue() }
+//            player.members.forEach { it.deafen(false).queue() }
         } else {
-            player.members.forEach { it.deafen(true).queue() }
+//            player.members.forEach { it.deafen(true).queue() }
         }
     }
 
@@ -70,12 +58,6 @@ object DiscordManager {
     private fun initializeBot() {
         if(!WereWolf3.CONFIG.getBoolean("voice_chat.discord.enable")) { return }
         val token = WereWolf3.CONFIG.getString("voice_chat.discord.bot_token")
-        thread {
-            this.jda = JDABuilder.createDefault(token)
-                .enableIntents(GatewayIntent.GUILD_VOICE_STATES, GatewayIntent.GUILD_MEMBERS)
-                .addEventListeners(JDAEventListener)
-                .build()
-        }
     }
 
     init { this.initializeBot() }

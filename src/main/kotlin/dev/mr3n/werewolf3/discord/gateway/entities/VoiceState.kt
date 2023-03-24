@@ -12,7 +12,7 @@ data class VoiceState(
     val channelId: String? = null,
     @SerialName("user_id")
     val userId: String,
-    val member: Member?,
+    val member: Member? = null,
     @SerialName("session_id")
     val sessionId: String,
     val deaf: Boolean,

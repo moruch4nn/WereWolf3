@@ -1,7 +1,8 @@
 voice_chat:
   discord:
     enable: false
-    bot_token: ""
+    tokens: []
+    guild_id: ""
     voice_channel:
       id: ""
       type: "STAGE"

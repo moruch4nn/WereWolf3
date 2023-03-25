@@ -14,6 +14,7 @@ import org.bukkit.entity.Item
 import org.bukkit.entity.Player
 import org.bukkit.entity.Projectile
 import org.bukkit.entity.Snowball
+import org.bukkit.event.block.Action
 import org.bukkit.event.entity.ProjectileHitEvent
 import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.inventory.ItemStack
@@ -58,6 +59,7 @@ object BombBall: IShopItem.ShopItem("bomb_ball", Material.SNOWBALL) {
             val player = event.player
             val item = event.item
             if(item == null || !isSimilar(item)) { return@registerEvent }
+            if(event.action != Action.RIGHT_CLICK_BLOCK && event.action != Action.RIGHT_CLICK_AIR) { return@registerEvent }
             val projectile = player.launchProjectile(Snowball::class.java)
             this.balls.add(projectile)
             projectile.persistentDataContainer.set(Keys.ENTITY_TYPE, PersistentDataType.STRING, ENTITY_TYPE)

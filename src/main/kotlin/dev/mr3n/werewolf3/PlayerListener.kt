@@ -1,6 +1,7 @@
 package dev.mr3n.werewolf3
 
 import dev.mr3n.werewolf3.datatypes.BooleanDataType
+import dev.mr3n.werewolf3.discord.DiscordManager
 import dev.mr3n.werewolf3.discord.SPECTATORS_VOICE_CHANNEL
 import dev.mr3n.werewolf3.discord.connectTo
 import dev.mr3n.werewolf3.protocol.DeadBody
@@ -106,6 +107,8 @@ object PlayerListener: Listener {
         event.deathMessage = null
 
         player.connectTo(SPECTATORS_VOICE_CHANNEL)
+
+        DiscordManager.updateVoiceChannelState(player)
     }
 
     /**

@@ -11,5 +11,6 @@ data class UpdateMemberRequest(
     val channelId: String?,
     val suppress: Boolean?,
     @SerialName("request_to_speak_timestamp")
-    val requestToSpeakTimestamp: Instant?
+    val requestToSpeakTimestamp: Instant?,
+    val mute: Boolean?
 )

@@ -10,7 +10,7 @@ import io.ktor.serialization.kotlinx.*
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
-import java.util.Timer
+import java.util.*
 import kotlin.concurrent.scheduleAtFixedRate
 import kotlin.concurrent.thread
 
@@ -38,7 +38,7 @@ class DiscordBotManager(private val tokens: List<String>) {
     private val jsonParserIgnoreNul = Json {
         ignoreUnknownKeys = true
         isLenient = true
-        explicitNulls = true
+        explicitNulls = false
     }
 
     val tokenManagers = tokens.map { TokenManager(it, client, jsonParserIgnoreNul) }
@@ -51,7 +51,7 @@ class DiscordBotManager(private val tokens: List<String>) {
 
     val session = runBlocking { client.webSocketSession("wss://gateway.discord.gg/?v=10&encoding=json") }
 
-    fun addListener(listener: DiscordEventListener) = this.listeners.add(listener)
+//    fun addListener(listener: DiscordEventListener) = this.listeners.add(listener)
 
     init {
         thread {
@@ -84,7 +84,7 @@ class DiscordBotManager(private val tokens: List<String>) {
 
     inline fun <reified T> patch(url: String, body: T): Boolean {
         val tokenManager = tokenManagers.filterNot { it.limited() }.randomOrNull()?:return false
-        runBlocking { tokenManager.patch(url, body) }
+        thread { runBlocking { tokenManager.patch(url, body) } }
         return true
     }
 
@@ -93,16 +93,4 @@ class DiscordBotManager(private val tokens: List<String>) {
              session.sendSerialized(GatewayEvent(OpCode.IDENTIFY,Identify(tokens[0], Intent.GUILDS, Intent.GUILD_VOICE_STATES)))
         }
     }
-}
-
-fun main() {
-    DiscordBotManager(listOf(System.getenv("DISCORD_BOT_TOKEN"))).addListener(object: DiscordEventListener() {
-        override fun onGuildCreate(event: GuildCreateEvent) {
-            event.guild.voiceStates
-        }
-
-        override fun onVoiceStateUpdate(event: VoiceStateUpdateEvent) {
-            println(event.voiceState)
-        }
-    })
 }

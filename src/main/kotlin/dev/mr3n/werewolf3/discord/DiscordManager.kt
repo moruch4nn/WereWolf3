@@ -29,12 +29,13 @@ val Player.discordIds: Set<String>
 fun Player.connectTo(audioChannel: String?) {
     if(audioChannel == null) { return }
     if(!WereWolf3.CONFIG.getBoolean("voice_chat.discord.enable")) { return }
+    if(!WereWolf3.CONFIG.getString("voice_chat.discord.mode").equals("channel", true)) { return }
     DiscordManager.manager.voiceStates
-        .filterValues { it.channelId == VOICE_CHANNEL }
         .filterKeys { this.discordIds.contains(it) }
         .filterValues { it.channelId != audioChannel }
-        .forEach { (id, _) ->
-            DiscordManager.manager.patch("https://discord.com/api/v10/guilds/${GUILD_ID}/members/${id}", UpdateMemberRequest(null, audioChannel, null, null))
+        .keys.parallelStream()
+        .forEach { id ->
+            DiscordManager.manager.patch("https://discord.com/api/v10/guilds/${GUILD_ID}/members/${id}", UpdateMemberRequest(null, audioChannel, null, null, null))
         }
 }
 
@@ -47,23 +48,39 @@ object DiscordManager {
         if(!WereWolf3.CONFIG.getBoolean("voice_chat.discord.enable")) { return }
         if(VOICE_CHANNEL == null) { return }
         if(SPECTATORS_VOICE_CHANNEL == null) { return }
-        if(!player.isAlive || STATUS != GameStatus.RUNNING || (TIME_OF_DAY == Time.MORNING && player.conversationalDistance < 0)) {
-            manager.voiceStates
-                .filterValues { it.channelId == VOICE_CHANNEL }
-                .filterKeys { player.discordIds.contains(it) }
-                .filterValues { it.deaf }
-                .forEach { (id, _) ->
-                    manager.patch("https://discord.com/api/v10/guilds/${GUILD_ID}/members/${id}", UpdateMemberRequest(false, null, null, null))
-                }
+        if(STATUS != GameStatus.RUNNING) {
+            this.deaf(player, false)
+            this.mute(player, false)
         } else {
-            manager.voiceStates
-                .filterValues { it.channelId == VOICE_CHANNEL }
-                .filterKeys { player.discordIds.contains(it) }
-                .filterValues { !it.deaf }
-                .forEach { (id, _) ->
-                    manager.patch("https://discord.com/api/v10/guilds/${GUILD_ID}/members/${id}", UpdateMemberRequest(true, null, null, null))
-                }
+            if(!player.isAlive) {
+                this.deaf(player, false)
+                this.mute(player, true)
+            } else if(TIME_OF_DAY == Time.MORNING && player.conversationalDistance < 0) {
+                this.deaf(player, false)
+                this.mute(player, false)
+            } else {
+                this.deaf(player, true)
+                this.mute(player, true)
+            }
         }
+    }
+
+    private fun deaf(player: Player, deaf: Boolean) {
+        manager.voiceStates
+            .filterKeys { player.discordIds.contains(it) }
+            .filterValues { it.deaf != deaf}
+            .forEach { (id, _) ->
+                manager.patch("https://discord.com/api/v10/guilds/${GUILD_ID}/members/${id}", UpdateMemberRequest(deaf, null, null, null, null))
+            }
+    }
+
+    private fun mute(player: Player, mute: Boolean) {
+        manager.voiceStates
+            .filterKeys { player.discordIds.contains(it) }
+            .filterValues { it.mute != mute}
+            .forEach { (id, _) ->
+                manager.patch("https://discord.com/api/v10/guilds/${GUILD_ID}/members/${id}", UpdateMemberRequest(null, null, null, null, mute))
+            }
     }
 
     val discordIdsByPlayer = mutableMapOf<UUID, MutableSet<String>>()

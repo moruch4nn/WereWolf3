@@ -2,6 +2,7 @@ voice_chat:
   discord:
     enable: false
     tokens: []
+    mode: deaf # deaf or channel
     guild_id: ""
     voice_channel:
       id: ""

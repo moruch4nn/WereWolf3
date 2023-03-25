@@ -4,6 +4,7 @@ import com.comphenix.protocol.PacketType
 import com.comphenix.protocol.events.PacketContainer
 import com.comphenix.protocol.utility.MinecraftReflection
 import com.comphenix.protocol.wrappers.WrappedChatComponent
+import dev.mr3n.werewolf3.Constants
 import dev.mr3n.werewolf3.PROTOCOL_MANAGER
 import org.bukkit.ChatColor
 import org.bukkit.entity.Player
@@ -40,6 +41,7 @@ object TeamPacketUtil {
     }
 
     fun sendTeamJLPacket(player: Player, color: ChatColor, entities: Collection<String>, operation: Int) {
+        if(player.name.startsWith(Constants.BE_PREFIX, true)) { return }
         // パケットを作成
         val packet = PROTOCOL_MANAGER.createPacket(PacketType.Play.Server.SCOREBOARD_TEAM)
         packet.modifier.writeDefaults()

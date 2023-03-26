@@ -55,10 +55,16 @@ object WolfAxe: IShopItem.ShopItem("wolf_axe",Material.IRON_AXE) {
             }
         }
         WereWolf3.INSTANCE.registerEvent<PlayerInteractEvent> { event ->
-            if(event.player.wolfAxeCharge < CHARGE) { event.player.wolfAxeCharge = 0 }
+            val item = event.player.inventory.itemInMainHand
+            if(!isSimilar(item)) { return@registerEvent }
+            event.player.wolfAxeCharge = 0
+            event.player.sendTitle(FAILED_TITLE_TEXT,messages("reset"),0,30,0)
         }
         WereWolf3.INSTANCE.registerEvent<PlayerItemHeldEvent> { event ->
+            val item = event.player.inventory.itemInMainHand
+            if(!isSimilar(item)) { return@registerEvent }
             event.player.wolfAxeCharge = 0
+            event.player.sendTitle(FAILED_TITLE_TEXT,messages("reset"),0,30,0)
         }
         WereWolf3.INSTANCE.runTaskTimer(20L,20L) {
             alivePlayers().forEach { player ->

@@ -128,6 +128,7 @@ wolf_axe:
       charged: "チャージ完了"
       not_enough_charge: "チャージが足りなかった。"
       used: "一撃の斧を使用した"
+      reset: "チャージリセット！"
 fake_divination:
   class: dev.mr3n.werewolf3.items.madman.FakeDivinationItem
   droppable: false

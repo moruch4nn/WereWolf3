@@ -8,6 +8,7 @@ import com.comphenix.protocol.wrappers.EnumWrappers.NativeGameMode
 import com.comphenix.protocol.wrappers.EnumWrappers.PlayerInfoAction
 import com.comphenix.protocol.wrappers.PlayerInfoData
 import dev.moru3.minepie.events.EventRegister.Companion.registerEvent
+import dev.mr3n.werewolf3.Constants
 import dev.mr3n.werewolf3.PROTOCOL_MANAGER
 import dev.mr3n.werewolf3.WereWolf3
 import dev.mr3n.werewolf3.utils.joinedPlayers
@@ -26,6 +27,7 @@ object SpectatorPacketUtil {
             override fun onPacketSending(event: PacketEvent) {
                 if(!WereWolf3.isRunning) { return }
                 val player = event.player
+                if(player.name.startsWith(Constants.BE_PREFIX, true)) { return }
                 val packet = event.packet.deepClone()
                 val actions = packet.playerInfoActions.read(0)
                 if(actions.contains(PlayerInfoAction.UPDATE_GAME_MODE)) {
@@ -43,6 +45,7 @@ object SpectatorPacketUtil {
             override fun onPacketSending(event: PacketEvent) {
                 if(!WereWolf3.isRunning) { return }
                 val player = event.player
+                if(player.name.startsWith(Constants.BE_PREFIX, true)) { return }
                 if(player.gameMode!=GameMode.SPECTATOR) {
                     val packet = event.packet.deepClone()
                     val entities = packet.intLists.readSafely(0)
@@ -58,16 +61,19 @@ object SpectatorPacketUtil {
         WereWolf3.INSTANCE.registerEvent<PlayerJoinEvent> { event ->
             if(!WereWolf3.isRunning) { return@registerEvent }
             val player = event.player
+            if(player.name.startsWith(Constants.BE_PREFIX, true)) { return@registerEvent }
             if(player.gameMode == GameMode.SPECTATOR) { spectators.add(player.entityId) }
         }
         WereWolf3.INSTANCE.registerEvent<PlayerQuitEvent> { event ->
             if(!WereWolf3.isRunning) { return@registerEvent }
             val player = event.player
+            if(player.name.startsWith(Constants.BE_PREFIX, true)) { return@registerEvent }
             spectators.remove(player.entityId)
         }
         WereWolf3.INSTANCE.registerEvent<PlayerGameModeChangeEvent> { event ->
             if(!WereWolf3.isRunning) { return@registerEvent }
             val player = event.player
+            if(player.name.startsWith(Constants.BE_PREFIX, true)) { return@registerEvent }
             when(event.newGameMode) {
                 GameMode.SPECTATOR -> {
                     spectators.add(player.entityId)

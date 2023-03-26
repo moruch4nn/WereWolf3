@@ -18,16 +18,16 @@ import org.bukkit.inventory.ItemStack
 import org.bukkit.inventory.meta.LeatherArmorMeta
 import kotlin.math.ceil
 
-enum class Role() {
+enum class Role {
     VILLAGER,
     DOCTOR,
     WOLF,
     MADMAN,
-    SEER,
+    DIVINER,
     MEDIUM
     ;
 
-    val config = WereWolf3.CONFIG
+    private val config = WereWolf3.CONFIG
 
     // 役職名を小文字で
     fun lowercase() = this.toString().lowercase()

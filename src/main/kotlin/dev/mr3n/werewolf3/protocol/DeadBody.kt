@@ -16,7 +16,9 @@ import org.bukkit.entity.Frog
 import org.bukkit.entity.Player
 import org.bukkit.event.EventPriority
 import org.bukkit.event.player.PlayerInteractAtEntityEvent
+import org.bukkit.event.player.PlayerJoinEvent
 import org.bukkit.event.player.PlayerMoveEvent
+import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.event.player.PlayerToggleSneakEvent
 import org.bukkit.inventory.EquipmentSlot
 import java.util.*
@@ -36,7 +38,6 @@ class DeadBody(val player: Player) {
     val time = System.currentTimeMillis()
 
     var balance = player.money
-        private set
 
     private val co = player.co
 
@@ -275,10 +276,17 @@ class DeadBody(val player: Player) {
     /**
      * 死体を消します。
      */
-    fun destroy() {
+    fun destroy(players: Collection<Player>) {
         val packet = PROTOCOL_MANAGER.createPacket(PacketType.Play.Server.ENTITY_DESTROY)
         packet.intLists.writeSafely(0, listOf(entityId))
-        joinedPlayers().forEach { p -> PROTOCOL_MANAGER.sendServerPacket(p,packet) }
+        players.forEach { p -> PROTOCOL_MANAGER.sendServerPacket(p, packet) }
+    }
+
+    /**
+     * 死体を消します。
+     */
+    fun destroy() {
+        this.destroy(joinedPlayers())
         FROGS.remove(frog.entityId)
         frog.remove()
         // 一覧からも削除
@@ -376,6 +384,20 @@ class DeadBody(val player: Player) {
                     player.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASEDRUM, 2f, 1f)
                     player.sendMessage(languages("carrying_dead_body.too_far").asPrefixed())
                 }
+            }
+
+            /**
+             * プレイヤーが参加した際に死体を表示
+             */
+            WereWolf3.INSTANCE.registerEvent<PlayerJoinEvent> { event ->
+                DEAD_BODIES.forEach { it.spawn(listOf(event.player)) }
+            }
+
+            /**
+             * プレイヤーが抜けた際に死体を削除
+             */
+            WereWolf3.INSTANCE.registerEvent<PlayerQuitEvent> { event ->
+                DEAD_BODIES.forEach { it.destroy(listOf(event.player)) }
             }
 
             // >>> プレイヤーと死体の間に障害物がある場合プレイヤーを透明にする処理 >>>

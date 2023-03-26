@@ -1,6 +1,8 @@
 package dev.mr3n.werewolf3
 
 import dev.moru3.minepie.item.EasyItem
+import dev.mr3n.werewolf3.discord.VOICE_CHANNEL
+import dev.mr3n.werewolf3.discord.connectTo
 import dev.mr3n.werewolf3.items.DefaultBow
 import dev.mr3n.werewolf3.items.DefaultSword
 import dev.mr3n.werewolf3.items.quickchat.TrustYou
@@ -45,6 +47,7 @@ object GameInitializer {
             setGameRule(GameRule.KEEP_INVENTORY, true)
             setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false)
             setGameRule(GameRule.DO_MOB_SPAWNING, false)
+            setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, true)
         }
         // 時間を朝に
         location.world!!.time = 0L
@@ -73,7 +76,6 @@ object GameInitializer {
             player.flySpeed = 0.2f
             player.walkSpeed = 0.2f
             player.health = player.healthScale
-            player.world.difficulty = Difficulty.PEACEFUL
             TeamPacketUtil.add(player,ChatColor.WHITE,players)
             player.setDisplayName(player.name)
             player.setPlayerListName(player.name)
@@ -81,6 +83,9 @@ object GameInitializer {
             player.kills.clear()
             player.inventory.contents.filterNotNull().forEach { it.amount = 0 }
             player.conversationalDistance(100,-1.0)
+
+            // Discordのボイスチャットに接続する
+            player.connectTo(VOICE_CHANNEL)
 
             TeamPacketUtil.colours.forEach { color ->
                 TeamPacketUtil.removeTeam(player, color)

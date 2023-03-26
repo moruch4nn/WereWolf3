@@ -1,7 +1,9 @@
 voice_chat:
   discord:
     enable: false
-    bot_token: ""
+    tokens: []
+    mode: deaf # deaf or channel
+    guild_id: ""
     voice_channel:
       id: ""
       type: "STAGE"
@@ -33,9 +35,9 @@ game:
 bedrock_edition:
   prefix: "BE." # for geyser with floodgate servers.
 roles:
-  seer:
+  diviner:
     items:
-      - "seer"
+      - "divination"
     priority: 1
     name: 占い師
     team: VILLAGER

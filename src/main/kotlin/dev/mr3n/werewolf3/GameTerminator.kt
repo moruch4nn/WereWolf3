@@ -1,5 +1,7 @@
 package dev.mr3n.werewolf3
 
+import dev.mr3n.werewolf3.discord.SPECTATORS_VOICE_CHANNEL
+import dev.mr3n.werewolf3.discord.connectTo
 import dev.mr3n.werewolf3.items.IShopItem
 import dev.mr3n.werewolf3.protocol.DeadBody
 import dev.mr3n.werewolf3.protocol.MetadataPacketUtil
@@ -73,6 +75,10 @@ object GameTerminator {
         try { IShopItem.ShopItem.ITEMS.forEach { it.onEnd() } } catch(_: Exception) { }
 
         try {
+            joinedPlayers().forEach { player -> player.connectTo(SPECTATORS_VOICE_CHANNEL) }
+        } catch(_: Exception) { }
+
+        try {
             joinedPlayers().forEach { player ->
                 // 人狼ゲーム関係のデータを削除
                 player.kills.clear()
@@ -117,9 +123,6 @@ object GameTerminator {
             PLAYERS.clear()
             FOUNDED_PLAYERS.clear()
         } catch(_: Exception) {}
-
-        // プラグインをreload
-        // if(!shutdown) { if(isPlugmanLoaded) { PluginUtil.reload(WereWolf3.INSTANCE) } else { Bukkit.getServer().reload() } }
     }
 
     fun init() {

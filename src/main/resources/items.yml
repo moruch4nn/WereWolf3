@@ -20,43 +20,42 @@ doctor_sword:
       not_working: "ダメージを受けていないようです。"
       healed: "回復されました。"
       healing: "%player%を回復しています。"
-seer:
-  class: dev.mr3n.werewolf3.items.seer.SeerItem
+divination:
+  class: dev.mr3n.werewolf3.items.diviner.DivinationItem
   droppable: false
   role_lock: true
-  price: 1
+  price: 2
   roles:
-    - SEER
-  seer_time: 40
+    - DIVINER
+  time: 60
   languages:
     name: "&d占いアイテム"
-    description: "プレイヤーを右クリック長押しすると\nそのプレイヤーを占うことができます。\n夜にしか使えません。"
+    description: "プレイヤーを右クリック後凝視し続けると\nそのプレイヤーを占うことができる。\n視線を逸らすことでキャンセルも可能"
     title:
-      seer:
+      divination:
         color: "&d"
         title: "占い"
     messages:
       canceled: "占いをキャンセルしました。"
       init: "%player%を占い中..."
       hint:
-        how_to: "プレヤーを右クリック長押しすることで占うことができます。"
+        how_to: "プレイヤーを凝視し続けることで占うことができます"
       result:
         wolf: "%player%は&c人狼です。"
         villager: "%player%は&c人狼では&nありません。"
-multiple_seer:
-  class: dev.mr3n.werewolf3.items.seer.MultipleSeerItem
+multiple_divination:
+  class: dev.mr3n.werewolf3.items.diviner.MultipleDivinationItem
   droppable: false
   role_lock: true
-  price: 2
+  price: 3
   roles:
-    - SEER
-  distance: 5.0
-  seer_time: 30
+    - DIVINER
+  distance: 2.5
   languages:
     name: "&d範囲占いアイテム"
-    description: "半径数m以内に人狼かいるかどうかを\n知ることができる。"
+    description: "半径約3m以内に人狼かいるかどうかを\n知ることができる。"
     title:
-      seer:
+      divination:
         color: "&d"
         title: "占い"
     messages:
@@ -82,7 +81,7 @@ medium:
       success: "霊媒が完了しました。"
       header: "&5========== 霊媒 =========="
       will: "&5遺言&7: &f%will%"
-      team: "&5陣営&7: &f%team%陣営"
+      role: "&5役職&7: &f%role%"
       time: "&5死亡時刻&7: &f%sec%秒前"
 bomb_ball:
   class: dev.mr3n.werewolf3.items.wolf.BombBall
@@ -129,8 +128,9 @@ wolf_axe:
       charged: "チャージ完了"
       not_enough_charge: "チャージが足りなかった。"
       used: "一撃の斧を使用した"
-fake_seer:
-  class: dev.mr3n.werewolf3.items.madman.FakeSeerItem
+      reset: "チャージリセット！"
+fake_divination:
+  class: dev.mr3n.werewolf3.items.madman.FakeDivinationItem
   droppable: false
   role_lock: true
   price: 3
@@ -139,6 +139,16 @@ fake_seer:
   languages:
     name: "&dニセ占いアイテム(偽物)"
     description: "偽物の占いアイテム。プレイヤーを騙す以外に使用する手段はない。"
+fake_multiple_divination:
+  class: dev.mr3n.werewolf3.items.madman.FakeMultipleDivinationItem
+  droppable: false
+  role_lock: true
+  price: 3
+  roles:
+    - MADMAN
+  languages:
+    name: "&dニセ範囲占いアイテム(偽物)"
+    description: "偽物の範囲占いアイテム。プレイヤーを騙す以外に使用する手段はない。"
 fake_medium:
   class: dev.mr3n.werewolf3.items.madman.FakeMediumItem
   droppable: false
@@ -161,7 +171,7 @@ stan_ball:
     - DOCTOR
     - WOLF
     - MADMAN
-    - SEER
+    - DIVINER
     - MEDIUM
   languages:
     name: "&cスタンボール"
@@ -183,7 +193,7 @@ glow_ink:
     - DOCTOR
     - WOLF
     - MADMAN
-    - SEER
+    - DIVINER
     - MEDIUM
   languages:
     name: "&aピカピカインク"
@@ -243,7 +253,7 @@ heal_potion:
     - DOCTOR
     - WOLF
     - MADMAN
-    - SEER
+    - DIVINER
     - MEDIUM
   heal_amount: 10.0
   languages:
@@ -288,7 +298,7 @@ invisible_potion:
     - DOCTOR
     - WOLF
     - MADMAN
-    - SEER
+    - DIVINER
     - MEDIUM
   time: 600
   languages:
@@ -322,7 +332,7 @@ one_shot_bow:
     - DOCTOR
     - WOLF
     - MADMAN
-    - SEER
+    - DIVINER
     - MEDIUM
   languages:
     name: "&c一撃の弓"
@@ -343,7 +353,7 @@ totem_of_undying:
     - DOCTOR
     - WOLF
     - MADMAN
-    - SEER
+    - DIVINER
     - MEDIUM
   speed_level: 2
   speed_time: 200
@@ -360,7 +370,7 @@ speed_potion:
     - DOCTOR
     - WOLF
     - MADMAN
-    - SEER
+    - DIVINER
     - MEDIUM
   time: 600
   level: 6
@@ -377,7 +387,7 @@ stone_sword:
     - DOCTOR
     - WOLF
     - MADMAN
-    - SEER
+    - DIVINER
     - MEDIUM
   languages:
     name: "&eちょっと強い石の剣"
@@ -408,7 +418,7 @@ fake_dead_body:
 #    - DOCTOR
 #    - WOLF
 #    - MADMAN
-#    - SEER
+#    - DIVINER
 #    - MEDIUM
 #  languages:
 #    name: "&eちょっと強いエンチャントの弓"
@@ -424,11 +434,21 @@ shield:
     - DOCTOR
     - WOLF
     - MADMAN
-    - SEER
+    - DIVINER
     - MEDIUM
   languages:
     name: "&eすごい盾"
     description: "一撃の弓などの攻撃を弾くが一回で壊れてしまう。"
+self_bomb:
+  class: dev.mr3n.werewolf3.items.wolf.SelfBomb
+  droppable: false
+  role_lock: true
+  distance: 6
+  roles:
+    - WOLF
+  languages:
+    name: "&c自爆"
+    description: "使用することで自分を含む周囲にいる\nプレイヤーを巻き込んで爆発する。\n範囲はすごいでかい。"
 last_resort:
   class: dev.mr3n.werewolf3.items.wolf.LastResort
   droppable: false
@@ -447,9 +467,7 @@ last_resort:
       subtitle: "残り日数が1日追加される..."
       description: "&f人狼が &4苦肉の策&f を使用しました。\n試合時間が&c1日延長&fされる代わりに、&c&nすべての人狼のプレイヤー名が公開&fされます。"
       wolfs: "&4&l人狼一覧: &f今回の人狼は %wolfs% です。"
-      bought: "&4苦肉の策&f を%player%が購入した"
-      what: "&4苦肉の策&f の詳細は詳しくはショップをご確認ください。"
-      already_bought: "すでにこのアイテムは人狼に購入されています。このアイテムは試合中に一度しか購入できません。"
+      already_used: "すでにこのアイテムは使用されています。"
 dead_body_remover:
   class: dev.mr3n.werewolf3.items.DeadBodyRemover
   droppable: true
@@ -460,7 +478,7 @@ dead_body_remover:
     - DOCTOR
     - WOLF
     - MADMAN
-    - SEER
+    - DIVINER
     - MEDIUM
   languages:
     name: "&c死体消し"

@@ -10,6 +10,7 @@ import org.bukkit.Material
 import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.bukkit.event.entity.EntityDamageByEntityEvent
+import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerItemHeldEvent
 
 @Suppress("unused")
@@ -49,12 +50,21 @@ object WolfAxe: IShopItem.ShopItem("wolf_axe",Material.IRON_AXE) {
             } else {
                 player.sendTitle(FAILED_TITLE_TEXT,messages("not_enough_charge"),0,30,0)
                 world.playSound(player, Sound.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 1f, 1f)
-                player.wolfAxeCharge = 0
                 event.isCancelled = true
+                player.wolfAxeCharge = 0
             }
         }
-        WereWolf3.INSTANCE.registerEvent<PlayerItemHeldEvent> { event ->
+        WereWolf3.INSTANCE.registerEvent<PlayerInteractEvent> { event ->
+            val item = event.player.inventory.itemInMainHand
+            if(!isSimilar(item)) { return@registerEvent }
             event.player.wolfAxeCharge = 0
+            event.player.sendTitle(FAILED_TITLE_TEXT,messages("reset"),0,30,0)
+        }
+        WereWolf3.INSTANCE.registerEvent<PlayerItemHeldEvent> { event ->
+            val item = event.player.inventory.itemInMainHand
+            if(!isSimilar(item)) { return@registerEvent }
+            event.player.wolfAxeCharge = 0
+            event.player.sendTitle(FAILED_TITLE_TEXT,messages("reset"),0,30,0)
         }
         WereWolf3.INSTANCE.runTaskTimer(20L,20L) {
             alivePlayers().forEach { player ->

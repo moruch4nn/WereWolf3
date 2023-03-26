@@ -23,6 +23,8 @@ object LightningRod: IShopItem.ShopItem("lightning_rod", Material.LIGHTNING_ROD)
 
     private val BLINDNESS_TITLE_TEXT = titleText("blindness")
 
+    private const val CONVERSATIONAL_PRIORITY = 10
+
     private var blindness = 0L
 
     init {
@@ -43,12 +45,12 @@ object LightningRod: IShopItem.ShopItem("lightning_rod", Material.LIGHTNING_ROD)
             joinedPlayers().forEach { player1 ->
                 // 雷が落ちた音
                 player1.playSound(player1, Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 1f, 1f)
+                // 停電中は会話をできなくする
+                player1.conversationalDistance(CONVERSATIONAL_PRIORITY, 0.0)
                 if(player1.role==Role.WOLF) {
                     // 人狼には残りの停電の時間を表示する
                     player1.sendTitle(BLINDNESS_TITLE_TEXT, messages("for_wolf", "%sec%" to blindness / 20), 0, 40, 10)
                 } else {
-                    // 停電中は会話をできなくする
-                    player1.conversationalDistance(10, 0.0)
                     player1.addPotionEffect(PotionEffect(PotionEffectType.BLINDNESS, 50, 10, false, false, false))
                     player1.sendTitle(BLINDNESS_TITLE_TEXT, messages("blindness", "%sec%" to blindness / 20), 0, 40, 10)
                 }
@@ -65,7 +67,7 @@ object LightningRod: IShopItem.ShopItem("lightning_rod", Material.LIGHTNING_ROD)
                         player1.sendTitle(BLINDNESS_TITLE_TEXT, messages("blindness", "%sec%" to blindness / 20), 0, 30, 10)
                     }
                     if(blindness <= 0) {
-                        player1.remConversationalDistance(10)
+                        player1.remConversationalDistance(CONVERSATIONAL_PRIORITY)
                     }
                 }
             }

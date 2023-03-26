@@ -47,6 +47,7 @@ object GameInitializer {
             setGameRule(GameRule.KEEP_INVENTORY, true)
             setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false)
             setGameRule(GameRule.DO_MOB_SPAWNING, false)
+            setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, true)
         }
         // 時間を朝に
         location.world!!.time = 0L
